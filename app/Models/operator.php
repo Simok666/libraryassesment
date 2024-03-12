@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravel\Sanctum\HasApiTokens;
 
-class User extends Authenticatable
+class operator extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -21,16 +21,6 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'instance_name',
-        'pic_name',
-        'address',
-        'map_coordinates',
-        'village',
-        'subdistrict',
-        'city',
-        'province',
-        'number_telephone',
-        'library_email'
     ];
 
     /**
@@ -40,7 +30,6 @@ class User extends Authenticatable
      */
     protected $hidden = [
         'password',
-        'remember_token',
     ];
 
     /**
@@ -49,7 +38,6 @@ class User extends Authenticatable
      * @var array<string, string>
      */
     protected $casts = [
-        'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
 }
