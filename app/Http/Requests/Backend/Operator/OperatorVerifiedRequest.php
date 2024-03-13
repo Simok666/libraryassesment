@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Auth;
+namespace App\Http\Requests\Backend\Operator;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UserAuthLoginRequest extends FormRequest
+class OperatorVerifiedRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,8 +22,7 @@ class UserAuthLoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => ['required','email', 'min:3', 'max:100'],
-            'password' => ['required']
+            'is_verified' => ['required']
         ];
     }
 }

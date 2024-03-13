@@ -24,7 +24,7 @@ class UserAuthRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'min:3', 'max:20'],
-            'email' => ['required','email', 'min:3', 'max:20'],
+            'email' => ['required','email', 'min:3', 'max:100'],
             'password' => ['required'],
             'instance_name' => ['required', 'string', 'min:3', 'max:20'],
             'pic_name' => ['required', 'string', 'min:3', 'max:20'],
