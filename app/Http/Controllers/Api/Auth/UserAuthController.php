@@ -28,11 +28,18 @@ class UserAuthController extends Controller
     public function register(UserAuthRequest $request)
     {
         try {
+            
             $user = User::create($request->validated());
-        
+            
+            if ($images = $request->sk_image) {
+                foreach ($images as $image) {
+                    $user->addMedia($image)->toMediaCollection('images');
+                }
+            }
+
             $admin = Admin::first();
             $operator = Operator::first();
-
+            // dd($admin);
             Mail::to([$admin->email, $operator->email])->send(new PostMail([
                 'title' => 'New User Has Been Registration',
                 'body' => $user,

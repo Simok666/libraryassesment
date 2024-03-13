@@ -28,6 +28,8 @@ class UserAuthRequest extends FormRequest
             'password' => ['required'],
             'instance_name' => ['required', 'string', 'min:3', 'max:20'],
             'pic_name' => ['required', 'string', 'min:3', 'max:20'],
+            'sk_image' => ['required','array'],
+            'sk_image.*' => ['image','mimes:jpg,png,jpeg,gif,svg,pdf','max:2048'],
             'address' => ['required', 'min:3', 'max:20'],
             'map_coordinates' => ['required', 'min:3', 'max:20'],
             'village' => ['required', 'min:3', 'max:20'],
@@ -35,7 +37,7 @@ class UserAuthRequest extends FormRequest
             'city' => ['required', 'min:3', 'max:20'],
             'province' => ['required', 'min:3', 'max:20'],
             'number_telephone' => ['required','numeric','min:10'],
-            'library_email' => ['required','email','min:3', 'max:20']
+            'library_email' => ['required','email','min:3', 'max:100'],
         ];
     }
 }
