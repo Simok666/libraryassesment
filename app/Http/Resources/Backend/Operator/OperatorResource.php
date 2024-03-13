@@ -4,6 +4,7 @@ namespace App\Http\Resources\Backend\Operator;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Http\Resources\ImageResource;
 
 class OperatorResource extends JsonResource
 {
@@ -33,6 +34,7 @@ class OperatorResource extends JsonResource
             'website' => $this->website,
             'library_email' => $this->library_email,
             'is_verified' => $this->is_verified,
+            'image' => ImageResource::collection($this->getMedia('images')),
         ];
     }
 }

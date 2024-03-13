@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Http\Resources\Auth\User;
+namespace App\Http\Resources\Backend\User;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use App\Http\Resources\ImageResource;
 
-class UserRegisterResource extends JsonResource
+class UserResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,8 +14,6 @@ class UserRegisterResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return [
-            'message' => 'Please wait until your account has been verified',
-        ];
+        return parent::toArray($request);
     }
 }
