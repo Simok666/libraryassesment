@@ -35,7 +35,7 @@ class UserAuthController extends Controller
 
             Mail::to([$admin->email, $operator->email])->send(new PostMail([
                 'title' => 'New User Has Been Registration',
-                'body' => 'The Body test',
+                'body' => $user,
             ]));
 
             return new UserRegisterResource($user);
