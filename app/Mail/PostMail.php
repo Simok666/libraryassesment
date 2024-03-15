@@ -14,14 +14,14 @@ class PostMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $data;
+    public $postMail;
 
     /**
      * Create a new message instance.
      */
-    public function __construct($data)
+    public function __construct($postMail)
     {
-        $this->data = $data;
+        $this->postMail = $postMail;
     }
 
     /**

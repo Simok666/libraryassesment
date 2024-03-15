@@ -1,21 +1,17 @@
 <?php
 
-namespace App\Http\Controllers\Api\Backend\Operator;
+namespace App\Http\Controllers\Api\Backend\Administrator;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Operator;
+use App\Http\Requests\Backend\Administrator\AdministratorVerifiedReqeust;
 use App\Models\User;
-use Mail;
-use App\Mail\PostMail;
-use App\Jobs\SendEmailJob;
-use App\Http\Requests\Backend\Operator\OperatorVerifiedRequest;
-use App\Http\Resources\Backend\Operator\OperatorResource;
-use App\Http\Resources\Backend\Operator\OperatorVerifiedResource;
+use App\Http\Resources\Backend\Administrator\AdministratorResource;
+use App\Http\Resources\Backend\Administrator\AdministratorVerifiedResource;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
-class OperatorController extends Controller
+class AdminController extends Controller
 {
     /**
      * index of items
@@ -27,7 +23,7 @@ class OperatorController extends Controller
      */
     public function getUserAccount($paginate = 10): JsonResponse
     {
-        return response()->json(OperatorResource::collection(User::paginate($paginate)), HttpResponse::HTTP_OK);
+        return response()->json(AdministratorResource::collection(User::paginate($paginate)), HttpResponse::HTTP_OK);
     }
 
 
@@ -40,7 +36,7 @@ class OperatorController extends Controller
      * @return JsonResponse
      * 
      */
-    public function verified(OperatorVerifiedRequest $request, User $user)
+    public function verified(AdministratorVerifiedReqeust $request, User $user)
     {
         try {
             $users = $user::find($request->id);

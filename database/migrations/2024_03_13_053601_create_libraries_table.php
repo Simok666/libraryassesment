@@ -13,7 +13,28 @@ return new class extends Migration
     {
         Schema::create('libraries', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('user_id');
+            $table->text('nomor_npp');
+            $table->text('hasil_akreditasi');
+            $table->string('nama_perpustakaan');
+            $table->text('alamat');
+            $table->text('desa');
+            $table->text('kabupaten_kota');
+            $table->text('provinsi');
+            $table->text('no_telp');
+            $table->text('situs_web');
+            $table->text('email');
+            $table->string('status_kelembagaan');
+            $table->text('tahun_berdiri_perpustakaan');
+            $table->text('sk_pendirian_perpustakaan');
+            $table->text('nama_kepala_perpustakaan');
+            $table->text('nama_kepala_instansi');
+            $table->text('induk');
+            $table->text('visi');
+            $table->text('misi');
             $table->timestamps();
+
+            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 

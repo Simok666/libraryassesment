@@ -7,6 +7,8 @@ use App\Http\Controllers\Api\Auth\AdminAuthController;
 use App\Http\Controllers\Api\Auth\OperatorAuthController;
 use App\Http\Controllers\Api\Auth\PimpinanAuthController;
 use App\Http\Controllers\Api\Backend\Operator\OperatorController;
+use App\Http\Controllers\Api\Backend\Administrator\AdminController;
+use App\Http\Controllers\Api\Backend\User\UserController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -27,11 +29,16 @@ Route::group(['namespace' => 'Api', 'prefix' => 'v1'], function () {
 });
 
 Route::middleware(['auth:sanctum', 'type.user'])->group(function () {
-   
+    Route::group(['prefix' => 'v1'], function () {
+        Route::post('user/store', [UserController::class, 'store']);
+    });
 });
 
 Route::middleware(['auth:sanctum', 'type.admin'])->group(function () {
-    
+    Route::group(['prefix' => 'v1'], function () {
+        Route::get('admin/getUser', [AdminController::class, 'getUserAccount']);
+        Route::put('admin/verified/{id}', [AdminController::class, 'verified']);
+    });
 });
 
 Route::middleware(['auth:sanctum', 'type.operator'])->group(function () {
