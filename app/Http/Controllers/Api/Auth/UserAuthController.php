@@ -34,10 +34,10 @@ class UserAuthController extends Controller
             
             if ($images = $request->sk_image) {
                 foreach ($images as $image) {
-                    $user->addMedia($image)->toMediaCollection('images');
+                    $user->addMedia($image)->toMediaCollection();
                 }
             }
-            
+       
             $admin = Admin::first();
             $operator = Operator::first();
 
