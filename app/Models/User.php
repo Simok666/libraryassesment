@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class User extends Authenticatable implements HasMedia
 {
@@ -54,4 +55,12 @@ class User extends Authenticatable implements HasMedia
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    /**
+     * Get the customer address associated with the user.
+     */
+    public function library(): HasOne
+    {
+        return $this->hasOne(Library::class);
+    }
 }

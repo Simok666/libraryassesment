@@ -12,6 +12,7 @@ use App\Models\User;
 use App\Models\Admin;
 use App\Models\Operator;
 use Mail;
+use App\Jobs\SendEmailJob;
 use App\Mail\PostMail;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Hash;
@@ -36,14 +37,18 @@ class UserAuthController extends Controller
                     $user->addMedia($image)->toMediaCollection('images');
                 }
             }
-
+            
             $admin = Admin::first();
             $operator = Operator::first();
-            // dd($admin);
-            Mail::to([$admin->email, $operator->email])->send(new PostMail([
+
+            
+            $postMail = [
+                'email' => [$admin->email, $admin->operator],
                 'title' => 'New User Has Been Registration',
                 'body' => $user,
-            ]));
+            ];
+
+            dispatch(new SendEmailJob($postMail));
 
             return new UserRegisterResource($user);
         }
