@@ -31,7 +31,7 @@ class UserController extends Controller
 
             if ($images = $request->data_perpustakaan_image) {
                 foreach ($images as $image) {
-                    $store->addMedia($image)->toMediaCollection('images');
+                    $store->addMedia($image)->toMediaCollection();
                 }
             }
             

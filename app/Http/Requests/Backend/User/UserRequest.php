@@ -42,7 +42,7 @@ class UserRequest extends FormRequest
             'visi' => ['required', 'string' ,'max:100'],
             'misi' => ['required', 'string' ,'max:100'],
             'data_perpustakaan_image' => ['required','array'],
-            'data_perpustakaan_image.*' => ['image','mimes:jpg,png,jpeg,gif,svg,pdf','max:2048'],
+            'data_perpustakaan_image.*' => ['mimes:jpg,png,jpeg,gif,svg,pdf','max:2048'],
         ];
     }
 }
