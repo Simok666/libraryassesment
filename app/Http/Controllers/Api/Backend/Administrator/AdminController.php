@@ -21,9 +21,9 @@ class AdminController extends Controller
      * @return JsonResponse
      * 
      */
-    public function getUserAccount($paginate = 10): JsonResponse
+    public function getUserAccount($paginate = 10)
     {
-        return response()->json(AdministratorResource::collection(User::paginate($paginate)), HttpResponse::HTTP_OK);
+        return  AdministratorResource::collection(User::paginate($paginate));
     }
 
 
