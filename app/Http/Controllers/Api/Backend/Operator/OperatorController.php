@@ -25,9 +25,9 @@ class OperatorController extends Controller
      * @return JsonResponse
      * 
      */
-    public function getUserAccount($paginate = 10): JsonResponse
+    public function getUserAccount(Request $request)
     {
-        return response()->json(OperatorResource::collection(User::paginate($paginate)), HttpResponse::HTTP_OK);
+        return  OperatorResource::collection(User::paginate(10));
     }
 
 
