@@ -6,8 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Operator;
 use App\Http\Requests\Auth\OperatorAuthRequest;
+use App\Http\Resources\Auth\AuthResource;
 use App\Models\Admin;
-use App\Http\Resources\Auth\Operator\OperatorAuthResource;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Hash;
 
@@ -21,6 +21,7 @@ class OperatorAuthController extends Controller
      */
     public function login(OperatorAuthRequest $request)
     {   
+        $request["role"] = "operator";
         $operator = Operator::where('email', $request->email)->first();
 
         if (!$operator || !Hash::check($request->password, $operator->password)) {
@@ -29,7 +30,7 @@ class OperatorAuthController extends Controller
             ]);
         }
 
-        return new OperatorAuthResource($operator);
+        return new AuthResource($operator);
     }
 
     /**

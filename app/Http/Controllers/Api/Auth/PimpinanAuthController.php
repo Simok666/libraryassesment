@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\Auth\PimpinanAuthRequest;
+use App\Http\Resources\Auth\AuthResource;
 use App\Models\Pimpinan;
 use App\Http\Resources\Auth\Pimpinan\PimpinanAuthResource;
 use Illuminate\Validation\ValidationException;
@@ -20,6 +21,7 @@ class PimpinanAuthController extends Controller
      */
     public function login(PimpinanAuthRequest $request)
     {   
+        $request["role"] = "pimpinan";
         $pimpinan = Pimpinan::where('email', $request->email)->first();
 
         if (!$pimpinan || !Hash::check($request->password, $pimpinan->password)) {
@@ -28,7 +30,7 @@ class PimpinanAuthController extends Controller
             ]);
         }
 
-        return new PimpinanAuthResource($pimpinan);
+        return new AuthResource($pimpinan);
     }
 
     /**

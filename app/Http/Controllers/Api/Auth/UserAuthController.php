@@ -6,8 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\Auth\UserAuthRequest;
 use App\Http\Requests\Auth\UserAuthLoginRequest;
+use App\Http\Resources\Auth\AuthResource;
 use App\Http\Resources\Auth\User\UserRegisterResource;  
-use App\Http\Resources\Auth\User\UserAuthResource;  
 use App\Models\User;
 use App\Models\Admin;
 use App\Models\Operator;
@@ -63,7 +63,7 @@ class UserAuthController extends Controller
     * @param UserAuthRequest $request
     */
     public function login(UserAuthLoginRequest $request) {
-
+        $request["role"] = "user";
         $user = User::where('email', $request->email)->first();
         
         if (!$user || !Hash::check($request->password, $user->password) || $user->is_verified == 0 ) {
@@ -72,7 +72,7 @@ class UserAuthController extends Controller
             ]);
         }
         
-        return new UserAuthResource($user);
+        return new AuthResource($user);
     }
 
      /**
