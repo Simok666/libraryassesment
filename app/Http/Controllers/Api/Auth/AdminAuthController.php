@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Api\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\Auth\AdminAuthRequest;
+use App\Http\Resources\Auth\AuthResource;
 use App\Models\Admin;
-use App\Http\Resources\Auth\Admin\AdminAuthResource;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Hash;
 
@@ -20,6 +20,7 @@ class AdminAuthController extends Controller
      */
     public function login(AdminAuthRequest $request)
     {   
+        $request["role"] = "admin";
         $admin = Admin::where('email', $request->email)->first();
 
         if (!$admin || !Hash::check($request->password, $admin->password)) {
@@ -28,7 +29,7 @@ class AdminAuthController extends Controller
             ]);
         }
 
-        return new AdminAuthResource($admin);
+        return new AuthResource($admin);
     }
 
     /**
