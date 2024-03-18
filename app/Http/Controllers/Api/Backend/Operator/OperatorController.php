@@ -52,6 +52,7 @@ class OperatorController extends Controller
                 $postMail = [
                     'email' => $users->email,
                     'title' => 'Your Account Has Been Verified',
+                    'status' => 'auth',
                     'body' => $users,
                 ];
                 

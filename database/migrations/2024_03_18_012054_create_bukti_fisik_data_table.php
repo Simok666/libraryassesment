@@ -11,12 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('komponens', function (Blueprint $table) {
+        Schema::create('bukti_fisik_data', function (Blueprint $table) {
             $table->id();
-            $table->string('title_komponens');
-            $table->integer('jumlah_indikator_kunci');
-            $table->integer('bobot');
-            $table->string('jenis_perpustakaan');
+            $table->string('title_bukti_fisik');
             $table->timestamps();
         });
     }
@@ -26,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('komponens');
+        Schema::dropIfExists('bukti_fisik_data');
     }
 };

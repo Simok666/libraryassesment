@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Auth;
+namespace App\Http\Requests\Backend\User;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UserAuthLoginRequest extends FormRequest
+class UserBuktiFisikRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,8 +22,10 @@ class UserAuthLoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => ['required','email', 'min:3', 'max:250'],
-            'password' => ['required']
+            'user_id' => ['required', 'numeric'],
+            'bukti_fisik_data_id' => ['required', 'numeric'],
+            'bukti_fisik_upload' => ['required', 'array'],
+            'bukti_fisik_upload.*' => ['mimes:jpg,png,jpeg,gif,svg,pdf','max:2048'],
         ];
     }
 }

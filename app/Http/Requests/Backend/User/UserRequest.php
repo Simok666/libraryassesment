@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Backend\User;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UserRequest extends FormRequest
 {
@@ -33,12 +34,13 @@ class UserRequest extends FormRequest
             'no_telp' => ['required', 'string' ,'max:100'],
             'situs_web' => ['required', 'string' ,'max:100'],
             'email' => ['required','email','string' ,'max:100'],
-            'status_kelembagaan' => ['required', 'string' ,'max:100'],
+            'status_kelembagaan' => ['required', Rule::in(['Negeri', 'Swasta'])],
             'tahun_berdiri_perpustakaan' => ['required', 'string' ,'max:100'],
             'sk_pendirian_perpustakaan' => ['required', 'string' ,'max:100'],
             'nama_kepala_perpustakaan' => ['required', 'string' ,'max:100'],
             'nama_kepala_instansi' => ['required', 'string' ,'max:100'],
             'induk' => ['required', 'string' ,'max:100'],
+            'jenis_perpustakaan' => ['required', Rule::in(['Perpustakaan Khusus', 'Perpustakaan Perguruan Tinggi'])],
             'visi' => ['required', 'string' ,'max:100'],
             'misi' => ['required', 'string' ,'max:100'],
             'data_perpustakaan_image' => ['required','array'],

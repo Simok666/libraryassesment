@@ -63,4 +63,20 @@ class User extends Authenticatable implements HasMedia
     {
         return $this->hasOne(Library::class);
     }
+
+    /**
+     * Get the customer address associated with the user.
+     */
+    public function komponen(): HasOne
+    {
+        return $this->hasOne(SubKomponen::class);
+    }
+
+    /**
+     * Get the customer address associated with the user.
+     */
+    public function buktiFisik(): HasOne
+    {
+        return $this->hasOne(BuktiFisik::class);
+    }
 }

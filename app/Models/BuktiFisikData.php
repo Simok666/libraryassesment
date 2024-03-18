@@ -6,15 +6,15 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Komponen extends Model
+class BuktiFisikData extends Model
 {
     use HasFactory;
 
     /**
      * Get the Komponen for the subkomponen.
      */
-    public function subKomponens(): HasMany
+    public function buktiFisik(): HasMany
     {
-        return $this->hasMany(subKomponen::class);
+        return $this->hasMany(BuktiFisik::class);
     }
 }
