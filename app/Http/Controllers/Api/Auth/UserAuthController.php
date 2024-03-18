@@ -34,7 +34,7 @@ class UserAuthController extends Controller
             
             if ($images = $request->sk_image) {
                 foreach ($images as $image) {
-                    $user->addMedia($image)->toMediaCollection();
+                    $user->addMedia($image)->toMediaCollection('images');
                 }
             }
        
@@ -45,6 +45,7 @@ class UserAuthController extends Controller
             $postMail = [
                 'email' => [$admin->email, $admin->operator],
                 'title' => 'New User Has Been Registration',
+                'status' => 'auth',
                 'body' => $user,
             ];
 

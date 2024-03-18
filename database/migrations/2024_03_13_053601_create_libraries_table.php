@@ -24,14 +24,16 @@ return new class extends Migration
             $table->text('no_telp');
             $table->text('situs_web');
             $table->text('email');
-            $table->string('status_kelembagaan');
+            $table->enum('status_kelembagaan',['Negeri', 'Swasta']);
             $table->text('tahun_berdiri_perpustakaan');
             $table->text('sk_pendirian_perpustakaan');
             $table->text('nama_kepala_perpustakaan');
             $table->text('nama_kepala_instansi');
             $table->text('induk');
+            $table->enum('jenis_perpustakaan',['Perpustakaan Khusus', 'Perpustakaan Perguruan Tinggi']);
             $table->text('visi');
             $table->text('misi');
+            $table->enum('status',['Baru', 'Aktif', 'Selesai']);
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users');

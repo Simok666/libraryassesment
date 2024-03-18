@@ -31,6 +31,10 @@ Route::group(['namespace' => 'Api', 'prefix' => 'v1'], function () {
 Route::middleware(['auth:sanctum', 'type.user'])->group(function () {
     Route::group(['prefix' => 'v1'], function () {
         Route::post('user/store', [UserController::class, 'store']);
+        Route::get('user/getSubKomponen', [UserController::class, 'getSubKomponen']);
+        Route::post('user/storeKomponen', [UserController::class, 'storeKomponen']);
+        Route::get('user/getBuktiFisikData', [UserController::class, 'getBuktiFisikData']);
+        Route::post('user/storeBuktiFisik', [UserController::class, 'storeBuktiFisik']);
     });
 });
 

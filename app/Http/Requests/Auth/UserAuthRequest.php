@@ -23,21 +23,21 @@ class UserAuthRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'min:3', 'max:20'],
-            'email' => ['required','email', 'min:3', 'max:100'],
+            'name' => ['required', 'string', 'min:3', 'max:250'],
+            'email' => ['required','email', 'min:3', 'max:250'],
             'password' => ['required'],
-            'instance_name' => ['required', 'string', 'min:3', 'max:20'],
-            'pic_name' => ['required', 'string', 'min:3', 'max:20'],
+            'instance_name' => ['required', 'string', 'min:3', 'max:250'],
+            'pic_name' => ['required', 'string', 'min:3', 'max:250'],
             'sk_image' => ['required','array'],
             'sk_image.*' => ['mimes:jpg,png,jpeg,gif,svg,pdf','max:2048'],
-            'address' => ['required', 'min:3', 'max:20'],
-            'map_coordinates' => ['required', 'min:3', 'max:20'],
-            'village' => ['required', 'min:3', 'max:20'],
-            'subdistrict' => ['required', 'min:3', 'max:20'],
-            'city' => ['required', 'min:3', 'max:20'],
-            'province' => ['required', 'min:3', 'max:20'],
+            'address' => ['required', 'min:3', 'max:250'],
+            'map_coordinates' => ['required', 'min:3', 'max:250'],
+            'village' => ['required', 'min:3', 'max:250'],
+            'subdistrict' => ['required', 'min:3', 'max:250'],
+            'city' => ['required', 'min:3', 'max:250'],
+            'province' => ['required', 'min:3', 'max:250'],
             'number_telephone' => ['required','numeric','min:10'],
-            'library_email' => ['required','email','min:3', 'max:100'],
+            'library_email' => ['required','email','min:3', 'max:250'],
         ];
     }
 }

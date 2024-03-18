@@ -33,6 +33,7 @@ class UserResource extends JsonResource
             'nama_kepala_perpustakaan' => $this->nama_kepala_perpustakaan,
             'nama_kepala_instansi' => $this->nama_kepala_instansi,
             'induk' => $this->induk,
+            'jenis_perpustakaan' => $this->jenis_perpustakaan, 
             'visi' => $this->visi,
             'misi' => $this->visi,
             'data_perpustakaan_image' => ImageResource::collection($this->getMedia('images')),

@@ -22,7 +22,7 @@ class PimpinanAuthRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => ['required','email', 'min:3', 'max:20'],
+            'email' => ['required','email', 'min:3', 'max:250'],
             'password' => ['required'] 
         ];
     }
