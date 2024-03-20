@@ -39,7 +39,7 @@ class OperatorAuthController extends Controller
      * @param OperatorAuthRequest $request
      * 
      */
-    public function destory(OperatorAuthRequest $request) 
+    public function destory(Request $request) 
     {
        $operator = $request->user();
 

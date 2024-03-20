@@ -27,7 +27,7 @@ class BuktiFisik extends Model implements HasMedia
      */
     public function buktiFisikData(): BelongsTo
     {
-        return $this->belongsTo(BuktiFisikData::class);
+        return $this->belongsTo(BuktiFisikData::class, 'bukti_fisik_data_id', 'id');
     }
 
     /**
@@ -35,6 +35,6 @@ class BuktiFisik extends Model implements HasMedia
      */
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 }

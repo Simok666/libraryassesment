@@ -38,6 +38,7 @@ class UserController extends Controller
     public function store(UserRequest $request, Library $library) 
     {
         try {
+            
             if( !$this->checkUserInsert($request->user_id, 'library') )
             {
                 $store = $library::create($request->validated());
@@ -74,12 +75,17 @@ class UserController extends Controller
      * 
      * get Komponen data
      * 
+     * @param Request $request
+     * @param User $user
+     * 
      * @return JsonResponse
      * 
      */
-    public function getSubKomponen(Request $request)
+    public function getSubKomponen(Request $request, User $user)
     {
-        return UserKomponenResource::collection(Komponen::where('jenis_perpustakaan', $request->jenis_perpustakaan)->get());
+        $users = $user::find($request->user_id)->library;
+
+        return UserKomponenResource::collection(Komponen::where('jenis_perpustakaan', $users->jenis_perpustakaan)->get());
     }
 
     /**
@@ -94,8 +100,8 @@ class UserController extends Controller
     public function storeKomponen(UserKomponenRequest $request, SubKomponen $subKomponen)
     {
         try {
-            if( !$this->checkUserInsert($request->user_id, 'subKomponen') )
-            {
+            // if( !$this->checkUserInsert($request->user_id, 'subKomponen') )
+            // {
                 $store = $subKomponen::create($request->validated());
     
                 if ($images = $request->bukti_dukung) {
@@ -117,8 +123,8 @@ class UserController extends Controller
                 dispatch(new SendEmailJob($postMail));
                 
                 return response()->json(['success' => 'success save data', 'data' => new UserSubKomponenResource($store)], HttpResponse::HTTP_CREATED);
-            }
-            return response()->json(['message' => 'duplicate data not allowed'], 409);
+            // }
+            // return response()->json(['message' => 'duplicate data not allowed'], 409);
 
         } catch(\Exception $e) {
             return response()->json(['error' => 'An error occurred while creating data: ' . $e->getMessage()], 404);
@@ -149,8 +155,8 @@ class UserController extends Controller
     public function storeBuktiFisik(UserBuktiFisikRequest $request, BuktiFisik $buktiFisik)
     {
         try {
-            if( !$this->checkUserInsert($request->user_id, 'buktiFisik') )
-            {
+            // if( !$this->checkUserInsert($request->user_id, 'buktiFisik') )
+            // {
                 $store = $buktiFisik::create($request->validated());
     
                 if ($images = $request->bukti_fisik_upload) {
@@ -171,8 +177,8 @@ class UserController extends Controller
                 dispatch(new SendEmailJob($postMail));
                 
                 return response()->json(['success' => 'success save data', 'data' => new UserBuktiFisikResource($store)], HttpResponse::HTTP_CREATED);
-            }
-            return response()->json(['message' => 'duplicate data not allowed'], 409);
+            // }
+            // return response()->json(['message' => 'duplicate data not allowed'], 409);
 
         } catch(\Exception $e) {
             return response()->json(['error' => 'An error occurred while creating data: ' . $e->getMessage()], 404);
@@ -181,15 +187,15 @@ class UserController extends Controller
 
     public function checkUserInsert($userId, $type = null) 
     {
-        $userLibrary = User::find(1)->library;
-        $userKomponen = User::find(1)->komponen;
-        $userBuktiFisik = User::find(1)->buktiFisik;
-        
-        if (count($userLibrary->get()) > 0 && $type == 'library') {
+        $userLibrary = User::find($userId)->library;
+        $userKomponen = User::find($userId)->komponen;
+        $userBuktiFisik = User::find($userId)->buktiFisik;
+
+        if ($type == 'library' && $userLibrary != null) {
             return true;
-        } elseif (count($userKomponen->get()) > 0 && $type == 'subKomponen') {
+        } elseif ($type == 'subKomponen'  && $userKomponen != null) {
             return true;
-        } elseif (count($userBuktiFisik->get()) > 0  && $type == 'buktiFisik') {
+        } elseif ($type == 'buktiFisik' && $userBuktiFisik != null ) {
             return true;
         }
         return false;

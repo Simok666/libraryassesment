@@ -35,6 +35,9 @@ Route::middleware(['auth:sanctum', 'type.user'])->group(function () {
         Route::post('user/storeKomponen', [UserController::class, 'storeKomponen']);
         Route::get('user/getBuktiFisikData', [UserController::class, 'getBuktiFisikData']);
         Route::post('user/storeBuktiFisik', [UserController::class, 'storeBuktiFisik']);
+
+        //logout 
+        Route::post('user/logout', [UserAuthController::class, 'destory']);
     });
 });
 
@@ -42,6 +45,9 @@ Route::middleware(['auth:sanctum', 'type.admin'])->group(function () {
     Route::group(['prefix' => 'v1'], function () {
         Route::get('admin/getUser', [AdminController::class, 'getUserAccount']);
         Route::put('admin/verified/{id}', [AdminController::class, 'verified']);
+
+         //logout 
+         Route::post('admin/logout', [AdminAuthController::class, 'destory']);
     });
 });
 
@@ -49,6 +55,17 @@ Route::middleware(['auth:sanctum', 'type.operator'])->group(function () {
     Route::group(['prefix' => 'v1'], function () {
         Route::get('operator/getUser', [OperatorController::class, 'getUserAccount']);
         Route::put('operator/verified/{id}', [OperatorController::class, 'verified']);
+
+        Route::get('operator/getListLibrary', [OperatorController::class, 'getListLibrary']);
+        Route::get('operator/getListKomponen', [OperatorController::class, 'getListKomponen']);
+        Route::get('operator/getListBuktiFisik', [OperatorController::class, 'getListBuktiFisik']);
+
+        Route::get('operator/getDetailLibrary/{id}', [OperatorController::class, 'getDetailLibrary']);
+        Route::get('operator/getDetailKomponen/{id}', [OperatorController::class, 'getDetailKomponen']);
+        Route::get('operator/getDetailBuktiFisik/{id}', [OperatorController::class, 'getDetailBuktiFisik']);
+
+         //logout 
+         Route::post('operator/logout', [OperatorAuthController::class, 'destory']);
     });
     
     

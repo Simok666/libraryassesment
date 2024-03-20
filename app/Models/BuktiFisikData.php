@@ -15,6 +15,6 @@ class BuktiFisikData extends Model
      */
     public function buktiFisik(): HasMany
     {
-        return $this->hasMany(BuktiFisik::class);
+        return $this->hasMany(BuktiFisik::class, 'bukti_fisik_data_id', 'id');
     }
 }

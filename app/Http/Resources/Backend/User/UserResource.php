@@ -35,7 +35,7 @@ class UserResource extends JsonResource
             'induk' => $this->induk,
             'jenis_perpustakaan' => $this->jenis_perpustakaan, 
             'visi' => $this->visi,
-            'misi' => $this->visi,
+            'misi' => $this->misi,
             'data_perpustakaan_image' => ImageResource::collection($this->getMedia('images')),
         ];
     }

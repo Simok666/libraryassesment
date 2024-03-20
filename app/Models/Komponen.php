@@ -15,6 +15,6 @@ class Komponen extends Model
      */
     public function subKomponens(): HasMany
     {
-        return $this->hasMany(subKomponen::class);
+        return $this->hasMany(subKomponen::class, 'subkomponen_id', 'id');
     }
 }
