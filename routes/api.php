@@ -26,6 +26,7 @@ Route::group(['namespace' => 'Api', 'prefix' => 'v1'], function () {
     Route::post('admin/login', [AdminAuthController::class, 'login']);
     Route::post('operator/login', [OperatorAuthController::class, 'login']);
     Route::post('pimpinan/login', [PimpinanAuthController::class, 'login']);
+    Route::post('user', [UserAuthController::class, 'getUserAccount'])->middleware('auth:sanctum');
 });
 
 Route::middleware(['auth:sanctum', 'type.user'])->group(function () {

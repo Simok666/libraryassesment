@@ -7,7 +7,8 @@ use Illuminate\Http\Request;
 use App\Http\Requests\Auth\UserAuthRequest;
 use App\Http\Requests\Auth\UserAuthLoginRequest;
 use App\Http\Resources\Auth\AuthResource;
-use App\Http\Resources\Auth\User\UserRegisterResource;  
+use App\Http\Resources\Auth\User\UserRegisterResource;
+use App\Http\Resources\Auth\UserAccountResource;
 use App\Models\User;
 use App\Models\Admin;
 use App\Models\Operator;
@@ -74,6 +75,16 @@ class UserAuthController extends Controller
         }
         
         return new AuthResource($user);
+    }
+    
+    // check user from token
+    public function getUserAccount(Request $request)
+    {
+        $user = $request->user();
+        $role = $request->user()->currentAccessToken()->abilities;
+        $role = explode(':', $role[0])[1] ?? "";
+        $user["role"] = $role;
+        return new UserAccountResource($user);
     }
 
      /**

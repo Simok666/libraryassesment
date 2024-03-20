@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 class IndexController extends Controller
 {
     // create laravel index function
-    public function index() {
-        return view('index');
+    public function index(Request $request, $view = "AuthLogin") {
+        return view($view);
     }
 }
