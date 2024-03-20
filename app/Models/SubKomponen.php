@@ -31,7 +31,7 @@ class SubKomponen extends Model implements HasMedia
      */
     public function komponen(): BelongsTo
     {
-        return $this->belongsTo(Komponen::class);
+        return $this->belongsTo(Komponen::class, 'subkomponen_id', 'id');
     }
 
     /**
@@ -39,6 +39,6 @@ class SubKomponen extends Model implements HasMedia
      */
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

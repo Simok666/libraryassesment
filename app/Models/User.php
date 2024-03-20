@@ -10,6 +10,7 @@ use Laravel\Sanctum\HasApiTokens;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends Authenticatable implements HasMedia
 {
@@ -61,22 +62,22 @@ class User extends Authenticatable implements HasMedia
      */
     public function library(): HasOne
     {
-        return $this->hasOne(Library::class);
+        return $this->hasOne(Library::class, 'user_id', 'id');
     }
 
     /**
      * Get the customer address associated with the user.
      */
-    public function komponen(): HasOne
+    public function komponen(): HasMany
     {
-        return $this->hasOne(SubKomponen::class);
+        return $this->hasMany(SubKomponen::class, 'user_id');
     }
 
     /**
      * Get the customer address associated with the user.
      */
-    public function buktiFisik(): HasOne
+    public function buktiFisik(): HasMany
     {
-        return $this->hasOne(BuktiFisik::class);
+        return $this->HasMany(BuktiFisik::class, 'user_id', 'id');
     }
 }

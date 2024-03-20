@@ -49,6 +49,15 @@ Route::middleware(['auth:sanctum', 'type.operator'])->group(function () {
     Route::group(['prefix' => 'v1'], function () {
         Route::get('operator/getUser', [OperatorController::class, 'getUserAccount']);
         Route::put('operator/verified/{id}', [OperatorController::class, 'verified']);
+
+        Route::get('operator/getListLibrary', [OperatorController::class, 'getListLibrary']);
+        Route::get('operator/getListKomponen', [OperatorController::class, 'getListKomponen']);
+        Route::get('operator/getListBuktiFisik', [OperatorController::class, 'getListBuktiFisik']);
+
+        Route::get('operator/getDetailLibrary/{id}', [OperatorController::class, 'getDetailLibrary']);
+        Route::get('operator/getDetailKomponen/{id}', [OperatorController::class, 'getDetailKomponen']);
+        Route::get('operator/getDetailBuktiFisik/{id}', [OperatorController::class, 'getDetailBuktiFisik']);
+        
     });
     
     
