@@ -10,6 +10,9 @@ use App\Models\Komponen;
 use App\Models\SubKomponen;
 use App\Models\BuktiFisikData;
 use App\Models\BuktiFisik;
+use App\Models\VerifikatorDesk;
+use App\Models\VerifikatorField;
+use App\Models\Library;
 use Mail;
 use App\Mail\PostMail;
 use App\Jobs\SendEmailJob;
@@ -22,6 +25,8 @@ use App\Http\Resources\Backend\Operator\OperatorListBuktiFisik;
 use App\Http\Resources\Backend\Operator\OperatorDetailLibrary;
 use App\Http\Resources\Backend\Operator\OperatorDetailKomponen;
 use App\Http\Resources\Backend\Operator\OperatorDetailBukti;
+use App\Http\Resources\Backend\Verifikator\VerifikatorDeskResource;
+use App\Http\Resources\Backend\Verifikator\VerifikatorFieldResource;
 use App\Http\Resources\Backend\User\UserResource;
 use App\Http\Resources\Backend\User\UserSubKomponenResource;
 use Illuminate\Http\JsonResponse;
@@ -187,4 +192,101 @@ class OperatorController extends Controller
         
         return  OperatorDetailBukti::collection($buktiFisik);
     }
+
+    /**
+     * get list verifikator desk user
+     * 
+     * @param VerifikatorDesk $desk
+     * 
+     * @return JsonResponse
+     * 
+     */
+    public function getListVerifikatorDesk( VerifikatorDesk $desk) 
+    {
+        return  VerifikatorDeskResource::collection($desk::paginate(10));
+    }
+
+    /**
+     * get list verifikator field user
+     * 
+     * @param VerifikatorField $field
+     * 
+     * @return JsonResponse
+     * 
+     */
+    public function getListVerifikatorField( VerifikatorField $field) 
+    {
+        return  VerifikatorFieldResource::collection($field::paginate(10));
+    }
+
+    /**
+     * notify email every verifikator field 
+     * 
+     * @param VerifikatorDesk $desk
+     * @param User $user
+     * 
+     * @return JsonResponse
+     * 
+     */
+    public function notifyEmailDesk(Request $request, VerifikatorDesk $desk, User $user)
+    {
+        try {
+            $verifikator = $desk::find($request->id);
+
+            $dataLibrary = Library::where('status', 'Baru')->update(['status' => 'Aktif']);
+            $dataSubKomponen = SubKomponen::where('status', 'Baru')->update(['status' => 'Aktif']);
+            $dataBuktiFisik = BuktiFisik::where('status', 'Baru')->update(['status' => 'Aktif']);
+            
+            $postMail = [
+                'email' => $verifikator->email,
+                'title' => 'Status usulan disetujui operator',
+                'status' => 'verifikator',
+                'body' => 'mohon check usulan dari PIC',
+            ];
+                
+            dispatch(new SendEmailJob($postMail));
+
+            return response()->json(['message' => 'notified with successfully'], HttpResponse::HTTP_CREATED);
+
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'An error occurred while notif email: ' . $e->getMessage()], 400);
+        }
+    }    
+
+    /**
+     * notify email every verifikator field 
+     * 
+     * @param VerifikatorField $field
+     * @param User $user
+     * 
+     * @return JsonResponse
+     * 
+     */
+    public function notifyEmailField(Request $request, VerifikatorField $field, User $user)
+    {
+        try {
+            $verifikator = $field::find($request->id);
+
+            $dataLibrary = Library::where('status', 'Baru')->update(['status' => 'Aktif']);
+            $dataSubKomponen = SubKomponen::where('status', 'Baru')->update(['status' => 'Aktif']);
+            $dataBuktiFisik = BuktiFisik::where('status', 'Baru')->update(['status' => 'Aktif']);
+            
+            $postMail = [
+                'email' => $verifikator->email,
+                'title' => 'Status usulan disetujui operator',
+                'status' => 'verifikator',
+                'body' => 'mohon check usulan dari PIC',
+            ];
+                
+            dispatch(new SendEmailJob($postMail));
+
+            return response()->json(['message' => 'notified with successfully'], HttpResponse::HTTP_CREATED);
+
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'An error occurred while notif email: ' . $e->getMessage()], 400);
+        }
+    }
+
+
+
 }
