@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}" />
-    <title>Login - Mazer Admin Dashboard</title>
+    <title>Login - Library Assesment</title>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/bootstrap.css') }}">
     <link rel="stylesheet" href="{{ asset('vendors/bootstrap-icons/bootstrap-icons.css') }}">
@@ -47,9 +47,8 @@
                         <button class="btn btn-primary btn-block btn-lg shadow-lg mt-5" type="submit">Log in</button>
                     </form>
                     <div class="text-center mt-5 text-lg fs-4">
-                        <p class="text-gray-600">Don't have an account? <a href="auth-register.html" class="font-bold">Sign
+                        <p class="text-gray-600">Don't have an account? <a href="{{ url("auth-register.html") }}" class="font-bold">Sign
                                 up As User</a>.</p>
-                        {{-- <p><a class="font-bold" href="auth-forgot-password.html">Forgot password?</a>.</p> --}}
                     </div>
                 </div>
             </div>
