@@ -16,6 +16,7 @@ class OperatorListKomponen extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+            'id' => $this->id,
             'pic_name' => $this->name,
             'pic_email' => $this->email,
             'komponen' => UserSubKomponenResource::collection($this->komponen)

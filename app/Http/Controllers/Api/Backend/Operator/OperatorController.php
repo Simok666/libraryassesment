@@ -100,7 +100,7 @@ class OperatorController extends Controller
                         $query->where('status', $request->status); 
                     }])->paginate($request->limit);
 
-       
+
         return  OperatorListLibrary::collection($library);
        
     }

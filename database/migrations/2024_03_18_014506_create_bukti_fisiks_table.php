@@ -16,6 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('bukti_fisik_data_id');
             $table->enum('status',['Baru', 'Aktif', 'Selesai']);
+            $table->enum('status_verifikator',['Sesuai', 'Belum Sesuai'])->nullable();
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users');

@@ -17,6 +17,12 @@
         {{ $postMail['body'] }}
     <?php } elseif ($postMail['status'] == 'verifikator') { ?>
         {{ $postMail['body'] }}
+    <?php } elseif ($postMail['status'] == 'profil_perpustakaan') { ?>
+        {{ $postMail['body'] }}
+    <?php } elseif ($postMail['status'] == 'komponen_perpustakaan') { ?>
+        {{ $postMail['body'] }}
+    <?php } elseif ($postMail['status'] == 'bukti_fisik_perpustakaan') { ?>
+        {{ $postMail['body'] }}
     <?php } elseif ($postMail['status'] == 'auth') { ?>
         <p>name : {{ $postMail['body']->name }}</p>
         <p>email : {{ $postMail['body']->email }}</p>

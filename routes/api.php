@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\Backend\Administrator\AdminController;
 use App\Http\Controllers\Api\Backend\User\UserController;
 use App\Http\Controllers\Api\Auth\VerifikatorDeskAuthController;
 use App\Http\Controllers\Api\Auth\VerifikatorFieldAuthController;
+use App\Http\Controllers\Api\Backend\Verifikator\VerifikatorDeskController;
 
 /*
 |--------------------------------------------------------------------------
@@ -84,15 +85,33 @@ Route::middleware(['auth:sanctum', 'type.operator'])->group(function () {
 });
 
 Route::middleware(['auth:sanctum', 'type.verifikator_desk'])->group(function () {
-    Route::group(['prefix' => 'v1'], function () {
-    
-        //logout
-        Route::post('verifikatordesk/logout', [VerifikatorDeskAuthController::class, 'destory']);
-    });
+        Route::group(['prefix' => 'v1'], function () {
+            Route::get('operator/getListLibrary', [OperatorController::class, 'getListLibrary']);
+            Route::get('operator/getListKomponen', [OperatorController::class, 'getListKomponen']);
+            Route::get('operator/getListBuktiFisik', [OperatorController::class, 'getListBuktiFisik']);
+
+            Route::get('operator/getDetailLibrary/{id}', [OperatorController::class, 'getDetailLibrary']);
+            Route::get('operator/getDetailKomponen/{id}', [OperatorController::class, 'getDetailKomponen']);
+            Route::get('operator/getDetailBuktiFisik/{id}', [OperatorController::class, 'getDetailBuktiFisik']);
+            
+            Route::post('verifikatordesk/doneNotification/{id}', [VerifikatorDeskController::class, 'doneNotification']);
+            Route::post('verifikatordesk/notYetNotification/{id}', [VerifikatorDeskController::class, 'notYetNotification']);
+
+            //logout
+            Route::post('verifikatordesk/logout', [VerifikatorDeskAuthController::class, 'destory']);
+        });
 });
 
 Route::middleware(['auth:sanctum', 'type.verifikator_field'])->group(function () {
     Route::group(['prefix' => 'v1'], function () {
+
+        Route::get('operator/getListLibrary', [OperatorController::class, 'getListLibrary']);
+        Route::get('operator/getListKomponen', [OperatorController::class, 'getListKomponen']);
+        Route::get('operator/getListBuktiFisik', [OperatorController::class, 'getListBuktiFisik']);
+
+        Route::get('operator/getDetailLibrary/{id}', [OperatorController::class, 'getDetailLibrary']);
+        Route::get('operator/getDetailKomponen/{id}', [OperatorController::class, 'getDetailKomponen']);
+        Route::get('operator/getDetailBuktiFisik/{id}', [OperatorController::class, 'getDetailBuktiFisik']);
    
         //logout
         Route::post('verifikatorfield/logout', [VerifikatorFieldAuthController::class, 'destory']);

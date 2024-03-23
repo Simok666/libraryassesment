@@ -57,8 +57,10 @@ class UserAuthController extends Controller
 
             return new UserRegisterResource($user);
         }
+        catch(\Illuminate\Database\QueryException $ex) {
+            return response()->json(['error' => 'An error occurred while creating account: Duplicate Entry'], 400);
+        }
         catch(\Exception $e) {
-            DB::rollBack();
             return response()->json(['error' => 'An error occurred while creating account: ' . $e->getMessage()], 404);
         }
     }
