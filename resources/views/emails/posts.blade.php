@@ -15,6 +15,8 @@
         {{ $postMail['body'] }}
     <?php } elseif ($postMail['status'] == 'insert bukti fisik') { ?>
         {{ $postMail['body'] }}
+    <?php } elseif ($postMail['status'] == 'verifikator') { ?>
+        {{ $postMail['body'] }}
     <?php } elseif ($postMail['status'] == 'auth') { ?>
         <p>name : {{ $postMail['body']->name }}</p>
         <p>email : {{ $postMail['body']->email }}</p>
