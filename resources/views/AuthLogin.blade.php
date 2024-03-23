@@ -14,7 +14,6 @@
     <link rel="stylesheet" href="{{ asset('vendors/toastify/toastify.css') }}">
 <body>
     <div id="auth">
-
         <div class="row h-100">
             <div class="col-lg-5 col-12">
                 <div id="auth-left">
@@ -62,29 +61,30 @@
         </div>
     </div>
     <script src="{{ asset('vendors/jquery/jquery.min.js') }}"></script>
-    <script src="{{ asset('js/app.js') }}"></script>
     <script src="{{ asset('vendors/toastify/toastify.js') }}"></script>
+    <script src="{{ asset('js/app.js') }}"></script>
     <script>
+        // if not empty token redirect
+        if (!empty(session('token'))) {
+            window.location.href = "{{ url('dashboard') }}";
+        }
         // jquery on submit
         $(document).ready(function() {
             $('form').submit(function(e) {
                 e.preventDefault();
-                let role = $('[name=role]').val();
-                $.ajax({
-                    type: 'POST',
-                    url: "{{ url('api/v1') }}/" + role + "/login",
-                    data: $(this).serialize(),
-                    dataType: 'json',
-                    success: function(data) {
-                        // redirect to dashboard
-                        window.location.href = "{{ url('dashboard') }}";
+                role = $('select[name=role]').val();
+                ajaxData(`{{ url('api/v1/') }}/${role}/login`, 'POST', $(this).serialize(),
+                    function(resp) {
+                        setSession('token',resp.data.token)
+                        setSession('isLogin',true)
+                        window.location = "{{ url('dashboard') }}";
                     },
-                    error: function(data) {
+                    function(data) {
                         let code = data.responseJSON.code;
                         if (code >= 500) toast("Something went wrong, please try again", 'danger');
                         else toast("Email or password is incorrect", 'warning');
                     }
-                });
+                );
             });
         })
     </script>
