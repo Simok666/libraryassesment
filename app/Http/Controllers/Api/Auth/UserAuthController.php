@@ -15,6 +15,7 @@ use App\Models\Operator;
 use Mail;
 use App\Jobs\SendEmailJob;
 use App\Mail\PostMail;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Hash;
 
@@ -30,6 +31,7 @@ class UserAuthController extends Controller
     public function register(UserAuthRequest $request)
     {
         try {
+            DB::beginTransaction();
             
             $user = User::create($request->validated());
             
@@ -38,13 +40,12 @@ class UserAuthController extends Controller
                     $user->addMedia($image)->toMediaCollection('images');
                 }
             }
-       
+
             $admin = Admin::first();
             $operator = Operator::first();
 
-            
             $postMail = [
-                'email' => [$admin->email, $admin->operator],
+                'email' => [$admin->email, $operator->email],
                 'title' => 'New User Has Been Registration',
                 'status' => 'auth',
                 'body' => $user,
@@ -52,9 +53,12 @@ class UserAuthController extends Controller
 
             dispatch(new SendEmailJob($postMail));
 
+            DB::commit();
+
             return new UserRegisterResource($user);
         }
         catch(\Exception $e) {
+            DB::rollBack();
             return response()->json(['error' => 'An error occurred while creating account: ' . $e->getMessage()], 404);
         }
     }

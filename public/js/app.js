@@ -51,7 +51,7 @@ function empty(value) {
 }
 
 function setSession(name, value) {
-    localStorage.setItem(name, JSON.stringify(value));
+    localStorage.setItem(name, value);
 }
 function session(name) {
     return localStorage.getItem(name) ?? "";
@@ -60,8 +60,9 @@ function session(name) {
 function checkLogin() {
     if(empty(session("isLogin"))) {
         toast("Session expired, please login again", 'danger');
-        setTimeout(deleteSession, 3000);
-        window.location = '/';
+        setTimeout(function(){
+            deleteSession();
+        }, 3000);
     } else {
         ajaxData(baseUrl + '/api/v1/user', 'POST', {}, function (resp) {
             console.log(resp);

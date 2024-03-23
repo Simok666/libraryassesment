@@ -53,3 +53,11 @@ $response = $kernel->handle(
 )->send();
 
 $kernel->terminate($request, $response);
+
+function debug($arg) {
+    header("Content-Type: application/json");
+    if (is_object($arg)) {
+        $arg = get_class_methods($arg);
+    } 
+    die(json_encode($arg));
+}
