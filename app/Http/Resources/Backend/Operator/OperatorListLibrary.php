@@ -16,6 +16,7 @@ class OperatorListLibrary extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+            'id' => $this->id,
             'pic_name' => $this->name,
             'pic_email' => $this->email,
             'profil_perpustakaan' => new UserResource($this->library)

@@ -34,6 +34,7 @@ return new class extends Migration
             $table->text('visi');
             $table->text('misi');
             $table->enum('status',['Baru', 'Aktif', 'Selesai']);
+            $table->enum('status_verifikator',['Sesuai', 'Belum Sesuai'])->nullable();
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users');

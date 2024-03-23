@@ -36,6 +36,8 @@ class UserResource extends JsonResource
             'jenis_perpustakaan' => $this->jenis_perpustakaan, 
             'visi' => $this->visi,
             'misi' => $this->misi,
+            'status' => $this->status,
+            'status_verifikasi' => $this->status_verifikator,
             'data_perpustakaan_image' => ImageResource::collection($this->getMedia('images')),
         ];
     }

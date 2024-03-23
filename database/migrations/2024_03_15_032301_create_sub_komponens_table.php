@@ -19,6 +19,8 @@ return new class extends Migration
             $table->integer('nilai');
             $table->boolean('is_verified')->default(false);
             $table->enum('status',['Baru', 'Aktif', 'Selesai']);
+            $table->text('notes')->nullable();
+            $table->enum('status_verifikator',['Sesuai', 'Belum Sesuai'])->nullable();
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users');

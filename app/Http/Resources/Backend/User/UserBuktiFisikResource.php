@@ -18,6 +18,8 @@ class UserBuktiFisikResource extends JsonResource
         return [
             'user_id' => $this->user_id,
             'bukti_fisik_data_id' => $this->bukti_fisik_data_id,
+            'status' => $this->status,
+            'status_verifikasi' => $this->status_verifikator,
             'bukti_fisik_upload' => ImageResource::collection($this->getMedia('images')),
         ];
     }
