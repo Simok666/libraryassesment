@@ -82,7 +82,7 @@ class OperatorController extends Controller
 
            return response()->json(['message' => 'User updated successfully'], HttpResponse::HTTP_CREATED);
             
-
+            return response()->json(['message' => 'Your Account has been verified'], 409);
         } catch(\Exception $e) {
             return response()->json(['error' => 'An error occurred while updating data: ' . $e->getMessage()], 400);
         }

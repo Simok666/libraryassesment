@@ -38,10 +38,10 @@ class UserController extends Controller
     public function store(UserRequest $request, Library $library) 
     {
         try {
-            
-            if( !$this->checkUserInsert($request->user_id, 'library') )
+
+            if( !$this->checkUserInsert($request->user()->id, 'library') )
             {
-                $store = $library::create($request->validated());
+                $store = $library::create(array_merge($request->validated(), ['user_id' => $request->user()->id]));
 
                 if ($images = $request->data_perpustakaan_image) {
                     foreach ($images as $image) {
@@ -83,7 +83,7 @@ class UserController extends Controller
      */
     public function getSubKomponen(Request $request, User $user)
     {
-        $users = $user::find($request->user_id)->library;
+        $users = $user::find($request->user()->id)->library;
 
         return UserKomponenResource::collection(Komponen::where('jenis_perpustakaan', $users->jenis_perpustakaan)->get());
     }
@@ -102,7 +102,8 @@ class UserController extends Controller
         try {
             // if( !$this->checkUserInsert($request->user_id, 'subKomponen') )
             // {
-                $store = $subKomponen::create($request->validated());
+                $jenisPerpus = Library::where('user_id', $request->user()->id)->first()->jenis_perpustakaan;
+                $store = $subKomponen::create(array_merge($request->validated(), ['user_id' => $request->user()->id]));
     
                 if ($images = $request->bukti_dukung) {
                     foreach ($images as $image) {
@@ -111,16 +112,19 @@ class UserController extends Controller
                 }
                 $admin = Admin::first();
                 $operator = Operator::first();
-    
-                
-                $postMail = [
-                    'email' => [$admin->email, $operator->email],
-                    'title' => 'Pengusul Melengkapi Data Komponen',
-                    'status' => 'insert komponen',
-                    'body' => $store,
-                ];
-    
-                dispatch(new SendEmailJob($postMail));
+            
+                if($subKomponen::where('user_id' ,$request->user()->id)->count() === 9 ){
+                    $postMail = [
+                        'email' => [$admin->email, $operator->email],
+                        'title' => 'Pengusul Melengkapi Data Komponen',
+                        'status' => 'insert komponen',
+                        'body' => Komponen::with((['subKomponens' => function ($query) use ($request) {
+                                        $query->where('user_id', $request->user()->id); 
+                                    }]))->where('jenis_perpustakaan', $jenisPerpus)->get(),
+                    ];
+        
+                    dispatch(new SendEmailJob($postMail));
+                }
                 
                 return response()->json(['success' => 'success save data', 'data' => new UserSubKomponenResource($store)], HttpResponse::HTTP_CREATED);
             // }
@@ -157,7 +161,9 @@ class UserController extends Controller
         try {
             // if( !$this->checkUserInsert($request->user_id, 'buktiFisik') )
             // {
-                $store = $buktiFisik::create($request->validated());
+                
+
+                $store = $buktiFisik::create(array_merge($request->validated(), ['user_id' => $request->user()->id]));
     
                 if ($images = $request->bukti_fisik_upload) {
                     foreach ($images as $image) {
@@ -166,15 +172,19 @@ class UserController extends Controller
                 }
                 $admin = Admin::first();
                 $operator = Operator::first();
-    
-                $postMail = [
-                    'email' => [$admin->email, $operator->email],
-                    'title' => 'Pengusul Melengkapi Data Perpustakaan',
-                    'status' => 'insert bukti fisik',
-                    'body' => $store,
-                ];
-    
-                dispatch(new SendEmailJob($postMail));
+                if($buktiFisik::where('user_id' ,$request->user()->id)->count() === 9) 
+                {
+                    $postMail = [
+                        'email' => [$admin->email, $operator->email],
+                        'title' => 'Pengusul Melengkapi Data Bukti Fisik',
+                        'status' => 'insert bukti fisik',
+                        'body' => BuktiFisikData::with((['buktiFisik' => function ($query) use ($request) {
+                                    $query->where('user_id', $request->user()->id); 
+                                }]))->get(),
+                    ];
+        
+                    dispatch(new SendEmailJob($postMail));
+                }
                 
                 return response()->json(['success' => 'success save data', 'data' => new UserBuktiFisikResource($store)], HttpResponse::HTTP_CREATED);
             // }

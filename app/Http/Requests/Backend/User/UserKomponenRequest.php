@@ -22,7 +22,7 @@ class UserKomponenRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'user_id' => ['required', 'numeric'],
+            // 'user_id' => ['required', 'numeric'],
             'subkomponen_id' => ['required', 'numeric'],
             'skor_subkomponen' => ['required', 'numeric'],
             'nilai' => ['required', 'numeric'],
