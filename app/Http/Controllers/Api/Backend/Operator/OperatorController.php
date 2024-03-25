@@ -44,9 +44,12 @@ class OperatorController extends Controller
      */
     public function getUserAccount(Request $request)
     {
-        return  OperatorResource::collection(User::paginate(10));
+        return OperatorResource::collection(
+            User::when(request()->filled("id"), function ($query){
+                $query->where('id', request("id"));
+            })->paginate($request->limit ?? "10")
+        );
     }
-
 
     /**
      * function fo update verified pic user account
@@ -58,10 +61,10 @@ class OperatorController extends Controller
      * 
      */
     public function verified(OperatorVerifiedRequest $request, User $user)
-    {
+    {   
         try {
             $users = $user::find($request->id);
-            $users->is_verified = $request->is_verified;
+            $users->is_verified = (Boolean) $request->is_verified;
             $users->save();
             
             if($users->is_verified) {
