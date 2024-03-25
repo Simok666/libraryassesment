@@ -23,7 +23,7 @@ class UserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'user_id' => ['required', 'numeric'],
+            // 'user_id' => ['required', 'numeric'],
             'nomor_npp' =>  ['required','max:100'],
             'hasil_akreditasi' => ['required', 'string' ,'max:100'],
             'nama_perpustakaan' => ['required', 'string' ,'max:100'],

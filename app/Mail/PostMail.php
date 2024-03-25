@@ -31,7 +31,7 @@ class PostMail extends Mailable
     {
         return new Envelope(
             subject: 'Post Mail',
-            from: new Address('rachmadfidhani33@gmail.com', 'New PIC Account'),
+            from: new Address('rachmadfidhani33@gmail.com', 'Library Assesment'),
         );
     }
 

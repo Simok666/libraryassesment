@@ -22,7 +22,7 @@ class UserBuktiFisikRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'user_id' => ['required', 'numeric'],
+            // 'user_id' => ['required', 'numeric'],
             'bukti_fisik_data_id' => ['required', 'numeric'],
             'bukti_fisik_upload' => ['required', 'array'],
             'bukti_fisik_upload.*' => ['mimes:jpg,png,jpeg,gif,svg,pdf','max:2048'],
