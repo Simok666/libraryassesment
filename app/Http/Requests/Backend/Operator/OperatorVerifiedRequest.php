@@ -22,7 +22,7 @@ class OperatorVerifiedRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'is_verified' => ['required']
+            'is_verified' => ['required', 'boolean']
         ];
     }
 }

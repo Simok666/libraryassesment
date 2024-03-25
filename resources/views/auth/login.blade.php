@@ -76,13 +76,9 @@
                     function(resp) {
                         setSession('token',resp.data.token)
                         setSession('isLogin',true)
-                        window.location = "{{ url('dashboard') }}";
+                        window.location = "{{ url('dashboard.html') }}";
                     },
-                    function(data) {
-                        let code = data.responseJSON.code;
-                        if (code >= 500) toast("Something went wrong, please try again", 'danger');
-                        else toast("Email or password is incorrect", 'warning');
-                    }
+                  
                 );
             });
         })
