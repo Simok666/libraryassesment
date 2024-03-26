@@ -60,6 +60,30 @@
                             <input type="file" name="sk_image[]" id="sk_image" class="form-control form-control-xl" placeholder="Choose Image" required>
                         </div>
                         <div class="form-group position-relative has-icon-left mb-4">
+                            <input type="text" name="leader_instance_name" class="form-control form-control-xl" placeholder="Leader Instance Name">
+                            <div class="form-control-icon">
+                                <i class="bi bi-building"></i>
+                            </div>
+                        </div>
+                        <div class="form-group position-relative has-icon-left mb-4">
+                            <input type="text" name="library_name" class="form-control form-control-xl" placeholder="Library Name">
+                            <div class="form-control-icon">
+                                <i class="bi bi-building"></i>
+                            </div>
+                        </div>
+                        <div class="form-group position-relative has-icon-left mb-4">
+                            <input type="text" name="head_library_name" class="form-control form-control-xl" placeholder="Head Library Name">
+                            <div class="form-control-icon">
+                                <i class="bi bi-building"></i>
+                            </div>
+                        </div>
+                        <div class="form-group position-relative has-icon-left mb-4">
+                            <input type="text" name="npp" class="form-control form-control-xl" placeholder="NPP">
+                            <div class="form-control-icon">
+                                <i class="bi bi-hash"></i>
+                            </div>
+                        </div>
+                        <div class="form-group position-relative has-icon-left mb-4">
                             <input type="text" name="address" class="form-control form-control-xl" placeholder="Address" required>
                             <div class="form-control-icon">
                                 <i class="bi bi-geo-alt"></i>
@@ -100,9 +124,15 @@
                             </div>
                         </div>
                         <div class="form-group position-relative has-icon-left mb-4">
-                            <input type="email" name="library_email" id="library_email" class="form-control form-control-xl" placeholder="tipsi@gmail.com" value="tipsi@gmail.com">
+                            <input type="email" name="library_email" id="library_email" class="form-control form-control-xl" placeholder="Library Email example@gmail.com" value="">
                             <div class="form-control-icon">
                                 <i class="bi bi-envelope"></i>
+                            </div>
+                        </div>
+                        <div class="form-group position-relative has-icon-left mb-4">
+                            <input type="text" name="website" id="website" class="form-control form-control-xl" placeholder="website https://example.com" value="">
+                            <div class="form-control-icon">
+                                <i class="bi bi-globe"></i>
                             </div>
                         </div>
                         <button class="btn btn-primary btn-block btn-lg shadow-lg mt-5" type="submit">Submit</button>
