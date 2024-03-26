@@ -9,54 +9,14 @@
         <h4 class="card-title"></h4>
     </div>
     <div class="card-body">
-        <div class="table-responsive">
-            <table class="table table-bordered mb-0 datatable datatable-users" data-action="/api/v1/operator/getUser">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Library Name</th>
-                        <th>Address</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
-        </div>
-        <nav aria-label="Page navigation" class="pagination-setting-users">
-            <div class="d-flex justify-content-end mt-3">
-                <span class="pagination-info">dari ke</span>
-            </div>
-            <ul class="pagination pagination-primary justify-content-end" data-table="table-users">
-                <li class="page-item">
-                    <a class="btn btn-primary btn-first" href="#">
-                        <span aria-hidden="true"><i class="bi bi-chevron-double-left"></i></span>
-                    </a>
-                </li>
-                <li class="page-item">
-                    <a class="btn btn-primary btn-prev" href="#">
-                        <span aria-hidden="true"><i class="bi bi-chevron-left"></i></span>
-                    </a>
-                </li>
-                <li class="page-item">
-                    <form  class="navbar-form pull-right goto">
-                        <input style="width:60px; padding: 5px; margin-left: 5px; margin-right: 5px" type="text" name="page" class="form-control no">
-                    </form>
-                </li>
-                <li class="page-item">
-                    <a class="btn btn-primary btn-next" href="#">
-                        <span aria-hidden="true"><i class="bi bi-chevron-right"></i></span>
-                    </a>
-                </li>
-                <li class="page-item">
-                    <a class="btn btn-primary btn-last" href="#">
-                        <span aria-hidden="true"><i class="bi bi-chevron-double-right"></i></span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
+        @include('components.table-pagenation', ['table' => 'users' , 'url' => '/api/v1/operator/getUser' , 'headers' => [
+            "Name",
+            "Email",
+            "Library",
+            "Address",
+            "Status",
+            "Action"
+        ] , 'pagination' => true])
     </div>
 </div>
 
