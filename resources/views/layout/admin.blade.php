@@ -50,6 +50,18 @@
                                 <span>User</span>
                             </a>
                         </li>
+                        <li class="sidebar-item">
+                            <a href="{{ url("libraries.html") }}" class="sidebar-link">
+                                <i class="bi bi-book"></i>
+                                <span>Libraries</span>
+                            </a>
+                        </li>
+                         <li class="sidebar-item">
+                            <a href="{{ url("proofOfWork.html") }}" class="sidebar-link">
+                                <i class="bi bi-lock"></i>
+                                <span>Bukti Fisik</span>
+                            </a>
+                        </li>
                     </ul>
                 </div>
                 <button class="sidebar-toggler btn x"><i data-feather="x"></i></button>

@@ -101,7 +101,7 @@ class OperatorController extends Controller
     {
         $library = User::with(['library' => function ($query) use ($request) {
                         $query->where('status', $request->status); 
-                    }])->paginate($request->limit);
+                    }])->paginate($request->limit ?? "10");
 
 
         return  OperatorListLibrary::collection($library);
@@ -120,7 +120,7 @@ class OperatorController extends Controller
     {
         $komponen =  User::with(['komponen' => function ($query) use ($request) {
             $query->where('status', $request->status); 
-        }])->paginate($request->limit);
+        }])->paginate($request->limit ?? "10");
     
         return OperatorListKomponen::collection($komponen);
     }
@@ -137,7 +137,7 @@ class OperatorController extends Controller
     {   
         $buktiFisik = User::with(['buktiFisik' => function ($query) use ($request) {
                         $query->where('status', $request->status); 
-                    }])->paginate($request->limit);
+                    }])->paginate($request->limit ?? "10");
         
         return  OperatorListBuktiFisik::collection($buktiFisik);
     }
