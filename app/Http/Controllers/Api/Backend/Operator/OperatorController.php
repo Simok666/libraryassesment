@@ -80,7 +80,7 @@ class OperatorController extends Controller
                 
             }
 
-           return response()->json(['message' => 'User updated successfully'], HttpResponse::HTTP_CREATED);
+            return response()->json(['message' => 'User updated successfully'], HttpResponse::HTTP_CREATED);
             
             return response()->json(['message' => 'Your Account has been verified'], 409);
         } catch(\Exception $e) {
@@ -151,49 +151,36 @@ class OperatorController extends Controller
      * 
      */
     public function getDetailLibrary(Request $request, User $user) {
-        $users = $user::find($request->id)->library;
+        try {
+            $users = $user::find($request->id);
 
-        return new OperatorDetailLibrary($users);
-    }
+            if($request->type_form == 'library') 
+            {   
+                if($users->library == null) {
+                    return response()->json(['error' => 'An error data not found'], 404);
+                }
 
-    /**
-     * get detail library user
-     * 
-     * @param Request $request
-     * @param SubKomponen $subKomponen
-     * @param User $user
-     * 
-     * @return JsonResponse
-     * 
-     */
-    public function getDetailKomponen(Request $request, SubKomponen $subKomponen, User $user) {
-        $users = $user::find($request->id)->library;
+                return new OperatorDetailLibrary($users->library);
+
+            } elseif ($request->type_form == 'subkomponen')
+            {
+                $subKomponen = Komponen::with(['subKomponens'=> function ($query) use ($request) {
+                    $query->where('user_id', $request->id);
+                }])->where('jenis_perpustakaan', $users->library->jenis_perpustakaan)->get();
+
+                return  OperatorDetailKomponen::collection($subKomponen);
+            } elseif ($request->type_form == 'buktifisik')
+            {
+                $buktiFisik = BuktiFisikData::with(['buktiFisik'=> function ($query) use ($request) {
+                    $query->where('user_id', $request->id);
+                }])->get();
+                
+                return  OperatorDetailBukti::collection($buktiFisik);
+            }
+        } catch(\Exception $e) {
+            return response()->json(['error' => 'An error occurred while get data: ' . $e->getMessage()], 400);
+        }
         
-        $subKomponen = Komponen::with(['subKomponens'=> function ($query) use ($request) {
-                            $query->where('user_id', $request->id);
-                        }])->where('jenis_perpustakaan', $users->jenis_perpustakaan)->get();
-
-        return  OperatorDetailKomponen::collection($subKomponen);
-    }
-
-    /**
-     * get detail library user
-     * 
-     * @param Request $request
-     * @param BuktiFisik $bukti
-     * @param User $user
-     * 
-     * @return JsonResponse
-     * 
-     */
-    public function getDetailBuktiFisik(Request $request, BuktiFisik $bukti, User $user) {
-        $users = $user::find($request->id)->library;
-        
-        $buktiFisik = BuktiFisikData::with(['buktiFisik'=> function ($query) use ($request) {
-                            $query->where('user_id', $request->id);
-                        }])->get();
-        
-        return  OperatorDetailBukti::collection($buktiFisik);
     }
 
     /**
