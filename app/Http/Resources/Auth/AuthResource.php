@@ -19,6 +19,7 @@ class AuthResource extends JsonResource
             'name' => $this->name,
             'email' => $this->email,
             'role' => $role ?? "",
+            'type_insert' => $this->type_insert ?? "",
             'token' => $this->createToken('mobile', ['role:'. $role])->plainTextToken
         ];
     }

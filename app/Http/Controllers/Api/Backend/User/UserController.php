@@ -38,10 +38,11 @@ class UserController extends Controller
     public function store(UserRequest $request, Library $library) 
     {
         try {
-
+            
             if( !$this->checkUserInsert($request->user()->id, 'library') )
             {
-                $store = $library::create(array_merge($request->validated(), ['user_id' => $request->user()->id]));
+                $store = $library::create(array_merge($request->validated(), ['user_id' => $request->user()->id] ));
+                $user = User::find($request->user()->id)->update(['type_insert' => '1']);
 
                 if ($images = $request->data_perpustakaan_image) {
                     foreach ($images as $image) {
@@ -67,6 +68,8 @@ class UserController extends Controller
 
         } catch(\Exception $e) {
             return response()->json(['error' => 'An error occurred while creating data: ' . $e->getMessage()], 404);
+        } catch(\Illuminate\Database\QueryException $ex) {
+            return response()->json(['error' => 'An error occurred while creating account: error on database'], 400);
         }
 
     }    
@@ -100,38 +103,37 @@ class UserController extends Controller
     public function storeKomponen(UserKomponenRequest $request, SubKomponen $subKomponen)
     {
         try {
-            // if( !$this->checkUserInsert($request->user_id, 'subKomponen') )
-            // {
-                $jenisPerpus = Library::where('user_id', $request->user()->id)->first()->jenis_perpustakaan;
-                $store = $subKomponen::create(array_merge($request->validated(), ['user_id' => $request->user()->id]));
-    
-                if ($images = $request->bukti_dukung) {
-                    foreach ($images as $image) {
-                        $store->addMedia($image)->toMediaCollection('images');
-                    }
+            $jenisPerpus = Library::where('user_id', $request->user()->id)->first()->jenis_perpustakaan;
+            $store = $subKomponen::create(array_merge($request->validated(), ['user_id' => $request->user()->id]));
+
+            if ($images = $request->bukti_dukung) {
+                foreach ($images as $image) {
+                    $store->addMedia($image)->toMediaCollection('images');
                 }
-                $admin = Admin::first();
-                $operator = Operator::first();
-            
-                if($subKomponen::where('user_id' ,$request->user()->id)->count() === 9 ){
-                    $postMail = [
-                        'email' => [$admin->email, $operator->email],
-                        'title' => 'Pengusul Melengkapi Data Komponen',
-                        'status' => 'insert komponen',
-                        'body' => Komponen::with((['subKomponens' => function ($query) use ($request) {
-                                        $query->where('user_id', $request->user()->id); 
-                                    }]))->where('jenis_perpustakaan', $jenisPerpus)->get(),
-                    ];
+            }
+            $admin = Admin::first();
+            $operator = Operator::first();
         
-                    dispatch(new SendEmailJob($postMail));
-                }
-                
-                return response()->json(['success' => 'success save data', 'data' => new UserSubKomponenResource($store)], HttpResponse::HTTP_CREATED);
-            // }
-            // return response()->json(['message' => 'duplicate data not allowed'], 409);
+            if($subKomponen::where('user_id' ,$request->user()->id)->count() === 9 ){
+                $user = User::find($request->user()->id)->update(['type_insert' => '2']);
+                $postMail = [
+                    'email' => [$admin->email, $operator->email],
+                    'title' => 'Pengusul Melengkapi Data Komponen',
+                    'status' => 'insert komponen',
+                    'body' => Komponen::with((['subKomponens' => function ($query) use ($request) {
+                                    $query->where('user_id', $request->user()->id); 
+                                }]))->where('jenis_perpustakaan', $jenisPerpus)->get(),
+                ];
+    
+                dispatch(new SendEmailJob($postMail));
+            }
+            
+            return response()->json(['success' => 'success save data', 'data' => new UserSubKomponenResource($store)], HttpResponse::HTTP_CREATED);
 
         } catch(\Exception $e) {
             return response()->json(['error' => 'An error occurred while creating data: ' . $e->getMessage()], 404);
+        } catch(\Illuminate\Database\QueryException $ex) {
+            return response()->json(['error' => 'An error occurred while creating account: error on database'], 400);
         }
     }
 
@@ -159,39 +161,36 @@ class UserController extends Controller
     public function storeBuktiFisik(UserBuktiFisikRequest $request, BuktiFisik $buktiFisik)
     {
         try {
-            // if( !$this->checkUserInsert($request->user_id, 'buktiFisik') )
-            // {
-                
+            $store = $buktiFisik::create(array_merge($request->validated(), ['user_id' => $request->user()->id]));
 
-                $store = $buktiFisik::create(array_merge($request->validated(), ['user_id' => $request->user()->id]));
+            if ($images = $request->bukti_fisik_upload) {
+                foreach ($images as $image) {
+                    $store->addMedia($image)->toMediaCollection('images');
+                }
+            }
+            $admin = Admin::first();
+            $operator = Operator::first();
+            if($buktiFisik::where('user_id' ,$request->user()->id)->count() === 9) 
+            {
+                $user = User::find($request->user()->id)->update(['type_insert' => '3']);
+                $postMail = [
+                    'email' => [$admin->email, $operator->email],
+                    'title' => 'Pengusul Melengkapi Data Bukti Fisik',
+                    'status' => 'insert bukti fisik',
+                    'body' => BuktiFisikData::with((['buktiFisik' => function ($query) use ($request) {
+                                $query->where('user_id', $request->user()->id); 
+                            }]))->get(),
+                ];
     
-                if ($images = $request->bukti_fisik_upload) {
-                    foreach ($images as $image) {
-                        $store->addMedia($image)->toMediaCollection('images');
-                    }
-                }
-                $admin = Admin::first();
-                $operator = Operator::first();
-                if($buktiFisik::where('user_id' ,$request->user()->id)->count() === 9) 
-                {
-                    $postMail = [
-                        'email' => [$admin->email, $operator->email],
-                        'title' => 'Pengusul Melengkapi Data Bukti Fisik',
-                        'status' => 'insert bukti fisik',
-                        'body' => BuktiFisikData::with((['buktiFisik' => function ($query) use ($request) {
-                                    $query->where('user_id', $request->user()->id); 
-                                }]))->get(),
-                    ];
-        
-                    dispatch(new SendEmailJob($postMail));
-                }
-                
-                return response()->json(['success' => 'success save data', 'data' => new UserBuktiFisikResource($store)], HttpResponse::HTTP_CREATED);
-            // }
-            // return response()->json(['message' => 'duplicate data not allowed'], 409);
+                dispatch(new SendEmailJob($postMail));
+            }
+            
+            return response()->json(['success' => 'success save data', 'data' => new UserBuktiFisikResource($store)], HttpResponse::HTTP_CREATED);
 
         } catch(\Exception $e) {
             return response()->json(['error' => 'An error occurred while creating data: ' . $e->getMessage()], 404);
+        } catch(\Illuminate\Database\QueryException $ex) {
+            return response()->json(['error' => 'An error occurred while creating account: error on database'], 400);
         }
     }
 
