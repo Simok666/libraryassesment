@@ -72,13 +72,17 @@
             $('form').submit(function(e) {
                 e.preventDefault();
                 role = $('select[name=role]').val();
+                loadingButton($("form"))
                 ajaxData(`{{ url('api/v1/') }}/${role}/login`, 'POST', $(this).serialize(),
                     function(resp) {
                         setSession('token',resp.data.token)
                         setSession('isLogin',true)
                         window.location = "{{ url('dashboard.html') }}";
+                        loadingButton($("form"), false)
                     },
-                  
+                    function (data) {
+                        loadingButton($("form"), false)
+                    }
                 );
             });
         })

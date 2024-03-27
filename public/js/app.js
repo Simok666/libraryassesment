@@ -25,7 +25,7 @@ function ajaxData(url, type, data , successFunc = "", errorFunc = "") {
         error: function (data) {
             let code = data.responseJSON.code;
             if (code >= 500) toast("Something went wrong, please try again", 'danger');
-            toast(data.responseJSON.message ?? data.responseJSON.error, 'warning')
+            else toast(data.responseJSON.message ?? data.responseJSON.error, 'warning')
             if(typeof errorFunc === "function") {
                 errorFunc(data);
             }

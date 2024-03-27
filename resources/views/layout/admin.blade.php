@@ -39,7 +39,7 @@
                         <li class="sidebar-title">Menu</li>
 
                         <li class="sidebar-item  ">
-                            <a href="index.html" class='sidebar-link'>
+                            <a href="dashboard.html" class='sidebar-link'>
                                 <i class="bi bi-grid-fill"></i>
                                 <span>Dashboard</span>
                             </a>
@@ -48,6 +48,18 @@
                             <a href="{{ url("users.html") }}" class="sidebar-link">
                                 <i class="bi bi-person"></i>
                                 <span>User</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="{{ url("libraries.html") }}" class="sidebar-link">
+                                <i class="bi bi-book"></i>
+                                <span>Libraries</span>
+                            </a>
+                        </li>
+                         <li class="sidebar-item">
+                            <a href="{{ url("proofOfWork.html") }}" class="sidebar-link">
+                                <i class="bi bi-lock"></i>
+                                <span>Bukti Fisik</span>
                             </a>
                         </li>
                     </ul>

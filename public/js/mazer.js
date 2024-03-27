@@ -108,7 +108,8 @@ var Sidebar = /*#__PURE__*/function () {
 
 
       setTimeout(function () {
-        return document.querySelector('.sidebar-item.active').scrollIntoView(false);
+        let activeItem = document.querySelector('.sidebar-item.active');
+        if (activeItem) return activeItem.scrollIntoView(false);
       }, 100); // check responsive
 
       this.onFirstLoad();
