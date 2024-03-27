@@ -27,12 +27,17 @@ class User extends Authenticatable implements HasMedia
         'password',
         'instance_name',
         'pic_name',
+        'leader_instance_name', 
+        'library_name', 
+        'head_library_name', 
+        'npp', 
         'address',
         'map_coordinates',
         'village',
         'subdistrict',
         'city',
         'province',
+        'website',
         'number_telephone',
         'library_email'
     ];

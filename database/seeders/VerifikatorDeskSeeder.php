@@ -17,6 +17,7 @@ class VerifikatorDeskSeeder extends Seeder
         VerifikatorDesk::create([
             'name' => 'Demo verifikator desk',
             'email' => 'simokart3@gmail.com',
+            'type' => 'desk',
             'password' => Hash::make('12345678')
         ]);
     }

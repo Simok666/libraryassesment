@@ -33,7 +33,16 @@ class UserAuthController extends Controller
         try {
             DB::beginTransaction();
             
-            $user = User::create($request->validated());
+            $validatedData = $request->validated();
+            $otherData = [
+                'leader_instance_name' => $request->leader_instance_name,
+                'library_name' => $request->library_name,
+                'head_library_name' => $request->head_library_name,
+                'npp' => $request->npp,
+                'website' => $request->website
+            ];
+            
+            $user = User::create(array_merge($validatedData, $otherData));
             
             if ($images = $request->sk_image) {
                 foreach ($images as $image) {

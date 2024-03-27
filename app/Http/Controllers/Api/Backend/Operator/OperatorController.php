@@ -72,7 +72,7 @@ class OperatorController extends Controller
                 $postMail = [
                     'email' => $users->email,
                     'title' => 'Your Account Has Been Verified',
-                    'status' => 'auth',
+                    'status' => 'verifikasi',
                     'body' => $users,
                 ];
                 
@@ -226,50 +226,18 @@ class OperatorController extends Controller
      * notify email every verifikator field 
      * 
      * @param VerifikatorDesk $desk
-     * @param User $user
-     * 
-     * @return JsonResponse
-     * 
-     */
-    public function notifyEmailDesk(Request $request, VerifikatorDesk $desk, User $user)
-    {
-        try {
-            $verifikator = $desk::find($request->id);
-
-            $dataLibrary = Library::where('status', 'Baru')->update(['status' => 'Aktif']);
-            $dataSubKomponen = SubKomponen::where('status', 'Baru')->update(['status' => 'Aktif']);
-            $dataBuktiFisik = BuktiFisik::where('status', 'Baru')->update(['status' => 'Aktif']);
-            
-            $postMail = [
-                'email' => $verifikator->email,
-                'title' => 'Status usulan disetujui operator',
-                'status' => 'verifikator',
-                'body' => 'mohon check usulan dari PIC',
-            ];
-                
-            dispatch(new SendEmailJob($postMail));
-
-            return response()->json(['message' => 'notified with successfully'], HttpResponse::HTTP_CREATED);
-
-        } catch (\Exception $e) {
-            return response()->json(['error' => 'An error occurred while notif email: ' . $e->getMessage()], 400);
-        }
-    }    
-
-    /**
-     * notify email every verifikator field 
-     * 
      * @param VerifikatorField $field
      * @param User $user
      * 
      * @return JsonResponse
      * 
      */
-    public function notifyEmailField(Request $request, VerifikatorField $field, User $user)
+    public function notifyEmailVerifikator(Request $request, VerifikatorDesk $desk, VerifikatorField $field,User $user)
     {
         try {
-            $verifikator = $field::find($request->id);
-
+            $verifikator = null;
+            ($request->type == 'desk') ? $verifikator = $desk::find($request->id) : $verifikator = $field::find($request->id);
+            
             $dataLibrary = Library::where('status', 'Baru')->update(['status' => 'Aktif']);
             $dataSubKomponen = SubKomponen::where('status', 'Baru')->update(['status' => 'Aktif']);
             $dataBuktiFisik = BuktiFisik::where('status', 'Baru')->update(['status' => 'Aktif']);
@@ -289,6 +257,34 @@ class OperatorController extends Controller
             return response()->json(['error' => 'An error occurred while notif email: ' . $e->getMessage()], 400);
         }
     }
+    
+    /**
+     * function for store data 
+     * 
+     * @param Request $request
+     * @param SubKomponen $user
+     * 
+     */
+     public function store(Request $request, SubKomponen $subkomponen) 
+     {
+        try {
+            $subKomponen = $subkomponen::find($request->id);
+            $notes = $request->notes;
+    
+            $dom = new \domdocument();
+            $dom->loadHtml($notes, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+    
+            $images = $dom->getelementsbytagname('img');
+    
+            foreach($images as $key => $img) {
+    
+            }
+        } catch (\Exception $e) {
+            
+        }
+     }
+
+
 
 
 

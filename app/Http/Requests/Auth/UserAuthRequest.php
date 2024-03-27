@@ -28,6 +28,10 @@ class UserAuthRequest extends FormRequest
             'password' => ['required'],
             'instance_name' => ['required', 'string', 'min:3', 'max:250'],
             'pic_name' => ['required', 'string', 'min:3', 'max:250'],
+            'leader_instance_name' => ['string', 'min:3', 'max:250'],
+            'library_name' => ['string', 'min:3', 'max:250'],
+            'head_library_name' => ['string', 'min:3', 'max:250'],
+            'npp' => ['string', 'min:3', 'max:400'],
             'sk_image' => ['required','array'],
             'sk_image.*' => ['mimes:jpg,png,jpeg,gif,svg,pdf','max:2048'],
             'address' => ['required', 'min:3', 'max:250'],
@@ -36,6 +40,7 @@ class UserAuthRequest extends FormRequest
             'subdistrict' => ['required', 'min:3', 'max:250'],
             'city' => ['required', 'min:3', 'max:250'],
             'province' => ['required', 'min:3', 'max:250'],
+            'website' => ['string', 'min:3', 'max:250'],
             'number_telephone' => ['required','numeric','min:10'],
             'library_email' => ['required','email','min:3', 'max:250'],
         ];

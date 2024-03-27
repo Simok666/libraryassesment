@@ -15,6 +15,9 @@ class VerifikatorFieldMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        return $next($request);
+        if(auth()->user()->tokenCan('role:verifikator_field')) {
+            return $next($request);
+        }
+        return response()->json('Not Authorized', 401);
     }
 }
