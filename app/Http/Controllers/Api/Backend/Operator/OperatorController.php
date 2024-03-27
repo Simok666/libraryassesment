@@ -150,7 +150,7 @@ class OperatorController extends Controller
      * @return JsonResponse
      * 
      */
-    public function getDetailLibrary(Request $request, User $user) {
+    public function getDetailData(Request $request, User $user) {
         try {
             $users = $user::find($request->id);
 

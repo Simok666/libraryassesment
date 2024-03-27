@@ -67,9 +67,7 @@ Route::middleware(['auth:sanctum', 'type.operator'])->group(function () {
         Route::get('operator/getListKomponen', [OperatorController::class, 'getListKomponen']);
         Route::get('operator/getListBuktiFisik', [OperatorController::class, 'getListBuktiFisik']);
 
-        Route::get('operator/getDetailLibrary/{id}', [OperatorController::class, 'getDetailLibrary']);
-        Route::get('operator/getDetailKomponen/{id}', [OperatorController::class, 'getDetailKomponen']);
-        Route::get('operator/getDetailBuktiFisik/{id}', [OperatorController::class, 'getDetailBuktiFisik']);
+        Route::get('operator/getDetailData/{id}', [OperatorController::class, 'getDetailData']);
 
         Route::get('operator/getListVerifikatorDesk', [OperatorController::class, 'getListVerifikatorDesk']);
         Route::get('operator/getListVerifikatorField', [OperatorController::class, 'getListVerifikatorField']);
