@@ -161,6 +161,7 @@
                 e.preventDefault();
                 var form = this;
                 var formData = new FormData(form);
+                loadingButton($(this))
                 $.ajax({
                     url: `{{ url('api/v1/user/register') }}`,
                     type: 'POST',
@@ -171,6 +172,7 @@
                     contentType: false,
                     success: function (resp) {
                         toast("Register Success", 'success');
+                        loadingButton($("form"), false)
                         setTimeout(function () {
                             window.location = "{{ url('auth-login.html') }}";
                         }, 3000);
@@ -182,6 +184,7 @@
                         } else {
                             toast(data.responseJSON.message, 'warning');
                         }
+                        loadingButton($("form"), false)
                     }
                 });
             });
