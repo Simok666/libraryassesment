@@ -74,8 +74,9 @@ Route::middleware(['auth:sanctum', 'type.operator'])->group(function () {
         Route::get('operator/getListVerifikatorDesk', [OperatorController::class, 'getListVerifikatorDesk']);
         Route::get('operator/getListVerifikatorField', [OperatorController::class, 'getListVerifikatorField']);
 
-        Route::post('operator/notifyEmailDesk/{id}', [OperatorController::class, 'notifyEmailDesk']);
-        Route::post('operator/notifyEmailField/{id}', [OperatorController::class, 'notifyEmailField']);
+        Route::post('operator/notifyEmailVerifikator/{id}', [OperatorController::class, 'notifyEmailVerifikator']);
+
+        Route::post('operator/store/{id}', [OperatorController::class, 'notifyEmailVerifikator']);
         
          //logout 
          Route::post('operator/logout', [OperatorAuthController::class, 'destory']);
@@ -86,16 +87,10 @@ Route::middleware(['auth:sanctum', 'type.operator'])->group(function () {
 
 Route::middleware(['auth:sanctum', 'type.verifikator_desk'])->group(function () {
         Route::group(['prefix' => 'v1'], function () {
-            Route::get('operator/getListLibrary', [OperatorController::class, 'getListLibrary']);
-            Route::get('operator/getListKomponen', [OperatorController::class, 'getListKomponen']);
-            Route::get('operator/getListBuktiFisik', [OperatorController::class, 'getListBuktiFisik']);
-
-            Route::get('operator/getDetailLibrary/{id}', [OperatorController::class, 'getDetailLibrary']);
-            Route::get('operator/getDetailKomponen/{id}', [OperatorController::class, 'getDetailKomponen']);
-            Route::get('operator/getDetailBuktiFisik/{id}', [OperatorController::class, 'getDetailBuktiFisik']);
             
-            Route::post('verifikatordesk/doneNotification/{id}', [VerifikatorDeskController::class, 'doneNotification']);
-            Route::post('verifikatordesk/notYetNotification/{id}', [VerifikatorDeskController::class, 'notYetNotification']);
+            Route::post('verifikatordesk/store/{id}', [VerifikatorDeskController::class, 'store']);
+            Route::post('verifikatordesk/notification/{id}', [VerifikatorDeskController::class, 'notification']);
+            
 
             //logout
             Route::post('verifikatordesk/logout', [VerifikatorDeskAuthController::class, 'destory']);
@@ -104,14 +99,6 @@ Route::middleware(['auth:sanctum', 'type.verifikator_desk'])->group(function () 
 
 Route::middleware(['auth:sanctum', 'type.verifikator_field'])->group(function () {
     Route::group(['prefix' => 'v1'], function () {
-
-        Route::get('operator/getListLibrary', [OperatorController::class, 'getListLibrary']);
-        Route::get('operator/getListKomponen', [OperatorController::class, 'getListKomponen']);
-        Route::get('operator/getListBuktiFisik', [OperatorController::class, 'getListBuktiFisik']);
-
-        Route::get('operator/getDetailLibrary/{id}', [OperatorController::class, 'getDetailLibrary']);
-        Route::get('operator/getDetailKomponen/{id}', [OperatorController::class, 'getDetailKomponen']);
-        Route::get('operator/getDetailBuktiFisik/{id}', [OperatorController::class, 'getDetailBuktiFisik']);
    
         //logout
         Route::post('verifikatorfield/logout', [VerifikatorFieldAuthController::class, 'destory']);

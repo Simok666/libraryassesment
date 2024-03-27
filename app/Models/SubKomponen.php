@@ -24,6 +24,8 @@ class SubKomponen extends Model implements HasMedia
         'skor_subkomponen',
         'nilai',
         'is_verified',
+        'notes',
+        'komentar_pleno'
     ];
 
     /**

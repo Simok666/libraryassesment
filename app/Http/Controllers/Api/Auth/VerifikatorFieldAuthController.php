@@ -9,6 +9,7 @@ use App\Http\Resources\Auth\Verifikator\VeifikatorFieldAuthResource;
 use App\Models\VerifikatorField;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Resources\Auth\AuthResource;
 
 class VerifikatorFieldAuthController extends Controller
 {
@@ -20,6 +21,7 @@ class VerifikatorFieldAuthController extends Controller
      */
     public function login(VeifikatorFieldAuthRequest $request)
     {   
+        $request["role"] = "verifikator_field";
         $field = VerifikatorField::where('email', $request->email)->first();
 
         if (!$field || !Hash::check($request->password, $field->password)) {
@@ -28,7 +30,7 @@ class VerifikatorFieldAuthController extends Controller
             ]);
         }
 
-        return new VeifikatorFieldAuthResource($field);
+        return new AuthResource($field);
     }
 
     /**

@@ -17,6 +17,7 @@ class VerifikatorFieldSeeder extends Seeder
         VerifikatorField::create([
             'name' => 'Demo verifikator field',
             'email' => 'simokart3@gmail.com',
+            'type' => 'field',
             'password' => Hash::make('12345678')
         ]);
     }

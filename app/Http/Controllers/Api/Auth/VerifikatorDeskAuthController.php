@@ -9,6 +9,7 @@ use App\Http\Resources\Auth\Verifikator\VeifikatorDeskAuthResource;
 use App\Models\VerifikatorDesk;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Resources\Auth\AuthResource;
 
 class VerifikatorDeskAuthController extends Controller
 {
@@ -20,6 +21,7 @@ class VerifikatorDeskAuthController extends Controller
      */
     public function login(VeifikatorDeskAuthRequest $request)
     {   
+        $request["role"] = "verifikator_desk";
         $desk = VerifikatorDesk::where('email', $request->email)->first();
 
         if (!$desk || !Hash::check($request->password, $desk->password)) {
@@ -28,7 +30,7 @@ class VerifikatorDeskAuthController extends Controller
             ]);
         }
 
-        return new VeifikatorDeskAuthResource($desk);
+        return new AuthResource($desk);
     }
 
     /**
