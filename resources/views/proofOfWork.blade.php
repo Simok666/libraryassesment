@@ -39,6 +39,7 @@
 @section('scripts')
 <script>
     $(document).ready(function() {
+        req.status = 'Baru';
         GetData(req,"bukti_fisik", formatTable);
 
         $(".dropdown-status").change(function() {

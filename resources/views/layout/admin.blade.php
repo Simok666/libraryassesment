@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <link rel="stylesheet" href="{{ asset('vendors/toastify/toastify.css') }}">
     {{-- <link rel="shortcut icon" href="assets/images/favicon.svg" type="image/x-icon"> --}}
-    @yield('style')
+    @yield('styles')
 </head>
 
 <body>
@@ -56,10 +56,16 @@
                                 <span>Libraries</span>
                             </a>
                         </li>
-                         <li class="sidebar-item">
+                        <li class="sidebar-item">
                             <a href="{{ url("proofOfWork.html") }}" class="sidebar-link">
                                 <i class="bi bi-lock"></i>
                                 <span>Bukti Fisik</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="{{ url("profile-perpustakaan.html") }}" class="sidebar-link">
+                                <i class="bi bi-person"></i>
+                                <span>Profile Perpustakaan</span>
                             </a>
                         </li>
                     </ul>
