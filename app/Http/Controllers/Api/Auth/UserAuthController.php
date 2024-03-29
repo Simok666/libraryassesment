@@ -40,7 +40,7 @@ class UserAuthController extends Controller
                 'head_library_name' => $request->head_library_name,
                 'npp' => $request->npp,
                 'website' => $request->website,
-                'type_insert' => 0,
+                'type_insert' => '0',
             ];
             
             $user = User::create(array_merge($validatedData, $otherData));
