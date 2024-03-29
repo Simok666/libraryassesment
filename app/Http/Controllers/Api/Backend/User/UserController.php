@@ -23,7 +23,8 @@ use App\Http\Resources\Backend\User\UserBuktiFisikResource;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use App\Jobs\SendEmailJob;
-
+use Illuminate\Support\Facades\Validator;
+use DB;
 class UserController extends Controller
 {
     /**
@@ -41,6 +42,7 @@ class UserController extends Controller
             
             if( !$this->checkUserInsert($request->user()->id, 'library') )
             {
+                DB::beginTransaction();
                 $store = $library::create(array_merge($request->validated(), ['user_id' => $request->user()->id] ));
                 $user = User::find($request->user()->id)->update(['type_insert' => '1']);
 
@@ -49,6 +51,8 @@ class UserController extends Controller
                         $store->addMedia($image)->toMediaCollection('images');
                     }
                 }
+                DB::commit();
+
                 $admin = Admin::first();
                 $operator = Operator::first();
 
@@ -62,13 +66,15 @@ class UserController extends Controller
 
                 dispatch(new SendEmailJob($postMail));
                 
-                return response()->json(['success' => 'success save data', 'data' => new UserResource($store)], HttpResponse::HTTP_CREATED);
+                return response()->json(['success' => 'success save data'], HttpResponse::HTTP_CREATED);
             }
             return response()->json(['message' => 'duplicate data not allowed'], 409);
 
         } catch(\Exception $e) {
+            DB::rollBack();
             return response()->json(['error' => 'An error occurred while creating data: ' . $e->getMessage()], 404);
         } catch(\Illuminate\Database\QueryException $ex) {
+            DB::rollBack();
             return response()->json(['error' => 'An error occurred while creating account: error on database'], 400);
         }
 
@@ -102,18 +108,36 @@ class UserController extends Controller
      * */
     public function storeKomponen(UserKomponenRequest $request, SubKomponen $subKomponen)
     {
+        
         try {
             $jenisPerpus = Library::where('user_id', $request->user()->id)->first()->jenis_perpustakaan;
-            $store = $subKomponen::create(array_merge($request->validated(), ['user_id' => $request->user()->id]));
-
-            if ($images = $request->bukti_dukung) {
-                foreach ($images as $image) {
-                    $store->addMedia($image)->toMediaCollection('images');
+            
+            $validator = $request;
+           
+            DB::beginTransaction();
+            $now = now();
+            $stores = [];
+            foreach ($request->all() as $data) {
+                $store = $subKomponen->create([
+                    'user_id' => $request->user()->id,
+                    'subkomponen_id' => $data['subkomponen_id'],
+                    'skor_subkomponen' => $data['skor_subkomponen'],
+                    'nilai' => $data['nilai'],
+                    'is_verified' => $data['is_verified'],
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+                
+                if (isset($data['bukti_dukung'])) {
+                    $store->addMedia($data['bukti_dukung'])->toMediaCollection('images');
+                    
                 }
+                $stores[] = $store->id;
             }
+
             $admin = Admin::first();
             $operator = Operator::first();
-        
+            
             if($subKomponen::where('user_id' ,$request->user()->id)->count() === 9 ){
                 $user = User::find($request->user()->id)->update(['type_insert' => '2']);
                 $postMail = [
@@ -127,12 +151,14 @@ class UserController extends Controller
     
                 dispatch(new SendEmailJob($postMail));
             }
+            DB::commit();
+            return response()->json(['success' => 'success save data'], HttpResponse::HTTP_CREATED);
             
-            return response()->json(['success' => 'success save data', 'data' => new UserSubKomponenResource($store)], HttpResponse::HTTP_CREATED);
-
         } catch(\Exception $e) {
+            DB::rollBack();
             return response()->json(['error' => 'An error occurred while creating data: ' . $e->getMessage()], 404);
         } catch(\Illuminate\Database\QueryException $ex) {
+            DB::rollBack();
             return response()->json(['error' => 'An error occurred while creating account: error on database'], 400);
         }
     }
@@ -161,13 +187,25 @@ class UserController extends Controller
     public function storeBuktiFisik(UserBuktiFisikRequest $request, BuktiFisik $buktiFisik)
     {
         try {
-            $store = $buktiFisik::create(array_merge($request->validated(), ['user_id' => $request->user()->id]));
-
-            if ($images = $request->bukti_fisik_upload) {
-                foreach ($images as $image) {
-                    $store->addMedia($image)->toMediaCollection('images');
+            $validator = $request;
+            DB::beginTransaction();
+            $now = now();
+            $stores = [];
+            foreach ($request->all() as $data) {
+                $store = $buktiFisik->create([
+                    'user_id' => $request->user()->id,
+                    'bukti_fisik_data_id' => $data['bukti_fisik_data_id'],
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+                
+                if (isset($data['bukti_fisik_upload'])) {
+                    $store->addMedia($data['bukti_fisik_upload'])->toMediaCollection('images');
+                    
                 }
+                $stores[] = $store->id;
             }
+
             $admin = Admin::first();
             $operator = Operator::first();
             if($buktiFisik::where('user_id' ,$request->user()->id)->count() === 9) 
@@ -184,12 +222,14 @@ class UserController extends Controller
     
                 dispatch(new SendEmailJob($postMail));
             }
-            
-            return response()->json(['success' => 'success save data', 'data' => new UserBuktiFisikResource($store)], HttpResponse::HTTP_CREATED);
+            DB::commit();
+            return response()->json(['success' => 'success save data'], HttpResponse::HTTP_CREATED);
 
         } catch(\Exception $e) {
+            DB::rollBack();
             return response()->json(['error' => 'An error occurred while creating data: ' . $e->getMessage()], 404);
         } catch(\Illuminate\Database\QueryException $ex) {
+            DB::rollBack();
             return response()->json(['error' => 'An error occurred while creating account: error on database'], 400);
         }
     }
