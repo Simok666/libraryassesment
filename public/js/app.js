@@ -33,6 +33,31 @@ function ajaxData(url, type, data , successFunc = "", errorFunc = "") {
     });
 }
 
+function ajaxDataFile(url, type, data , successFunc = "", errorFunc = "") {
+    return $.ajax({
+        url: url,
+        type: type,
+        dataType:"JSON",
+        data: data,
+        cache: false,
+        processData: false,
+        contentType: false,
+        success: function (resp) {
+            if(!empty(successFunc)) {
+                successFunc(resp);
+            }
+        },
+        error: function (data) {
+            let code = data.responseJSON.code;
+            if (code >= 500) toast("Something went wrong, please try again", 'danger');
+            else toast(data.responseJSON.message ?? data.responseJSON.error, 'warning')
+            if(typeof errorFunc === "function") {
+                errorFunc(data);
+            }
+        }
+    });
+}
+
 function toast(message, type = "success") {
     switch(type) {
         case 'primary': type = '#435ebe'; break;
@@ -74,12 +99,38 @@ function checkLogin() {
             $(".display-user-name").html(resp.data.name);
             $(".display-user-role").html(resp.data.role);
             setSession("role", resp.data.role);
+            checkSpecialAction(resp.data)
         }, function(data) {
             toast(data.responseJSON.message ?? data.responseJSON.error, 'warning');
             setTimeout(deleteSession, 3000);
         });
     }
 }
+
+function checkSpecialAction(resp) {
+    const { host, hostname, href, origin, pathname, port, protocol, search } = window.location
+    if (resp.role == "user") {        
+        switch (parseInt(resp.type_insert)) {
+            case 0:
+                window.location = `${baseUrl}/profile-perpustakaan.html`;
+                break;
+            case 1:
+                window.location = `${baseUrl}/profile-komponent.html`;
+                break;
+            case 2:
+                window.location = `${baseUrl}/profile-buktifisik.html`;
+                break;
+        
+            default:
+                break;
+        }
+    } else if (resp.role == "admin") {
+        
+    } else if (resp.role == "superadmin") {
+
+    } // etc
+}
+
 function deleteSession() {
     localStorage.removeItem("isLogin");
     localStorage.removeItem("token");
