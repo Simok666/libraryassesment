@@ -110,20 +110,19 @@ function checkLogin() {
 function checkSpecialAction(resp) {
     const { host, hostname, href, origin, pathname, port, protocol, search } = window.location
     if (resp.role == "user") {        
-        switch (parseInt(resp.type_insert)) {
-            case 0:
-                window.location = `${baseUrl}/profile-perpustakaan.html`;
-                break;
-            case 1:
-                window.location = `${baseUrl}/profile-komponent.html`;
-                break;
-            case 2:
-                window.location = `${baseUrl}/profile-buktifisik.html`;
-                break;
+        const pageMapping = {
+            0: 'profile-perpustakaan',
+            1: 'profile-komponent',
+            2: 'profile-buktifisik'
+        };
+          
+        const pattern = new RegExp('\\b(' + Object.values(pageMapping).join('|') + ')\\b', 'i');
+        const isWordIncluded = pattern.test(pathname);
         
-            default:
-                break;
+        if (!isWordIncluded && parseInt(resp.type_insert) in pageMapping) {
+            window.location = `${baseUrl}/${pageMapping[parseInt(resp.type_insert)]}.html`;
         }
+          
     } else if (resp.role == "admin") {
         
     } else if (resp.role == "superadmin") {
@@ -153,7 +152,7 @@ function GetData(req , table, formatFunc = "" ,successfunc = "") {
         retryLimit: 3,
         success: function(resp){
             resp.lsdt = "";
-            if(empty(resp.meta.data)) {
+            if(!empty(resp.meta)) {
                 if(typeof formatFunc !== "function") {
                     return;
                 }
@@ -165,6 +164,10 @@ function GetData(req , table, formatFunc = "" ,successfunc = "") {
                     successfunc(resp);
                 }
             } else {
+                if(typeof formatFunc !== "function") {
+                    return;
+                }
+                resp.lsdt = formatFunc(resp.data);
                 $(".datatable-"+table+" tbody").html(resp.lsdt);
                 $(".pagination-setting-"+table).addClass("hidden");
                 if(successfunc != "") {
