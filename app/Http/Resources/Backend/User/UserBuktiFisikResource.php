@@ -21,6 +21,7 @@ class UserBuktiFisikResource extends JsonResource
             'status' => $this->status,
             'status_verifikasi' => $this->status_verifikator,
             'bukti_fisik_upload' => ImageResource::collection($this->getMedia('images')),
+            'bukti_fisik_data' => $this->buktiFisikData ?? []
         ];
     }
 }
