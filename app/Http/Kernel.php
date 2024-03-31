@@ -69,6 +69,7 @@ class Kernel extends HttpKernel
         'type.operator' => \App\Http\Middleware\OperatorMiddleware::class,
         'type.pimpinan' => \App\Http\Middleware\PimpinanMiddleware::class,
         'type.verifikator_desk' => \App\Http\Middleware\VerifikatorDeskMiddleware::class,
-        'type.verifikator_field' => \App\Http\Middleware\VerifikatorFieldMiddleware::class
+        'type.verifikator_field' => \App\Http\Middleware\VerifikatorFieldMiddleware::class,
+        'checkRole' => \App\Http\Middleware\CheckRole::class,
     ];
 }
