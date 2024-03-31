@@ -118,10 +118,11 @@ class OperatorController extends Controller
      * 
      */
     public function getListKomponen(Request $request)
-    {
-        $komponen =  User::with(['komponen' => function ($query) use ($request) {
-            $query->where('status', $request->status); 
-        }])->when($request->has('id'), function ($query) use ($request) {
+    {   
+        $komponen =  User::with(['komponen.komponen'])
+        ->whereHas('komponen', function ($query) use ($request) {
+            $query->where('status', $request->status);
+        })->when($request->has('id'), function ($query) use ($request){
             $query->where('id', request("id"));
         })->paginate($request->limit ?? "10");
     
@@ -157,7 +158,9 @@ class OperatorController extends Controller
      */
     public function getListVerifikatorDesk( VerifikatorDesk $desk) 
     {
-        return  VerifikatorDeskResource::collection($desk::paginate(10));
+        return  VerifikatorDeskResource::collection($desk::when(request()->filled("id"), function ($query){
+            $query->where('id', request("id"));
+        })->paginate($request->limit ?? "10"));
     }
 
     /**
@@ -170,7 +173,9 @@ class OperatorController extends Controller
      */
     public function getListVerifikatorField( VerifikatorField $field) 
     {
-        return  VerifikatorFieldResource::collection($field::paginate(10));
+        return  VerifikatorFieldResource::collection($field::when(request()->filled("id"), function ($query){
+            $query->where('id', request("id"));
+        })->paginate($request->limit ?? "10"));
     }
 
     /**
