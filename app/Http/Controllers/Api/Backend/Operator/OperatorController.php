@@ -139,10 +139,11 @@ class OperatorController extends Controller
      */
     public function getListBuktiFisik(Request $request)
     {   
-        $buktiFisik = User::with(['buktiFisik' => function ($query) use ($request) {
-                        $query->where('status', $request->status); 
-                    }])->when($request->has('id'), function ($query) use ($request) {
-                        $query->where('id', request("id"));
+        $buktiFisik = User::with(["buktiFisik.buktiFisikData"])
+                    ->whereHas("buktiFisik", function ($query) use ($request) {
+                        $query->where("status", $request->status);
+                    })->when($request->has("id"), function($query) use ($request){
+                        $query->where("id", $request->id);
                     })->paginate($request->limit ?? "10");
         
         return  OperatorListBuktiFisik::collection($buktiFisik);

@@ -79,59 +79,78 @@
                     </div>
                 </div>
 
-                <dl class="row after-loading"> 
-                    <dt class="col-sm-3">Name</dt>
-                    <dd class="col-sm-9" data-bind-name></dd>
-
-                    <dt class="col-sm-3">Email</dt>
-                    <dd class="col-sm-9" data-bind-email></dd>
-                    
-                    <dt class="col-sm-3">Pic</dt>
-                    <dd class="col-sm-9" data-bind-pic-name></dd>
-
-                    <dt class="col-sm-3">Leader Name</dt>
-                    <dd class="col-sm-9" data-bind-leader-instance-name></dd>
-
-                    <dt class="col-sm-3">Library Name</dt>
-                    <dd class="col-sm-9" data-bind-library-name></dd>
-
-                    <dt class="col-sm-3">Head Library Name</dt>
-                    <dd class="col-sm-9" data-bind-head-library-name></dd>
-
-                    <dt class="col-sm-3">NPP</dt>
-                    <dd class="col-sm-9" data-bind-npp></dd>
-
-                    <dt class="col-sm-3">Address</dt>
-                    <dd class="col-sm-9" data-bind-address></dd>
-
-                    <dt class="col-sm-3">Map Coordinates</dt>
-                    <dd class="col-sm-9" data-bind-map-coordinates></dd>
-
-                    <dt class="col-sm-3">Village</dt>
-                    <dd class="col-sm-9" data-bind-village></dd>
-
-                    <dt class="col-sm-3">Subdistrict</dt>
-                    <dd class="col-sm-9" data-bind-subdistrict></dd>
-
-                    <dt class="col-sm-3">City</dt>
-                    <dd class="col-sm-9" data-bind-city></dd>
-
-                    <dt class="col-sm-3">Province</dt>
-                    <dd class="col-sm-9" data-bind-province></dd>
-
-                    <dt class="col-sm-3">Phone Number</dt>
-                    <dd class="col-sm-9" data-bind-number-telephone></dd>
-
-                    <dt class="col-sm-3">Website</dt>
-                    <dd class="col-sm-9" data-bind-website></dd>
-
-                    <dt class="col-sm-3">Library Email</dt>
-                    <dd class="col-sm-9" data-bind-library-email></dd>
-
-                    <dt class="col-sm-3">Image</dt>
-                    <dd class="col-sm-9" data-bind-image>
-                    </dd>
-                </dl>
+                <table class="table table-striped after-loading">
+                    <tbody>
+                        <tr>
+                            <th>Name</th>
+                            <td data-bind-name></td>
+                        </tr>
+                        <tr>
+                            <th>Email</th>
+                            <td data-bind-email></td>
+                        </tr>
+                        <tr>
+                            <th>Pic</th>
+                            <td data-bind-pic_name></td>
+                        </tr>
+                        <tr>
+                            <th>Leader Name</th>
+                            <td data-bind-leader_instance_name></td>
+                        </tr>
+                        <tr>
+                            <th>Library Name</th>
+                            <td data-bind-library_name></td>
+                        </tr>
+                        <tr>
+                            <th>Head Library Name</th>
+                            <td data-bind-head_library_name></td>
+                        </tr>
+                        <tr>
+                            <th>NPP</th>
+                            <td data-bind-npp></td>
+                        </tr>
+                        <tr>
+                            <th>Address</th>
+                            <td data-bind-address></td>
+                        </tr>
+                        <tr>
+                            <th>Map Coordinates</th>
+                            <td data-bind-map_coordinates></td>
+                        </tr>
+                        <tr>
+                            <th>Village</th>
+                            <td data-bind-village></td>
+                        </tr>
+                        <tr>
+                            <th>Subdistrict</th>
+                            <td data-bind-subdistrict></td>
+                        </tr>
+                        <tr>
+                            <th>City</th>
+                            <td data-bind-city></td>
+                        </tr>
+                        <tr>
+                            <th>Province</th>
+                            <td data-bind-province></td>
+                        </tr>
+                        <tr>
+                            <th>Phone Number</th>
+                            <td data-bind-number_telephone></td>
+                        </tr>
+                        <tr>
+                            <th>Website</th>
+                            <td data-bind-website></td>
+                        </tr>
+                        <tr>
+                            <th>Library Email</th>
+                            <td data-bind-library_email></td>
+                        </tr>
+                        <tr>
+                            <th>Image</th>
+                            <td data-bind-image></td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-light-secondary"
@@ -210,7 +229,11 @@
             }
 
             let result = resp.data[0];
-            $('#detailUser').find('[data-bind-id]').html(result.id);
+            $.each(result, function(index, data) {
+                if (index == "image") return;
+                $('#detailUser').find(`[data-bind-${index}]`).html(data);
+            });
+            {{-- $('#detailUser').find('[data-bind-id]').html(result.id);
             $('#detailUser').find('[data-bind-name]').html(result.name);
             $('#detailUser').find('[data-bind-email]').html(result.email);
             $('#detailUser').find('[data-bind-instance-name]').html(result.instance_name);
@@ -223,7 +246,7 @@
             $('#detailUser').find('[data-bind-number-telephone]').html(result.number_telephone);
             $('#detailUser').find('[data-bind-map-coordinates]').html(result.map_coordinates);
             $('#detailUser').find('[data-bind-library-email]').html(result.library_email);
-            $('#detailUser').find('[data-bind-is-verified]').html(result.is_verified);
+            $('#detailUser').find('[data-bind-is-verified]').html(result.is_verified); --}}
             if (!empty(result.image)) {
                 result.image.forEach(function(image) {
                     $('#detailUser').find('[data-bind-image]').html(`<a href="${image.url}" target="_blank">View Image</a>`);
