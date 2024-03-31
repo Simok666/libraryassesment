@@ -31,6 +31,7 @@ Route::group(['namespace' => 'Api', 'prefix' => 'v1'], function () {
     Route::post('operator/login', [OperatorAuthController::class, 'login']);
     Route::post('pimpinan/login', [PimpinanAuthController::class, 'login']);
     Route::post('user', [UserAuthController::class, 'getUserAccount'])->middleware('auth:sanctum');
+    // Route::get('getListLibrary', [OperatorController::class, 'getListLibrary'])->middleware(['auth:sanctum','type.operator']);
     Route::post('verifikatordesk/login', [VerifikatorDeskAuthController::class, 'login']);
     Route::post('verifikatorfield/login', [VerifikatorFieldAuthController::class, 'login']);
 });
