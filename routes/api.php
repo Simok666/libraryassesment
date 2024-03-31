@@ -31,7 +31,9 @@ Route::group(['namespace' => 'Api', 'prefix' => 'v1'], function () {
     Route::post('operator/login', [OperatorAuthController::class, 'login']);
     Route::post('pimpinan/login', [PimpinanAuthController::class, 'login']);
     Route::post('user', [UserAuthController::class, 'getUserAccount'])->middleware('auth:sanctum');
-    // Route::get('getListLibrary', [OperatorController::class, 'getListLibrary'])->middleware(['auth:sanctum','type.operator']);
+    Route::get('getListLibrary', [OperatorController::class, 'getListLibrary'])->middleware(['auth:sanctum', 'checkRole:type.operator,type.verifikator_desk']);
+    Route::get('getListKomponen', [OperatorController::class, 'getListKomponen'])->middleware(['auth:sanctum', 'checkRole:type.operator,type.verifikator_desk']);
+    Route::get('getListBuktiFisik', [OperatorController::class, 'getListBuktiFisik'])->middleware(['auth:sanctum', 'checkRole:type.operator,type.verifikator_desk']);
     Route::post('verifikatordesk/login', [VerifikatorDeskAuthController::class, 'login']);
     Route::post('verifikatorfield/login', [VerifikatorFieldAuthController::class, 'login']);
 });
@@ -64,9 +66,9 @@ Route::middleware(['auth:sanctum', 'type.operator'])->group(function () {
         Route::get('operator/getUser', [OperatorController::class, 'getUserAccount']);
         Route::put('operator/verified/{id}', [OperatorController::class, 'verified']);
 
-        Route::get('operator/getListLibrary', [OperatorController::class, 'getListLibrary']);
-        Route::get('operator/getListKomponen', [OperatorController::class, 'getListKomponen']);
-        Route::get('operator/getListBuktiFisik', [OperatorController::class, 'getListBuktiFisik']);
+        // Route::get('operator/getListLibrary', [OperatorController::class, 'getListLibrary']);
+        // Route::get('operator/getListKomponen', [OperatorController::class, 'getListKomponen']);
+        // Route::get('operator/getListBuktiFisik', [OperatorController::class, 'getListBuktiFisik']);
 
         Route::get('operator/getDetailData/{id}', [OperatorController::class, 'getDetailData']);
 
