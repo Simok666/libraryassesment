@@ -15,7 +15,16 @@ class checkRole
      */
     public function handle(Request $request, Closure $next, ...$roles): Response
     {
-        $roleIds = ['type.operator' => 1, 'type.verifikator_desk' => 1];
+        $roleIds = [];
+        
+        if($request->getPathInfo() === "/api/v1/getListLibrary" || $request->getPathInfo() === "/api/v1/storeTextEditor/" ||
+             $request->getPathInfo() === "/api/v1/getListKomponen" || $request->getPathInfo() === "/api/v1/getListBuktiFisik") 
+             {
+            $roleIds = ['type.operator' => 'role:operator', 'type.verifikator_desk' => 'role:verifikator_desk', 'type.verifikator_field' => 'role:verifikator_field'];
+        } else {
+            $roleIds = ['type.operator' => 'role:operator', 'type.pimpinan' => 'role:pimpinan'];
+        }
+        
         $allowedRoleIds = [];
         foreach ($roles as $role)
         {
@@ -27,7 +36,7 @@ class checkRole
         $allowedRoleIds = array_unique($allowedRoleIds); 
         
         if(auth()->user()) {
-          if(in_array(auth()->user()->id, $allowedRoleIds)) {
+          if(in_array(auth()->user()->currentAccessToken()->getAttributeValue('abilities')[0], $allowedRoleIds)) {
             return $next($request);
           }
         }

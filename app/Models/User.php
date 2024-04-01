@@ -64,7 +64,7 @@ class User extends Authenticatable implements HasMedia
     ];
 
     /**
-     * Get the customer address associated with the user.
+     * Get the customer library associated with the user.
      */
     public function library(): HasOne
     {
@@ -72,7 +72,15 @@ class User extends Authenticatable implements HasMedia
     }
 
     /**
-     * Get the customer address associated with the user.
+     * Get the customer pleno associated with the user.
+     */
+    public function pleno(): HasOne
+    {
+        return $this->hasOne(Pleno::class, 'user_id', 'id');
+    }
+
+    /**
+     * Get the customer komponen associated with the user.
      */
     public function komponen(): HasMany
     {
@@ -80,7 +88,7 @@ class User extends Authenticatable implements HasMedia
     }
 
     /**
-     * Get the customer address associated with the user.
+     * Get the customer buktiFisik associated with the user.
      */
     public function buktiFisik(): HasMany
     {

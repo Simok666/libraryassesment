@@ -16,6 +16,7 @@ class UserSubKomponenResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+            'id' => $this->id,
             'user_id' => $this->user_id,
             'subkomponen_id' => $this->subkomponen_id,
             'skor_subkomponen' => $this->skor_subkomponen,
@@ -23,6 +24,8 @@ class UserSubKomponenResource extends JsonResource
             'is_verified' => $this->is_verified,
             'status' => $this->status,
             'status_verifikasi' => $this->status_verifikator,
+            'notes' => $this->notes,
+            'komentar_pleno' => $this->komentar_pleno,
             'bukti_dukung' => ImageResource::collection($this->getMedia('images')),
             'komponen' => $this->komponen,
         ];

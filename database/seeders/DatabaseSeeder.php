@@ -20,6 +20,9 @@ class DatabaseSeeder extends Seeder
             BuktiFisikDataSeeder::class,
             VerifikatorDeskSeeder::class,
             VerifikatorFieldSeeder::class,
+            UserSeeder::class,
+            SubKomponenSeeder::class,
+            BuktiFisikSeeder::class,
            ]);
     }
 }
