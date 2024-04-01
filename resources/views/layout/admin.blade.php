@@ -69,6 +69,12 @@
                             </a>
                         </li>
                         <li class="sidebar-item">
+                            <a href="{{ url("verifikator.html") }}" class="sidebar-link">
+                                <i class="bi bi-person-check"></i>
+                                <span>Verifikator</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
                             <a href="{{ url("profile-perpustakaan.html") }}" class="sidebar-link">
                                 <i class="bi bi-person"></i>
                                 <span>Profile Perpustakaan</span>

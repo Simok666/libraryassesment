@@ -282,3 +282,18 @@ function loadingButton (formSubmit, isLoading = true) {
         btnSubmit.html(btnSubmit.attr("title"));
     }
 }
+
+function  CustomloadingButton (selector, isLoading = true) {
+    let btnSubmit = selector;
+    let spiner = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>`;
+    if(isLoading === true) {
+        let title = btnSubmit.html();
+        btnSubmit.attr("title", title);
+        btnSubmit.prop("disabled", true);
+        btnSubmit.html(spiner);
+    } else {
+        btnSubmit.prop("disabled", false)
+        btnSubmit.html(btnSubmit.attr("title"));
+        btnSubmit.removeAttr("title")
+    }
+}
