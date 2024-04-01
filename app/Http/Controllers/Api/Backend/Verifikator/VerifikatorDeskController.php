@@ -13,7 +13,9 @@ use App\Http\Requests\Backend\Verifikator\VerifikatorRequest;
 use Mail;
 use App\Mail\PostMail;
 use App\Jobs\SendEmailJob;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
+use DB;
 
 
 class VerifikatorDeskController extends Controller
@@ -107,45 +109,73 @@ class VerifikatorDeskController extends Controller
      * store notes verifikator
      * 
      * @param Request $request
+     * @param SubKomponen $subKomponen
      * 
      */
-    public function store (Request $request) 
+    public function store (Request $request, SubKomponen $subkomponen) 
     {
         try {
-            $subKomponen = $subkomponen::find($request->id);
-            $notes = $request->notes;
-
-            if (!$subKomponen) {
-                return response()->json(['message' => 'Subkomponen Not Found'], 404);
-            }
-
-            $dom = new \domdocument();
-            $dom->loadHtml($notes, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
-    
-            $images = $dom->getelementsbytagname('img');
-    
-            foreach($images as $key => $img) {
-                $data = $img->getattribute('src');
-                list($type, $data) = explode(';', $data);
-                list(, $data)      = explode(',', $data);
-
-                $data = base64_decode($data);
-                $image_name= time().$k.'.png';
-                $path = public_path() .'/'. $image_name;
-
-                file_put_contents($path, $data);
-
-                $img->removeattribute('src');
-                $img->setattribute('src', $image_name);
-            }
-
-            $detail = $dom->savehtml();
-            $subKomponen->notes = $detail;
-            $subKomponen->save();
             
+            $textEditor = null;
+            foreach($request->all() as $key => $val) {
+                
+                $subKomponen = $subkomponen::find($val['id']);
+                
+                if (!$subKomponen) {
+                    return response()->json(['message' => 'Subkomponen id Not Found'], 404);
+                }
+
+                if(auth()->user()->currentAccessToken()->getAttributeValue('abilities')[0] == 'role:operator') {
+                    $textEditor = $val['pleno'];
+                } elseif (auth()->user()->currentAccessToken()->getAttributeValue('abilities')[0] == 'role:verifikator_desk') {
+                    $textEditor = $val['notes'];
+                } else {
+                    $textEditor = $val['verifikasi_lapangan'];
+                }
+
+                DB::beginTransaction();
+
+                $dom = new \domdocument();
+                $dom->loadHtml($textEditor, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+
+                $images = $dom->getelementsbytagname('img');
+        
+                foreach($images as $key => $img) {
+                    $data = $img->getattribute('src');
+                    list($type, $data) = explode(';', $data);
+                    list(, $data)      = explode(',', $data);
+
+                    $data = base64_decode($data);
+                    $image_name= time().$k.'.png';
+                    $path = public_path() .'/'. $image_name;
+
+                    file_put_contents($path, $data);
+
+                    $img->removeattribute('src');
+                    $img->setattribute('src', $image_name);
+                }
+
+                $detail = $dom->savehtml();
+                
+                if (auth()->user()->currentAccessToken()->getAttributeValue('abilities')[0] == 'role:operator') {
+                    $subKomponen->komentar_pleno = $detail;
+                    $subKomponen->is_pleno = (Boolean) 1;
+                } elseif (auth()->user()->currentAccessToken()->getAttributeValue('abilities')[0] == 'role:verifikator_desk') {
+                    $subKomponen->notes = $detail;
+                } else {
+                    $subKomponen->verifikasi_lapangan = $detail;
+                }
+
+                $subKomponen->save();
+
+                DB::commit();
+                
+            }
+
             return response()->json(['message' => 'success save notes'], HttpResponse::HTTP_CREATED);
 
         } catch (\Exception $e) {
+            DB::rollBack();
             return response()->json(['error' => 'An error occurred while store data: ' . $e->getMessage()], 400);
         } 
     }
