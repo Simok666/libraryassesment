@@ -21,7 +21,6 @@ class OperatorAuthController extends Controller
      */
     public function login(OperatorAuthRequest $request)
     {   
-        $request["role"] = "operator";
         $operator = Operator::where('email', $request->email)->first();
 
         if (!$operator || !Hash::check($request->password, $operator->password)) {
@@ -29,6 +28,7 @@ class OperatorAuthController extends Controller
                 'email' => ['The provided credentials are incorrect.'],
             ]);
         }
+        $operator->role = "operator";
 
         return new AuthResource($operator);
     }

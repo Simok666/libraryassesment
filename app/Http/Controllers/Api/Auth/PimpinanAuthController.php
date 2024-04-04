@@ -29,6 +29,7 @@ class PimpinanAuthController extends Controller
                 'email' => ['The provided credentials are incorrect.'],
             ]);
         }
+        $pimpinan->role = "pimpinan";
 
         return new AuthResource($pimpinan);
     }

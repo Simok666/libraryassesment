@@ -21,7 +21,6 @@ class VerifikatorDeskAuthController extends Controller
      */
     public function login(VeifikatorDeskAuthRequest $request)
     {   
-        $request["role"] = "verifikator_desk";
         $desk = VerifikatorDesk::where('email', $request->email)->first();
 
         if (!$desk || !Hash::check($request->password, $desk->password)) {
@@ -29,6 +28,7 @@ class VerifikatorDeskAuthController extends Controller
                 'email' => ['The provided credentials are incorrect.'],
             ]);
         }
+        $desk->role = "verifikator_desk";
 
         return new AuthResource($desk);
     }

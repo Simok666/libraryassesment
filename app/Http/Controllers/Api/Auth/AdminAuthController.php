@@ -20,7 +20,6 @@ class AdminAuthController extends Controller
      */
     public function login(AdminAuthRequest $request)
     {   
-        $request["role"] = "admin";
         $admin = Admin::where('email', $request->email)->first();
 
         if (!$admin || !Hash::check($request->password, $admin->password)) {
@@ -28,7 +27,7 @@ class AdminAuthController extends Controller
                 'email' => ['The provided credentials are incorrect.'],
             ]);
         }
-
+        $admin->role = "admin";
         return new AuthResource($admin);
     }
 
