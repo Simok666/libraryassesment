@@ -53,7 +53,23 @@
         });
     });
 
-    function formatTable(data) {
+    function formatdesk(data) {
+        var result = "";
+        $.each(data, function(index, data) {
+            result += `
+                <tr>
+                    <td>${data.name}</td>
+                    <td>${data.email}</td>
+                    <td>                        
+                        <a href="#" class="btn btn-info btn-icon btn-sm btn-notif" title="Notifikasi" data-id="${data.id}"><span class="bi bi-bell"> </span></a>
+                    </td>                
+                </tr>
+            `
+        });
+        return result;
+    }
+
+    function formatfield(data) {
         var result = "";
         $.each(data, function(index, data) {
             result += `

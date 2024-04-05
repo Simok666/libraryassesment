@@ -90,16 +90,16 @@
 <script>
     $(document).ready(function() {
         req.status = 'Baru';
-        GetData(req,"bukti_fisik", formatTable);
+        GetData(req,"bukti_fisik", formatbukti_fisik);
 
         $(".dropdown-status").change(function() {
             req.status = $(this).val();
             req.page = 1;
-            GetData(req,"bukti_fisik", formatTable);
+            GetData(req,"bukti_fisik", formatbukti_fisik);
         });
     });
 
-    function formatTable(data) {
+    function formatbukti_fisik(data) {
         var result = "";
         $.each(data, function(index, data) {
             result += `

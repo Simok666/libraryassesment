@@ -161,16 +161,16 @@
 <script>
     $(document).ready(function() {
         req.status = "Baru";
-        GetData(req,"libraries", formatTable);
+        GetData(req,"libraries", formatlibraries);
 
         $(".dropdown-status").change(function() {
             req.status = $(this).val();
             req.page = 1;
-            GetData(req,"libraries", formatTable);
+            GetData(req,"libraries", formatlibraries);
         });
     });
 
-    function formatTable(data) {
+    function formatlibraries(data) {
         var result = "";
         $.each(data, function(index, data) {
             result += `
