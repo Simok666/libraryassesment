@@ -122,6 +122,12 @@ function checkSpecialAction(resp) {
         if (!isWordIncluded && parseInt(resp.type_insert) in pageMapping) {
             window.location = `${baseUrl}/${pageMapping[parseInt(resp.type_insert)]}.html`;
         }
+
+        // check pathname with pageMapping
+        const isRedirected = Object.keys(pageMapping).some(key => pathname.includes(pageMapping[resp.type_insert]));
+
+        console.log({isRedirected : parseInt(isRedirected), pathname: pathname, pageMapping: pageMapping});
+        // if (!isRedirected) window.location = baseUrl + '/dashboard.html';
           
     } else if (resp.role == "admin") {
         
@@ -267,10 +273,7 @@ function loading(selector, isLoading = true) {
 }
 
 function loadingButton (formSubmit, isLoading = true) {
-    let btnSubmit = formSubmit.find("button[type='submit']");
-    if (empty(btnSubmit)) {
-        btnSubmit = $(document).find(`button[form=${formSubmit.attr("id")}]`);
-    }
+    btnSubmit = $(`form[id=${formSubmit.attr("id")}] [type='submit'],button[form=${formSubmit.attr("id")}]`);
     let spiner = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>`;
     if(isLoading === true) {
         let title = btnSubmit.html();
@@ -278,7 +281,7 @@ function loadingButton (formSubmit, isLoading = true) {
         btnSubmit.prop("disabled", true);
         btnSubmit.html(spiner);
     } else {
-        btnSubmit.removeAttr("disabled")
+        btnSubmit.prop("disabled", false)
         btnSubmit.html(btnSubmit.attr("title"));
     }
 }

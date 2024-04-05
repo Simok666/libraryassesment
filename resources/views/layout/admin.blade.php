@@ -80,6 +80,12 @@
                                 <span>Profile Perpustakaan</span>
                             </a>
                         </li>
+                        <li class="sidebar-item">
+                            <a href="{{ url("verifikator-library.html") }}" class="sidebar-link">
+                                <i class="bi bi-book"></i>
+                                <span>Verifikator Library</span>
+                            </a>
+                        </li>
                     </ul>
                 </div>
                 <button class="sidebar-toggler btn x"><i data-feather="x"></i></button>

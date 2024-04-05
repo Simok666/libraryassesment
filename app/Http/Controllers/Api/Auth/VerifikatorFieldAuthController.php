@@ -21,7 +21,6 @@ class VerifikatorFieldAuthController extends Controller
      */
     public function login(VeifikatorFieldAuthRequest $request)
     {   
-        $request["role"] = "verifikator_field";
         $field = VerifikatorField::where('email', $request->email)->first();
 
         if (!$field || !Hash::check($request->password, $field->password)) {
@@ -30,6 +29,7 @@ class VerifikatorFieldAuthController extends Controller
             ]);
         }
 
+        $field->role = "verifikator_field";
         return new AuthResource($field);
     }
 

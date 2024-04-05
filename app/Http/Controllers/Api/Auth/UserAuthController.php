@@ -81,7 +81,6 @@ class UserAuthController extends Controller
     * @param UserAuthRequest $request
     */
     public function login(UserAuthLoginRequest $request) {
-        $request["role"] = "user";
         $user = User::where('email', $request->email)->first();
         
         if (!$user || !Hash::check($request->password, $user->password) || $user->is_verified == 0 ) {
@@ -89,6 +88,7 @@ class UserAuthController extends Controller
                 'email' => ['The provided credentials are incorrect or Your account has not been verified'],
             ]);
         }
+        $user->role = "user";
         
         return new AuthResource($user);
     }

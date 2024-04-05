@@ -115,6 +115,8 @@ class VerifikatorDeskController extends Controller
     public function store (Request $request, SubKomponen $subkomponen) 
     {
         try {
+
+            return $request->all();
             
             $textEditor = null;
             foreach($request->all() as $key => $val) {
