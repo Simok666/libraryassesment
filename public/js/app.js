@@ -162,13 +162,21 @@ function checkLogin() {
 
 function checkUserAccess(){
     const role = session("role");
-    const sidebarMenu = sidebarItems.filter(item => {
-        let pathname = window.location.pathname.replace(/[/-]/g, '');
-        let menuUrl = item.url.replace(/_/g, '-');
-        console.log(pathname, menuUrl)
-
-        // return item.includes(menuUrl)
+    console.log(menuByRole[role]);
+    const accessMenu = menuByRole[`${role}`].filter(item => {
+        let pathname = window.location.pathname.replace(/\.html$/, '').replace(/[/]/g, '');
+        let menuUrl = item.replace(/_/g, '-');
+        if (item == "*") return true;
+        return pathname == menuUrl
     });
+
+    if (empty(accessMenu)) {
+        toast("Access Denied", 'danger');
+        setTimeout(function(){
+            // redirect to login
+            window.location = baseUrl + '/auth-login.html';
+        }, 300);
+    }
 }
 
 function setMenuByRole(){

@@ -134,7 +134,7 @@
                     <tr>
                         <td>${index+1}</td>
                         <td>${data.bukti_fisik_data.title_bukti_fisik}</td>
-                        <td><a href="#" class="openPopup" link="${data.bukti_fisik_upload[0].url}">View File</a></td>
+                        <td><a href="#" class="openPopup" link="${data.bukti_fisik_upload[0]?.url}">View File</a></td>
                     </tr>
                 `
             });
