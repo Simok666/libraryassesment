@@ -3,6 +3,57 @@ var baseUrl = window.location.origin;
 var req = {
     page:1
 };
+
+const menuByRole = {
+    "admin" : ["*"],
+    "user" : ["dashboard","profile-perpustakaan"],
+    "operator" : ["dashboard", "libraries", "proofOfWork", "komponent", "verifikator"],
+    "verifikator_desk" : ["dashboard", "libraries", "proofOfWork", "komponent", "verifikator-desk"],
+    "verifikator_field" : ["dashboard", "libraries", "proofOfWork", "komponent", "verifikator-field"]
+}
+
+const sidebarItems = [
+    {
+      url: "dashboard",
+      icon: "bi bi-grid-fill",
+      label: "Dashboard"
+    },
+    {
+      url: "users",
+      icon: "bi bi-person",
+      label: "User"
+    },
+    {
+      url: "libraries",
+      icon: "bi bi-book",
+      label: "Libraries"
+    },
+    {
+      url: "proofOfWork",
+      icon: "bi bi-lock",
+      label: "Bukti Fisik"
+    },
+    {
+      url: "komponent",
+      icon: "bi bi-collection",
+      label: "Komponen"
+    },
+    {
+      url: "verifikator",
+      icon: "bi bi-person-check",
+      label: "Verifikator"
+    },
+    {
+      url: "profile-perpustakaan",
+      icon: "bi bi-person",
+      label: "Profile Perpustakaan"
+    },
+    {
+      url: "verifikator-desk",
+      icon: "bi bi-book",
+      label: "Verifikator Desk"
+    }
+];
 // jquery set default header
 $.ajaxSetup({
     headers: {
@@ -93,18 +144,71 @@ function checkLogin() {
         toast("Session expired, please login again", 'danger');
         setTimeout(function(){
             deleteSession();
-        }, 3000);
+        }, 300);
     } else {
         ajaxData(baseUrl + '/api/v1/user', 'POST', {}, function (resp) {
             $(".display-user-name").html(resp.data.name);
             $(".display-user-role").html(resp.data.role);
             setSession("role", resp.data.role);
             checkSpecialAction(resp.data)
+            checkUserAccess()
+            setMenuByRole();
         }, function(data) {
             toast(data.responseJSON.message ?? data.responseJSON.error, 'warning');
-            setTimeout(deleteSession, 3000);
+            setTimeout(deleteSession, 300);
         });
     }
+}
+
+function checkUserAccess(){
+    const role = session("role");
+    console.log(menuByRole[role]);
+    const accessMenu = menuByRole[`${role}`].filter(item => {
+        let pathname = window.location.pathname.replace(/\.html$/, '').replace(/[/]/g, '');
+        let menuUrl = item.replace(/_/g, '-');
+        if (item == "*") return true;
+        return pathname == menuUrl
+    });
+
+    if (empty(accessMenu)) {
+        toast("Access Denied", 'danger');
+        setTimeout(function(){
+            // redirect to login
+            window.location = baseUrl + '/auth-login.html';
+        }, 300);
+    }
+}
+
+function setMenuByRole(){
+    const role = session("role");
+    const menu = menuByRole[role];
+    const sidebarMenu = sidebarItems.filter(item => {
+        let menuUrl = item.url.replace(/_/g, '-');
+        return menu.includes(menuUrl)
+    });
+
+    // add list menu
+    sidebarMenu.forEach(function(item){
+        let menuItem = `
+        <li class="sidebar-item  ">
+            <a href="${item.url}.html" class='sidebar-link'>
+                <i class="bi ${item.icon}"></i>
+                <span>${item.label}</span>
+            </a>
+        </li>
+        `
+        $(".sidebar-menu .menu").append(menuItem);
+    });
+
+    // active menu
+    $(".sidebar-menu .menu .sidebar-item").each(function(index, menu){
+        let pathname = window.location.pathname.replace(/[/-]/g, '');
+        let urlSidebar = $(this).find("a").attr("href").replace(/[/-]/g, '');
+        const hrefRegex = new RegExp(`^${urlSidebar.replace(/\//g, '')}$`);
+        if(hrefRegex.test(pathname)){
+            $(this).addClass("active");
+        }
+    });
 }
 
 function checkSpecialAction(resp) {

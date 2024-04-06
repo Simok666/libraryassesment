@@ -145,7 +145,7 @@
                         <td class="text-center">${data.nilai}</td>
                         <td class="text-center">
                             <i class="${data.is_verified ? 'bi bi-check-circle-fill text-success' : 'bi bi-x-circle-fill text-danger'}"></i>
-                        <td class="text-center"><a href="#" class="openPopup" link="${data.bukti_dukung[0].url}">View File</a></td>
+                        <td class="text-center"><a href="#" class="openPopup" link="${data.bukti_dukung[0]?.url}">View File</a></td>
                     </tr>
                 `
             });

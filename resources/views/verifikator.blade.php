@@ -34,8 +34,8 @@
 @section('scripts')
 <script>
     $(document).ready(function() {
-        GetData(req, "desk", formatTable);
-        GetData(req, "field", formatTable);
+        GetData(req, "desk", formatdesk);
+        GetData(req, "field", formatfield);
 
         $(".datatable-desk, .datatable-field").on('click', '.btn-notif', function() {
             let buttonNotif = $(this);
