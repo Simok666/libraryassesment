@@ -22,7 +22,7 @@ class checkRole
              {
             $roleIds = ['type.operator' => 'role:operator', 'type.verifikator_desk' => 'role:verifikator_desk', 'type.verifikator_field' => 'role:verifikator_field'];
         } else {
-            $roleIds = ['type.operator' => 'role:operator', 'type.pimpinan' => 'role:pimpinan'];
+            $roleIds = ['type.operator' => 'role:operator', 'type.pimpinan_sesban' => 'role:pimpinan_sesban'];
         }
         
         $allowedRoleIds = [];

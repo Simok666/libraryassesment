@@ -20,6 +20,7 @@ class BuktiFisik extends Model implements HasMedia
     protected $fillable = [
         'user_id',
         'bukti_fisik_data_id',
+        'status_buktifisik'
     ];
 
     /**

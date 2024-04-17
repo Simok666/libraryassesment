@@ -24,13 +24,14 @@ class PlenoUploadRequest extends FormRequest
        
         return [
             // 'user_id' => ['required', 'numeric'],
-            'draft_sk_upload' => (auth()->user()->currentAccessToken()->getAttributeValue('abilities')[0] == 'role:pimpinan') ? ['array'] : ['required','array'],
+            'draft_sk_upload' => (auth()->user()->currentAccessToken()->getAttributeValue('abilities')[0] == 'role:pimpinan_sesban') ? ['array'] : ['required','array'],
             'draft_sk_upload.*' => ['mimes:jpg,png,jpeg,gif,svg,pdf','max:2048'],
-            'pleno_upload' => (auth()->user()->currentAccessToken()->getAttributeValue('abilities')[0] == 'role:pimpinan') ? ['array'] : ['required','array'],
+            'pleno_upload' => (auth()->user()->currentAccessToken()->getAttributeValue('abilities')[0] == 'role:pimpinan_sesban') ? ['array'] : ['required','array'],
             'pleno_upload.*' => ['mimes:jpg,png,jpeg,gif,svg,pdf','max:2048'],
-            'sk_upload_pimpinan' => (auth()->user()->currentAccessToken()->getAttributeValue('abilities')[0] == 'role:pimpinan') ? ['required', 'array'] : ['array'],
-            'sk_upload_pimpinan.*' => ['mimes:jpg,png,jpeg,gif,svg,pdf','max:2048']
-        
+            'sk_upload_pimpinan' => (auth()->user()->currentAccessToken()->getAttributeValue('abilities')[0] == 'role:pimpinan_sesban') ? ['required', 'array'] : ['array'],
+            'sk_upload_pimpinan.*' => ['mimes:jpg,png,jpeg,gif,svg,pdf','max:2048'],
+            'sk_upload_pimpinan_kaban' => (auth()->user()->currentAccessToken()->getAttributeValue('abilities')[0] == 'role:pimpinan_kaban') ? ['required', 'array'] : ['array'],
+            'sk_upload_pimpinan_kaban.*' => ['mimes:jpg,png,jpeg,gif,svg,pdf','max:2048']
         ];
     }
 }

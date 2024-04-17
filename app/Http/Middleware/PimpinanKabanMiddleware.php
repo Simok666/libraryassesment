@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class PimpinanMiddleware
+class PimpinanKabanMiddleware
 {
     /**
      * Handle an incoming request.
@@ -15,7 +15,7 @@ class PimpinanMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(auth()->user()->tokenCan('role:pimpinan_sesban')) {
+        if(auth()->user()->tokenCan('role:pimpinan_kaban')) {
             return $next($request);
         }
         return response()->json('Not Authorized', 401);

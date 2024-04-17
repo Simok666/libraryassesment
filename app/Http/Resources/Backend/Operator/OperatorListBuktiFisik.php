@@ -19,6 +19,7 @@ class OperatorListBuktiFisik extends JsonResource
             'id' => $this->id,
             'pic_name' => $this->name,
             'pic_email' => $this->email,
+            'status_buktifisik' => $this->status_buktifisik,
             'BuktiFisik' => UserBuktiFisikResource::collection($this->buktiFisik)
         ];
     }

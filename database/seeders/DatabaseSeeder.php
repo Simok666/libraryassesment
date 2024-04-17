@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
             AdminSeeder::class,
             OperatorSeeder::class,
             PimpinanSeeder::class,
+            PimpinanKabanSeeder::class,
             KomponenSeeder::class,
             BuktiFisikDataSeeder::class,
             VerifikatorDeskSeeder::class,
@@ -23,6 +24,7 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             SubKomponenSeeder::class,
             BuktiFisikSeeder::class,
+            LibrariesSeeder::class
            ]);
     }
 }

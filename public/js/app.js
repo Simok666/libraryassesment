@@ -6,8 +6,8 @@ var req = {
 
 const menuByRole = {
     "admin" : ["*"],
-    "user" : ["dashboard","profile-perpustakaan"],
-    "operator" : ["dashboard", "libraries", "proofOfWork", "komponent", "verifikator"],
+    "user" : ["dashboard","profile-perpustakaan", "profile-komponent" , "profile-buktifisik"],
+    "operator" : ["dashboard", "users", "libraries", "proofOfWork", "komponent", "verifikator"],
     "verifikator_desk" : ["dashboard", "libraries", "proofOfWork", "komponent", "verifikator-desk"],
     "verifikator_field" : ["dashboard", "libraries", "proofOfWork", "komponent", "verifikator-field"]
 }

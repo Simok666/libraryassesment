@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\SubKomponen;
 use Faker\Factory as Faker;
 use DB;
 
@@ -23,12 +24,16 @@ class SubKomponenSeeder extends Seeder
             
             $userId = ceil($subkomponenId / 9);
 
-            DB::table('sub_komponens')->insert([
+            $subKomponen = SubKomponen::create([
                 'subkomponen_id' => $subkomponenIdInRange,
                 'user_id' => $userId,
                 'skor_subkomponen' => $faker->numberBetween(1, 100),
                 'nilai' => $faker->numberBetween(1, 100)
             ]);
+
+            // $fakerImage = $faker->imageUrl(250, 250, 'animals', true);
+            // $subKomponen->addMedia($fakerImage)
+            //     ->toMediaCollection('images');
         }
     }
 }

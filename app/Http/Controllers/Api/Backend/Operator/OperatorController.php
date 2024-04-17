@@ -278,12 +278,26 @@ class OperatorController extends Controller
                         }
                     }
 
-                } elseif ((auth()->user()->currentAccessToken()->getAttributeValue('abilities')[0] == 'role:pimpinan')) {
-                    $store = Pleno::find(request("id"));
-                    $store->update();
+                } elseif ((auth()->user()->currentAccessToken()->getAttributeValue('abilities')[0] == 'role:pimpinan_sesban')) {
+                    $sesban = Pleno::where('user_id', request("id"));
+                    $sesban->update();
                     if($skPimpinan = $request->sk_upload_pimpinan) {
                         foreach ($skPimpinan as $pimpinan) {
-                            $store->addMedia($pimpinan)->toMediaCollection('sk_upload_pimpinan');
+                            $sesban->addMedia($pimpinan)->toMediaCollection('sk_upload_pimpinan');
+                        }
+                    }
+                } elseif (auth()->user()->currentAccessToken()->getAttributeValue('abilities')[0] == 'role:pimpinan_kaban') {
+                    $kaban = Pleno::find(request("id"));
+                    User::with(['komponen.komponen'])->whereHas('komponen', function ($query) use ($request) {
+                        $query->update('is_pleno', 1);
+                    })->when($request->has("id"), function ($query) use ($request){
+                        $query->where('id', request("id"));
+                    });
+
+                    $kaban->update();
+                    if($skPimpinanKaban = $request->sk_upload_pimpinan_kaban) {
+                        foreach ($skPimpinanKaban as $pimpinanKaban) {
+                            $sesban->addMedia($pimpinanKaban)->toMediaCollection('sk_upload_pimpinan_kaban');
                         }
                     }
                 }
@@ -309,6 +323,13 @@ class OperatorController extends Controller
             DB::rollBack();
             return response()->json(['error' => 'An error occurred while upload pleno: ' . $e->getMessage()], 400);
         }
+
+        /**
+         * public function
+         * 
+         * 
+         * 
+         */
         
     }
 

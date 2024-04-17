@@ -34,14 +34,14 @@ class VerifikatorDeskController extends Controller
             $users = User::find($request->id);
             $operator = Operator::first();
             $typeNotification = filter_var($request->type_notification, FILTER_VALIDATE_BOOLEAN);
-         
+            
             if($request->type_form == 'library') 
             {
                 $library = User::find($request->id)->library;
 
                 if($library)
                 {
-                    ($typeNotification) ? $library->status_verifikator  = 1 : $library->status_verifikator  = 2;  
+                    ($library->status_verifikato == 1) ? $library->status_verifikator  = 1 : $library->status_verifikator  = 2;  
                     $library->save();
                     
                     $postMail = [
@@ -110,23 +110,31 @@ class VerifikatorDeskController extends Controller
      * 
      * @param Request $request
      * @param SubKomponen $subKomponen
+     * @param User $user
      * 
      */
-    public function store (Request $request, SubKomponen $subkomponen) 
+    public function store (Request $request, SubKomponen $subkomponen, User $user , Operator $operator) 
     {
         try {
-
-            return $request->all();
             
             $textEditor = null;
-            foreach($request->all() as $key => $val) {
-                
-                $subKomponen = $subkomponen::find($val['id']);
-                
-                if (!$subKomponen) {
-                    return response()->json(['message' => 'Subkomponen id Not Found'], 404);
-                }
+            $user = $user::find($request->user_id);
+            $operator = Operator::first();
+            $setStatusSubKomponen = [];
+            $setStatusBuktiFisik = [];
+            $setTypeData = [];
 
+            $data = collect($request->repeater)->map(function ($val) use ($subkomponen, $user, $request, $operator, &$setStatusSubKomponen, &$setStatusBuktiFisik, &$setTypeData) {
+                
+                $val['user_id'] = $request->user_id;
+                $val['type'] = $request->type;
+                
+                $val['notes'] = ($val['type'] == 'subkomponen' || $val['type'] == 'bukti_fisik') ? $val['catatan'] : $val['notes'];
+                
+                if (!$user) {
+                    return response()->json(['message' => 'User id Not Found'], 404);
+                }
+                
                 if(auth()->user()->currentAccessToken()->getAttributeValue('abilities')[0] == 'role:operator') {
                     $textEditor = $val['pleno'];
                 } elseif (auth()->user()->currentAccessToken()->getAttributeValue('abilities')[0] == 'role:verifikator_desk') {
@@ -134,51 +142,171 @@ class VerifikatorDeskController extends Controller
                 } else {
                     $textEditor = $val['verifikasi_lapangan'];
                 }
-
+                
                 DB::beginTransaction();
 
-                $dom = new \domdocument();
-                $dom->loadHtml($textEditor, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
-
-                $images = $dom->getelementsbytagname('img');
+                if(!empty($textEditor)) {
+                    $dom = new \domdocument();
+                    $dom->loadHtml($textEditor, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+                    $images = $dom->getelementsbytagname('img');
         
-                foreach($images as $key => $img) {
-                    $data = $img->getattribute('src');
-                    list($type, $data) = explode(';', $data);
-                    list(, $data)      = explode(',', $data);
+                    foreach($images as $key => $img) {
+                        $data = $img->getattribute('src');
+                        list($type, $data) = explode(';', $data);
+                        list(, $data)      = explode(',', $data);
 
-                    $data = base64_decode($data);
-                    $image_name= time().$k.'.png';
-                    $path = public_path() .'/'. $image_name;
+                        $data = base64_decode($data);
+                        $image_name= time().$k.'.png';
+                        $path = public_path() .'/'. $image_name;
 
-                    file_put_contents($path, $data);
+                        file_put_contents($path, $data);
 
-                    $img->removeattribute('src');
-                    $img->setattribute('src', $image_name);
+                        $img->removeattribute('src');
+                        $img->setattribute('src', $image_name);
+                    }
+
+                    $detail = $dom->savehtml();
+                } else {
+                    $detail = null;
                 }
 
-                $detail = $dom->savehtml();
-                
                 if (auth()->user()->currentAccessToken()->getAttributeValue('abilities')[0] == 'role:operator') {
+                    
                     $subKomponen->komentar_pleno = $detail;
-                    $subKomponen->is_pleno = (Boolean) 1;
                 } elseif (auth()->user()->currentAccessToken()->getAttributeValue('abilities')[0] == 'role:verifikator_desk') {
-                    $subKomponen->notes = $detail;
+                    $status = (boolean) $val['status'];
+                    $setTypeData[] = $val['type'];
+                    
+                    if($val['type'] == 'perpustakaan') {
+                        $val['library_id'] = $request->library_id;
+                        
+                        if($status) {
+                            $user->library->status_verifikator = $status;
+                            $user->library->notes = $detail;
+                            $user->status_perpustakaan = (boolean) true;
+
+                            $postMail = [
+                                'email' => [$user->email, $operator->email],
+                                'title' => 'Form Data Perpustakaan sudah sesuai',
+                                'status' => 'profil_perpustakaan',
+                                'body' => $user->library,
+                            ];
+
+                            dispatch(new SendEmailJob($postMail));
+
+                        } else {
+                            
+                            $user->type_insert = "0";
+                            $user->library->notes = $detail;
+                            $user->library->status_verifikator = $status;
+
+                            $postMail = [
+                                'email' => [$user->email, $operator->email],
+                                'title' => 'Form Data Perpustakaan tidak sesuai',
+                                'status' => 'profil_perpustakaan',
+                                'body' => $user->library,
+                            ];
+
+                            dispatch(new SendEmailJob($postMail));
+                        }
+                        $user->library->save();
+                    } elseif ($val['type'] == 'subkomponen') {
+                        if($status) {
+                            $setStatusSubKomponen[] = $val['status'];
+                            $subKomponen = $user->with(['komponen' => function ($query) use ($val, $detail, $status) {
+                                $query->where('id', $val['id'])->update(['status_verifikator' => $status, 'notes' =>  $detail]);
+                            }])->find($val['user_id']);
+                            
+                        } else {
+                            $subKomponen = $user->with(['komponen' => function ($query) use ($val, $detail, $status) {
+                                $query->where('id', $val['id'])->update(['status_verifikator' => $status, 'notes' =>  $detail]);
+                            }])->find($val['user_id'])->update(['type_insert' => "1"]);
+                        }
+                        
+                    } elseif ($val['type'] == 'bukti_fisik') {
+                        if($status) {
+                            $setStatusBuktiFisik[] = $val['status'];
+                            $buktiFisik = $user->with(['buktiFisik' => function ($query) use ($val, $detail, $status) {
+                                $query->where('id', $val['id'])->update(['status_verifikator' => $status, 'notes' =>  $detail]);
+                            }])->find($val['user_id']);
+                            
+                        } else {
+                            $buktiFisik = $user->with(['buktiFisik' => function ($query) use ($val, $detail, $status) {
+                                $query->where('id', $val['id'])->update(['status_verifikator' => $status, 'notes' =>  $detail]);
+                            }])->find($val['user_id'])->update(['type_insert' => "2"]);
+                        }
+                    }
+
                 } else {
                     $subKomponen->verifikasi_lapangan = $detail;
                 }
-
-                $subKomponen->save();
-
+               
+                $user->save();
                 DB::commit();
+            });
+
+            if(count($setStatusSubKomponen) == 9 && $setTypeData[0] == 'subkomponen') {
+                $user->status_subkomponent = (boolean) true;
                 
+                $postMail = [
+                    'email' => [$user->email, $operator->email],
+                    'title' => 'Form Data komponen sudah Sesuai',
+                    'status' => 'komponen_perpustakaan',
+                    'body' => $user,
+                ];
+
+                dispatch(new SendEmailJob($postMail));
+
+            } else {
+                if( $setTypeData[0] == 'subkomponen' ) {
+                    $user->status_subkomponent = (boolean) false;
+    
+                    $postMail = [
+                        'email' => [$user->email, $operator->email],
+                        'title' => 'Form Data komponen tidak sesuai',
+                        'status' => 'komponen_perpustakaan',
+                        'body' => $user,
+                    ];
+    
+                    dispatch(new SendEmailJob($postMail));
+                }
             }
+            
+            if(count($setStatusBuktiFisik) == 9 && $setTypeData[0] == 'bukti_fisik') 
+            {
+                $user->status_buktifisik = (boolean) true;
+                $postMail = [
+                    'email' => [$user->email, $operator->email],
+                    'title' => 'Form Data bukti fisik sudah Sesuai',
+                    'status' => 'bukti_fisik_perpustakaan',
+                    'body' => $user,
+                ];
+
+                dispatch(new SendEmailJob($postMail));
+            } else {
+                if ( $setTypeData[0] == 'bukti_fisik' ) {
+                    $user->status_buktifisik = (boolean) false;
+                    $postMail = [
+                        'email' => [$user->email, $operator->email],
+                        'title' => 'Form Data bukti fisik tidak Sesuai',
+                        'status' => 'bukti_fisik_perpustakaan',
+                        'body' => $user,
+                    ];
+
+                    dispatch(new SendEmailJob($postMail));
+                }
+            }
+
+            $user->save();
 
             return response()->json(['message' => 'success save notes'], HttpResponse::HTTP_CREATED);
 
         } catch (\Exception $e) {
             DB::rollBack();
             return response()->json(['error' => 'An error occurred while store data: ' . $e->getMessage()], 400);
+        } catch (\Illuminate\Database\QueryException $ex) {
+            DB::rollBack();
+            return response()->json(['error' => 'An error occurred while store data: ' . $ex->getMessage()], 400);
         } 
     }
 
