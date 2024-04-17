@@ -40,7 +40,8 @@ class User extends Authenticatable implements HasMedia
         'website',
         'number_telephone',
         'library_email',
-        'type_insert'
+        'type_insert',
+        'status_perpustakaan'
     ];
 
     /**

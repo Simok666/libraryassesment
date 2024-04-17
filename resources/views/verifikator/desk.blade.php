@@ -316,18 +316,18 @@
                     <td>${data.pic_name}</td>
                     <td>${data.pic_email}</td>
                     <td class="text-center">
-                        ${!empty(data.status_perpustakaan) ? `<span class="bi bi-check-circle-fill text-success"></span>` : `<span class="bi bi-x-circle-fill text-danger"></span>`}
+                        ${(data.status_perpustakaan) ? `<span class="bi bi-check-circle-fill text-success"></span>` : `<span class="bi bi-x-circle-fill text-danger"></span>`}
                     </td>
                     <td class="text-center">
-                        ${!empty(data.status_subkomponent) ? `<span class="bi bi-check-circle-fill text-success"></span>` : `<span class="bi bi-x-circle-fill text-danger"></span>`}
+                        ${(data.status_subkomponent) ? `<span class="bi bi-check-circle-fill text-success"></span>` : `<span class="bi bi-x-circle-fill text-danger"></span>`}
                     </td>
                     <td class="text-center">
-                        ${!empty(data.status_buktifisik) ? `<span class="bi bi-check-circle-fill text-success"></span>` : `<span class="bi bi-x-circle-fill text-danger"></span>`}
+                        ${(data.status_buktifisik) ? `<span class="bi bi-check-circle-fill text-success"></span>` : `<span class="bi bi-x-circle-fill text-danger"></span>`}
                     </td>
                     <td class="text-center btn-group-vertical" width="100%">                        
-                        ${empty(data.status_perpustakaan)? `<a href="#" class="btn btn-warning btn-sm btn-verify-perpustakaan mb-1" title="Verify Perpustakaan" data-id="${data.id}">Verify Perpustakaan</a>` : ''}
-                        ${empty(data.status_subkomponent)? `<a href="#" class="btn btn-warning btn-sm btn-verify-subkomponen mb-1" title="Verify Subkomponen" data-id="${data.id}">Verify Subkomponen</a>` : ''}
-                        ${empty(data.status_buktifisik)? `<a href="#" class="btn btn-warning btn-sm btn-verify-bukti-fisik" title="Verify Bukti Fisik" data-id="${data.id}">Verifi Bukti Fisik</a>` : ''}
+                        ${!(data.status_perpustakaan)? `<a href="#" class="btn btn-warning btn-sm btn-verify-perpustakaan mb-1" title="Verify Perpustakaan" data-id="${data.id}">Verify Perpustakaan</a>` : ''}
+                        ${!(data.status_subkomponent)? `<a href="#" class="btn btn-warning btn-sm btn-verify-subkomponen mb-1" title="Verify Subkomponen" data-id="${data.id}">Verify Subkomponen</a>` : ''}
+                        ${!(data.status_buktifisik)? `<a href="#" class="btn btn-warning btn-sm btn-verify-bukti-fisik" title="Verify Bukti Fisik" data-id="${data.id}">Verifi Bukti Fisik</a>` : ''}
                     </td>
                 </tr>
             `
@@ -468,7 +468,7 @@
                             </select>
                         </td>
                         <td>
-                            <input type="hidden" name="repeater[${index}][id]" value="${data.bukti_fisik_data_id}">
+                            <input type="hidden" name="repeater[${index}][id]" value="${data.id}">
                             <textarea class="form-control sumernote-buktifisik" id="sumkomp${index}" name="repeater[${index}][catatan]" placeholder="notes">
                             </textarea>
                         </td>

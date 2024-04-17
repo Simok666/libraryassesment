@@ -189,11 +189,28 @@
                             <?php } elseif ($postMail['status'] == 'verifikator') { ?>
                                 {{ $postMail['body'] }}
                             <?php } elseif ($postMail['status'] == 'profil_perpustakaan') { ?>
-                                {{ $postMail['body'] }}
+                                <p><strong>Nomor Npp:</strong> {{ $postMail['body']->nomor_npp }}</p>
+                                <p><strong>Nama Perpustakaan:</strong> {{ $postMail['body']->nama_perpustakaan }}</p>
+                                <p><strong>Alamat:</strong> {{ $postMail['body']->alamat }}</p>
+                                <p><strong>Desa:</strong> {{ $postMail['body']->desa }}</p>
+                                <p><strong>Kab/Kota:</strong> {{ $postMail['body']->kabupaten_kota }}</p>
+                                <p><strong>Provinsi:</strong> {{ $postMail['body']->provinsi }}</p>
+                                <p><strong>No. Telp:</strong> {{ $postMail['body']->no_telp }}</p>
+                                <p><strong>Status Kelembagaan:</strong> {{ $postMail['body']->status_kelembagaan }}</p>
+                                <p><strong>Jens Perpustakaan:</strong> {{ $postMail['body']->jenis_perpustakaan }}</p>
+                                <p><strong>Email:</strong> {{ $postMail['body']->email }}</p>
                             <?php } elseif ($postMail['status'] == 'komponen_perpustakaan') { ?>
-                                {{ $postMail['body'] }}
+                                <p><strong>Nama:</strong> {{ $postMail['body']->name }}</p>
+                                <p><strong>Email Pengguna:</strong> {{ $postMail['body']->email }}</p>
+                                <p><strong>Nama Perpustakaan:</strong> {{ $postMail['body']->library_name }}</p>
+                                <p><strong>Alamat:</strong> {{ $postMail['body']->address }}</p>
+                                <p><strong>No. Telp:</strong> {{ $postMail['body']->number_telephone }}</p>
                             <?php } elseif ($postMail['status'] == 'bukti_fisik_perpustakaan') { ?>
-                                {{ $postMail['body'] }}
+                                <p><strong>Nama:</strong> {{ $postMail['body']->name }}</p>
+                                <p><strong>Email Pengguna:</strong> {{ $postMail['body']->email }}</p>
+                                <p><strong>Nama Perpustakaan:</strong> {{ $postMail['body']->library_name }}</p>
+                                <p><strong>Alamat:</strong> {{ $postMail['body']->address }}</p>
+                                <p><strong>No. Telp:</strong> {{ $postMail['body']->number_telephone }}</p>
                              <?php } elseif ($postMail['status'] == 'verifikasi') { ?>
                                 <p><strong>Name:</strong> {{ $postMail['body']->name }}</p>
                                 <p><strong>Email:</strong> {{ $postMail['body']->email }}</p>

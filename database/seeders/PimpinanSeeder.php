@@ -15,7 +15,7 @@ class PimpinanSeeder extends Seeder
     public function run(): void
     {
         Pimpinan::create([
-            'name' => 'Demo Admin',
+            'name' => 'Demo Pimpinan Sesban',
             'email' => 'simokart3@gmail.com',
             'password' => Hash::make('12345678')
         ]);

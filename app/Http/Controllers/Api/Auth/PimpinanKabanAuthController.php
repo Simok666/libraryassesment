@@ -4,32 +4,31 @@ namespace App\Http\Controllers\Api\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Http\Requests\Auth\PimpinanAuthRequest;
+use App\Http\Requests\Auth\PimpinanKabanRequest;
 use App\Http\Resources\Auth\AuthResource;
-use App\Models\Pimpinan;
+use App\Models\PimpinanKaban;
 use App\Http\Resources\Auth\Pimpinan\PimpinanAuthResource;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Hash;
 
-class PimpinanAuthController extends Controller
+class PimpinanKabanAuthController extends Controller
 {
-    /**
+   /**
      * login function
      * 
-     * @param PimpinanAuthRequest $request
+     * @param PimpinanKabanRequest $request
      * 
      */
-    public function login(PimpinanAuthRequest $request)
+    public function login(PimpinanKabanRequest $request)
     {   
-        $request["role"] = "pimpinan_sesban";
-        $pimpinan = Pimpinan::where('email', $request->email)->first();
+        $request["role"] = "pimpinan_kaban";
+        $pimpinan = PimpinanKaban::where('email', $request->email)->first();
 
         if (!$pimpinan || !Hash::check($request->password, $pimpinan->password)) {
             throw ValidationException::withMessages([
                 'email' => ['The provided credentials are incorrect.'],
             ]);
         }
-        $pimpinan->role = "pimpinan";
 
         return new AuthResource($pimpinan);
     }

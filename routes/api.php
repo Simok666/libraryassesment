@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\Auth\UserAuthController;
 use App\Http\Controllers\Api\Auth\AdminAuthController;
 use App\Http\Controllers\Api\Auth\OperatorAuthController;
 use App\Http\Controllers\Api\Auth\PimpinanAuthController;
+use App\Http\Controllers\Api\Auth\PimpinanKabanAuthController;
 use App\Http\Controllers\Api\Backend\Operator\OperatorController;
 use App\Http\Controllers\Api\Backend\Administrator\AdminController;
 use App\Http\Controllers\Api\Backend\User\UserController;
@@ -29,13 +30,14 @@ Route::group(['namespace' => 'Api', 'prefix' => 'v1'], function () {
     Route::post('user/register', [UserAuthController::class, 'register']);
     Route::post('admin/login', [AdminAuthController::class, 'login']);
     Route::post('operator/login', [OperatorAuthController::class, 'login']);
-    Route::post('pimpinan/login', [PimpinanAuthController::class, 'login']);
+    Route::post('pimpinanSesban/login', [PimpinanAuthController::class, 'login']);
+    Route::post('pimpinanKaban/login', [PimpinanKabanAuthController::class, 'login']);
     Route::post('user', [UserAuthController::class, 'getUserAccount'])->middleware('auth:sanctum');
     Route::get('getListLibrary', [OperatorController::class, 'getListLibrary'])->middleware(['auth:sanctum', 'checkRole:type.operator,type.verifikator_desk,type.verifikator_field']);
     Route::get('getListKomponen', [OperatorController::class, 'getListKomponen'])->middleware(['auth:sanctum', 'checkRole:type.operator,type.verifikator_desk,type.verifikator_field']);
     Route::get('getListBuktiFisik', [OperatorController::class, 'getListBuktiFisik'])->middleware(['auth:sanctum', 'checkRole:type.operator,type.verifikator_desk,type.verifikator_field']);
     Route::post('storeTextEditor', [VerifikatorDeskController::class, 'store'])->middleware(['auth:sanctum', 'checkRole:type.operator,type.verifikator_desk,type.verifikator_field']);
-    Route::post('uploadPleno/{id}', [OperatorController::class, 'upload'])->middleware(['auth:sanctum', 'checkRole:type.operator,type.pimpinan']);
+    Route::post('uploadPleno/{id}', [OperatorController::class, 'upload'])->middleware(['auth:sanctum', 'checkRole:type.operator,type.pimpinan_sesban,type.pimpinan_kaban']);
 
     Route::post('verifikatordesk/login', [VerifikatorDeskAuthController::class, 'login']);
     Route::post('verifikatorfield/login', [VerifikatorFieldAuthController::class, 'login']);
@@ -48,7 +50,9 @@ Route::middleware(['auth:sanctum', 'type.user'])->group(function () {
         Route::post('user/storeKomponen', [UserController::class, 'storeKomponen']);
         Route::get('user/getBuktiFisikData', [UserController::class, 'getBuktiFisikData']);
         Route::post('user/storeBuktiFisik', [UserController::class, 'storeBuktiFisik']);
-
+        
+        Route::get('user/getDetailLibrary', [UserController::class, 'getDetailLibrary']);
+        
         //logout 
         Route::post('user/logout', [UserAuthController::class, 'destory']);
     });
@@ -111,6 +115,8 @@ Route::middleware(['auth:sanctum', 'type.verifikator_field'])->group(function ()
     });
 });
 
-Route::middleware(['auth:sanctum', 'type.pimpinan'])->group(function () {
+Route::middleware(['auth:sanctum', 'type.pimpinan_sesban'])->group(function () {
     
+    //logout
+    Route::post('pimpinanSesban/logout', [PimpinanAuthController::class, 'login']); 
 });

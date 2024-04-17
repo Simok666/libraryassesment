@@ -27,6 +27,12 @@ use Illuminate\Support\Facades\Validator;
 use DB;
 class UserController extends Controller
 {
+    public function getDetailLibrary(Request $request, Library $library)
+    {
+        $library = User::find($request->user()->id)->library;
+        return ($library !== null) ? new UserResource($library) : null;
+    }
+
     /**
      * store data library registration
      * 
