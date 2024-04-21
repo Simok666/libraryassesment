@@ -104,12 +104,13 @@ class OperatorController extends Controller
      */
     public function getListLibrary(Request $request)
     {
-        $library = User::with(['library' => function ($query) use ($request) {
-            $query->where('status', $request->status); 
-        }])->when($request->has('id'), function ($query) use ($request) {
+        $library = User::with('library')
+        ->whereHas('library' , function ($query) {
+            $query->where('status', request('status'));
+        })->when($request->has('id'), function ($query) use ($request) {
              $query->where('id', request("id"));
         })->paginate($request->limit ?? "10");
-
+        
         return  OperatorListLibrary::collection($library);
        
     }
