@@ -21,90 +21,6 @@ use DB;
 class VerifikatorDeskController extends Controller
 {
     /**
-     * notifikasi sudah sesuai
-     * 
-     * @param Request $request
-     * 
-     * @return JsonResponse
-     * 
-     */
-    public function notification(Request $request, User $user) 
-    {
-        try{
-            $users = User::find($request->id);
-            $operator = Operator::first();
-            $typeNotification = filter_var($request->type_notification, FILTER_VALIDATE_BOOLEAN);
-            
-            if($request->type_form == 'library') 
-            {
-                $library = User::find($request->id)->library;
-
-                if($library)
-                {
-                    ($library->status_verifikato == 1) ? $library->status_verifikator  = 1 : $library->status_verifikator  = 2;  
-                    $library->save();
-                    
-                    $postMail = [
-                        'email' => $operator->email,
-                        'title' => 'Form Data Profil Perpustakaan'. $typeNotification ? 'Sesuai' : 'Tidak Sesuai',
-                        'status' => 'profil_perpustakaan',
-                        'body' => $library,
-                    ];
-
-                    dispatch(new SendEmailJob($postMail));
-                }
-            } elseif ($request->type_form == 'subkomponen')
-            {
-                $subKomoponen = User::find($request->id)->komponen;
-                
-                if($subKomoponen)
-                {
-                    foreach ($subKomoponen as $value) {
-                        
-                        ($typeNotification) ? $value->status_verifikator  = 1 : $value->status_verifikator  = 2 ;  
-                        $value->save();
-                    }
-
-                    $postMail = [
-                        'email' => $operator->email,
-                        'title' => 'Form Data Komponen '. $typeNotification ? 'Sesuai' : 'Tidak Sesuai',
-                        'status' => 'komponen_perpustakaan',
-                        'body' => $subKomoponen,
-                    ];
-
-                    dispatch(new SendEmailJob($postMail));
-                }
-            } elseif ($request->type_form == 'buktifisik') 
-            {
-                $buktiFisik = User::find($request->id)->buktiFisik;
-                
-                if($buktiFisik)
-                {
-                    foreach($buktiFisik as $value) {
-                        ($typeNotification) ? $value->status_verifikator  = 1 : $value->status_verifikator  = 2;  
-                        $value->save();
-                    }
-
-                    $postMail = [
-                        'email' => $operator->email,
-                        'title' => 'Form Data Bukti Fisik Perpustakaan '. $typeNotification ? 'Sesuai' : 'Tidak Sesuai',
-                        'status' => 'bukti_fisik_perpustakaan',
-                        'body' => $buktiFisik,
-                    ];
-
-                    dispatch(new SendEmailJob($postMail));
-                }
-            }
-            
-
-            return response()->json(['message' => 'notified with successfully'], HttpResponse::HTTP_CREATED);
-
-        } catch (\Exception $e) {
-            return response()->json(['error' => 'An error occurred while notif email: ' . $e->getMessage()], 400);
-        }
-    }
-
-    /**
      * 
      * store notes verifikator
      * 
@@ -129,8 +45,6 @@ class VerifikatorDeskController extends Controller
                 $val['user_id'] = $request->user_id;
                 $val['type'] = $request->type;
                 
-                $val['notes'] = ($val['type'] == 'subkomponen' || $val['type'] == 'bukti_fisik') ? $val['catatan'] : $val['notes'];
-                
                 if (!$user) {
                     return response()->json(['message' => 'User id Not Found'], 404);
                 }
@@ -138,7 +52,7 @@ class VerifikatorDeskController extends Controller
                 if(auth()->user()->currentAccessToken()->getAttributeValue('abilities')[0] == 'role:operator') {
                     $textEditor = $val['pleno'];
                 } elseif (auth()->user()->currentAccessToken()->getAttributeValue('abilities')[0] == 'role:verifikator_desk') {
-                    $textEditor = $val['notes'];
+                    $textEditor = ($val['type'] == 'subkomponen' || $val['type'] == 'bukti_fisik') ? $val['catatan'] : $val['notes'];
                 } else {
                     $textEditor = $val['verifikasi_lapangan'];
                 }
@@ -171,9 +85,13 @@ class VerifikatorDeskController extends Controller
                 }
 
                 if (auth()->user()->currentAccessToken()->getAttributeValue('abilities')[0] == 'role:operator') {
-                    
-                    $subKomponen->komentar_pleno = $detail;
+                
+                    $subKomponen = $user->with(['komponen' => function ($query) use ($val, $detail) {
+                        $query->where('id', $val['id'])->update(['komentar_pleno' =>  $detail , 'is_pleno' => 1]);
+                    }])->find($val['user_id']);
+
                 } elseif (auth()->user()->currentAccessToken()->getAttributeValue('abilities')[0] == 'role:verifikator_desk') {
+                    
                     $status = (boolean) $val['status'];
                     $setTypeData[] = $val['type'];
                     
@@ -210,6 +128,7 @@ class VerifikatorDeskController extends Controller
                             dispatch(new SendEmailJob($postMail));
                         }
                         $user->library->save();
+                    
                     } elseif ($val['type'] == 'subkomponen') {
                         if($status) {
                             $setStatusSubKomponen[] = $val['status'];
@@ -245,59 +164,61 @@ class VerifikatorDeskController extends Controller
                 DB::commit();
             });
 
-            if(count($setStatusSubKomponen) == 9 && $setTypeData[0] == 'subkomponen') {
-                $user->status_subkomponent = (boolean) true;
-                
-                $postMail = [
-                    'email' => [$user->email, $operator->email],
-                    'title' => 'Form Data komponen sudah Sesuai',
-                    'status' => 'komponen_perpustakaan',
-                    'body' => $user,
-                ];
-
-                dispatch(new SendEmailJob($postMail));
-
-            } else {
-                if( $setTypeData[0] == 'subkomponen' ) {
-                    $user->status_subkomponent = (boolean) false;
-    
+            if( auth()->user()->currentAccessToken()->getAttributeValue('abilities')[0] == 'role:verifikator_desk' ) {
+                if(count($setStatusSubKomponen) == 9 && $setTypeData[0] == 'subkomponen') {
+                    $user->status_subkomponent = (boolean) true;
+                    
                     $postMail = [
                         'email' => [$user->email, $operator->email],
-                        'title' => 'Form Data komponen tidak sesuai',
+                        'title' => 'Form Data komponen sudah Sesuai',
                         'status' => 'komponen_perpustakaan',
                         'body' => $user,
                     ];
     
                     dispatch(new SendEmailJob($postMail));
+    
+                } else {
+                    if( $setTypeData[0] == 'subkomponen' ) {
+                        $user->status_subkomponent = (boolean) false;
+        
+                        $postMail = [
+                            'email' => [$user->email, $operator->email],
+                            'title' => 'Form Data komponen tidak sesuai',
+                            'status' => 'komponen_perpustakaan',
+                            'body' => $user,
+                        ];
+        
+                        dispatch(new SendEmailJob($postMail));
+                    }
                 }
-            }
-            
-            if(count($setStatusBuktiFisik) == 9 && $setTypeData[0] == 'bukti_fisik') 
-            {
-                $user->status_buktifisik = (boolean) true;
-                $postMail = [
-                    'email' => [$user->email, $operator->email],
-                    'title' => 'Form Data bukti fisik sudah Sesuai',
-                    'status' => 'bukti_fisik_perpustakaan',
-                    'body' => $user,
-                ];
-
-                dispatch(new SendEmailJob($postMail));
-            } else {
-                if ( $setTypeData[0] == 'bukti_fisik' ) {
-                    $user->status_buktifisik = (boolean) false;
+                
+                if(count($setStatusBuktiFisik) == 9 && $setTypeData[0] == 'bukti_fisik') 
+                {
+                    $user->status_buktifisik = (boolean) true;
                     $postMail = [
                         'email' => [$user->email, $operator->email],
-                        'title' => 'Form Data bukti fisik tidak Sesuai',
+                        'title' => 'Form Data bukti fisik sudah Sesuai',
                         'status' => 'bukti_fisik_perpustakaan',
                         'body' => $user,
                     ];
-
+    
                     dispatch(new SendEmailJob($postMail));
+                } else {
+                    if ( $setTypeData[0] == 'bukti_fisik' ) {
+                        $user->status_buktifisik = (boolean) false;
+                        $postMail = [
+                            'email' => [$user->email, $operator->email],
+                            'title' => 'Form Data bukti fisik tidak Sesuai',
+                            'status' => 'bukti_fisik_perpustakaan',
+                            'body' => $user,
+                        ];
+    
+                        dispatch(new SendEmailJob($postMail));
+                    }
                 }
+    
+                $user->save();
             }
-
-            $user->save();
 
             return response()->json(['message' => 'success save notes'], HttpResponse::HTTP_CREATED);
 
