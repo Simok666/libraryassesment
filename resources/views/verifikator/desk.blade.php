@@ -262,7 +262,7 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label>Status Perpustakaan</label>
-                                <select class="form-select" name="repeater[0][status]" required>
+                                <select class="form-select dropdown-status-perpustakaan" name="repeater[0][status]" required>
                                     <option value="" selected disabled> -- Status ---</option>
                                     <option value="1"> Lolos Verifikasi </option>
                                     <option value="0"> Tidak Lolos Verifikasi </option>
@@ -367,6 +367,9 @@
 
             $("#modal-perpustakaan").find('[name=user_id]').val(result.user_id);
             $("#modal-perpustakaan").find('[name=library_id]').val(result.library_id);
+            $("#modal-perpustakaan").find('.dropdown-status-perpustakaan').val(result.status_verifikasi).trigger('change');
+            $("#modal-perpustakaan").find('.sumernote-perpustakaan').val(result.notes).trigger('change');
+
             settingSummerNote($(".sumernote-perpustakaan"))
         },
         function() {
@@ -397,6 +400,7 @@
             let dataDetail = "";
 
             $.each(result, function(index, data) {
+                let statusVerif = data.status_verifikasi;
                 dataDetail += `
                     <tr>
                         <td>${index+1}</td>
@@ -410,14 +414,15 @@
                         <td class="text-center"><a href="#" class="openPopup" link="${data.bukti_dukung[0].url}">View File</a></td>
                         <td class="form-group">
                             <select class="form-select" name="repeater[${index}][status]" required>
-                                <option value="" selected disabled> -- Status ---</option>
-                                <option value="1"> Lolos Verifikasi </option>
-                                <option value="0"> Tidak Lolos Verifikasi </option>
+                                <option value="" disabled> -- Status ---</option>
+                                <option value="1" ${((statusVerif == 1) ? 'selected' : '')}> Lolos Verifikasi </option>
+                                <option value="0" ${((statusVerif == 0) ? 'selected' : '')}> Tidak Lolos Verifikasi </option>
                             </select>
                         </td>
                         <td>
                             <input type="hidden" name="repeater[${index}][id]" value="${data.id}">
                             <textarea class="form-control sumernote-komponent" id="sumkomp${index}" name="repeater[${index}][catatan]" placeholder="notes">
+                            ${data.notes ?? ""}
                             </textarea>
                         </td>
                     </tr>
@@ -455,6 +460,7 @@
             let dataDetail = "";
 
             $.each(result, function(index, data) {
+                let statusVerif = data.status_verifikasi;
                 dataDetail += `
                     <tr>
                         <td>${index+1}</td>
@@ -463,13 +469,14 @@
                         <td class="form-group">
                             <select class="form-select" name="repeater[${index}][status]" required>
                                 <option value="" selected disabled> -- Status ---</option>
-                                <option value="1"> Lolos Verifikasi </option>
-                                <option value="0"> Tidak Lolos Verifikasi </option>
+                                <option value="1" ${((statusVerif == 1) ? 'selected' : '')}> Lolos Verifikasi </option>
+                                <option value="0" ${((statusVerif == 0) ? 'selected' : '')}> Tidak Lolos Verifikasi </option>
                             </select>
                         </td>
                         <td>
                             <input type="hidden" name="repeater[${index}][id]" value="${data.id}">
                             <textarea class="form-control sumernote-buktifisik" id="sumkomp${index}" name="repeater[${index}][catatan]" placeholder="notes">
+                                ${data.notes}
                             </textarea>
                         </td>
                     </tr>
@@ -522,11 +529,11 @@
         loadingButton($(this))
         ajaxData(url, 'POST', data, function(resp) {
             toast("Data has been saved");
-            $('#modal-komponent').modal('hide');
-            loadingButton($("#form-komponent"), false)
+            $('#modal-subkomponent').modal('hide');
+            loadingButton($("#form-subkomponent"), false)
             GetData(req,"libraries", formatlibraries);
         }, function(data) {
-            loadingButton($("#form-komponent"), false)
+            loadingButton($("#form-subkomponent"), false)
         });
     });
 
