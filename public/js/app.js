@@ -52,6 +52,11 @@ const sidebarItems = [
       url: "verifikator-desk",
       icon: "bi bi-book",
       label: "Verifikator Desk"
+    },
+    {
+      url: "verifikator-field",
+      icon: "bi bi-book",
+      label: "Verifikator Field"
     }
 ];
 // jquery set default header
