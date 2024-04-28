@@ -155,9 +155,9 @@ function checkLogin() {
             $(".display-user-name").html(resp.data.name);
             $(".display-user-role").html(resp.data.role);
             setSession("role", resp.data.role);
-            checkSpecialAction(resp.data)
             checkUserAccess()
             setMenuByRole();
+            checkSpecialAction(resp.data)
         }, function(data) {
             toast(data.responseJSON.message ?? data.responseJSON.error, 'warning');
             setTimeout(deleteSession, 300);
@@ -227,22 +227,42 @@ function checkSpecialAction(resp) {
           
         const pattern = new RegExp('\\b(' + Object.values(pageMapping).join('|') + ')\\b', 'i');
         const isWordIncluded = pattern.test(pathname);
-        
-        if (!isWordIncluded && parseInt(resp.type_insert) in pageMapping) {
+        const filename = pathname.split('/').pop();
+        if ((isWordIncluded && parseInt(resp.type_insert) in pageMapping) || parseInt(resp.type_insert) < 3) {
+            const patternSamePage = new RegExp('\\b(' + pageMapping[resp.type_insert] + ')\\b', 'i');
+            console.log(patternSamePage.test(filename))
+            if (patternSamePage.test(filename)) {
+                return;
+            }
             window.location = `${baseUrl}/${pageMapping[parseInt(resp.type_insert)]}.html`;
-        }
-
-        // check pathname with pageMapping
-        const isRedirected = Object.keys(pageMapping).some(key => pathname.includes(pageMapping[resp.type_insert]));
-
-        console.log({isRedirected : parseInt(isRedirected), pathname: pathname, pageMapping: pageMapping});
-        // if (!isRedirected) window.location = baseUrl + '/dashboard.html';
-          
+        } else if (isWordIncluded && parseInt(resp.type_insert) >= 3) {
+            window.location = `${baseUrl}/dashboard.html`;
+        } else {
+            let a = $(".sidebar-menu .menu").find("a[href='profile-perpustakaan.html']").parent().remove();
+            console.log(a);
+        };         
     } else if (resp.role == "admin") {
         
     } else if (resp.role == "superadmin") {
 
     } // etc
+
+    // const { pathname } = window.location;
+    // const roleMapping = {
+    //     "user": {
+    //         0: 'profile-perpustakaan',
+    //         1: 'profile-komponent',
+    //         2: 'profile-buktifisik'
+    //     },
+    //     "admin": {},
+    //     "superadmin": {}
+    // };
+    // const pageMapping = roleMapping[resp.role] || {};
+    // const filename = pathname.split('/').pop();
+    // const redirectPage = pageMapping[resp.type_insert] || (resp.type_insert >= 3 ? 'dashboard.html' : null);
+    // if(redirectPage && pathname.indexOf(pageMapping[resp.type_insert]) === -1){
+    //     window.location = `${baseUrl}/${redirectPage}`;
+    // }
 }
 
 function deleteSession() {
