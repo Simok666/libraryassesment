@@ -74,7 +74,6 @@
                                 <th>NILAI</th>
                                 <th>VERIFIKASI</th>
                                 <th>BUKTI DUKUNG</th>
-                                <th width="15%">Status</th>
                                 <th width="30%">Catatan</th>
                             </tr>
                         </thead>
@@ -122,7 +121,6 @@
                                 <th scope="col">#</th>
                                 <th scope="col">Title</th>
                                 <th scope="col">File</th>
-                                <th scope="col">Status</th>
                                 <th scope="col">Catatan</th>
                             </tr>
                         </thead>
@@ -261,18 +259,8 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label>Status Perpustakaan</label>
-                                <select class="form-select dropdown-status-perpustakaan" name="repeater[0][status]" required>
-                                    <option value="" selected disabled> -- Status ---</option>
-                                    <option value="1"> Lolos Verifikasi </option>
-                                    <option value="0"> Tidak Lolos Verifikasi </option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="form-group">
                                 <label for="summer-note">Catatan</label>
-                                <textarea class="form-control sumernote-perpustakaan" id="summer-note" name="repeater[0][notes]" placeholder="notes"></textarea>
+                                <textarea class="form-control sumernote-perpustakaan" id="summer-note" name="repeater[0][verifikasi_lapangan]" placeholder="notes"></textarea>
                             </div>
                         </div>
                     </div>
@@ -412,16 +400,9 @@
                         <td class="text-center">
                             <i class="${data.is_verified ? 'bi bi-check-circle-fill text-success' : 'bi bi-x-circle-fill text-danger'}"></i>
                         <td class="text-center"><a href="#" class="openPopup" link="${data.bukti_dukung[0].url}">View File</a></td>
-                        <td class="form-group">
-                            <select class="form-select" name="repeater[${index}][status]" required>
-                                <option value="" disabled> -- Status ---</option>
-                                <option value="1" ${((statusVerif == 1) ? 'selected' : '')}> Lolos Verifikasi </option>
-                                <option value="0" ${((statusVerif == 0) ? 'selected' : '')}> Tidak Lolos Verifikasi </option>
-                            </select>
-                        </td>
                         <td>
                             <input type="hidden" name="repeater[${index}][id]" value="${data.id}">
-                            <textarea class="form-control sumernote-komponent" id="sumkomp${index}" name="repeater[${index}][catatan]" placeholder="notes">
+                            <textarea class="form-control sumernote-komponent" id="sumkomp${index}" name="repeater[${index}][verifikasi_lapangan]" placeholder="notes">
                             ${data.notes ?? ""}
                             </textarea>
                         </td>
@@ -466,16 +447,9 @@
                         <td>${index+1}</td>
                         <td>${data.bukti_fisik_data.title_bukti_fisik}</td>
                         <td><a href="#" class="openPopup" link="${data.bukti_fisik_upload[0].url}">View File</a></td>
-                        <td class="form-group">
-                            <select class="form-select" name="repeater[${index}][status]" required>
-                                <option value="" selected disabled> -- Status ---</option>
-                                <option value="1" ${((statusVerif == 1) ? 'selected' : '')}> Lolos Verifikasi </option>
-                                <option value="0" ${((statusVerif == 0) ? 'selected' : '')}> Tidak Lolos Verifikasi </option>
-                            </select>
-                        </td>
                         <td>
                             <input type="hidden" name="repeater[${index}][id]" value="${data.id}">
-                            <textarea class="form-control sumernote-buktifisik" id="sumkomp${index}" name="repeater[${index}][catatan]" placeholder="notes">
+                            <textarea class="form-control sumernote-buktifisik" id="sumkomp${index}" name="repeater[${index}][verifikasi_lapangan]" placeholder="notes">
                                 ${data.notes}
                             </textarea>
                         </td>
@@ -498,26 +472,14 @@
     function settingSummerNote(selector) {
         $(selector).summernote({
             height: 100,
-            disableDragAndDrop: true,
-            paste: {
-                forcePlainText: true,
-                text: function() {},
-                onBeforePaste: function(evt) {
-                    evt.preventDefault();
-                },
-            },
+            disableDragAndDrop: false,
             toolbar: [
                 ['style', ['style']],
                 ['font', ['bold', 'italic', 'underline', 'clear']],
                 ['para', ['ul', 'ol', 'paragraph']],
-                ['insert', []],
+                ['insert', ['picture']],
                 ['misc', ['codeview']],
-            ],
-            callbacks: {
-                onImageUpload: function() {
-                    return false;
-                },
-            },
+            ]
         });
     }
 
