@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Web\IndexController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\Backend\Operator\OperatorController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,3 +25,5 @@ Route::group(['suffix' => '.html'], function () {
         return view($view);
     });
 });
+
+Route::get('generatePdf/{id}', [OperatorController::class, 'generatepdf']);

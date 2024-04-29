@@ -22,6 +22,7 @@ class OperatorListLibrary extends JsonResource
             'status_perpustakaan' => $this->status_perpustakaan,
             'status_subkomponent' => $this->status_subkomponent,
             'status_buktifisik' => $this->status_buktifisik,
+            'is_pleno' => $this->is_pleno,
             'profil_perpustakaan' => new UserResource($this->library)
         ];
     }

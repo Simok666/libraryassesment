@@ -233,9 +233,12 @@ class OperatorController extends Controller
         $subKomponen  = User::with(['komponen.komponen'])
                         ->where('id', $request->id)->first();
         
-        $pdf = PDF::loadView('pdf.pleno', $subKomponen);
+        $view = view('pdf.pleno',compact('subKomponen'))->render();
+    
+        $pdf = PDF::loadHTML($view)->setPaper('a3', 'landscape');
 
-        return $pdf->download('pleno-'."$subKomponen->id"."-"."$subKomponen->library_name".'.pdf');
+        // return $pdf->download('pleno-'."$subKomponen->id"."-"."$subKomponen->library_name".'.pdf');
+        return $pdf->stream();
     }
 
     /**
@@ -246,12 +249,18 @@ class OperatorController extends Controller
      * 
      */
     public function getListPleno(Request $request) {
-        $komponen =  User::with(['pleno'])
+        $pleno =  User::with(['pleno'])
         ->whereHas('komponen', function ($query) use ($request) {
             $query->where('status', $request->status);
-        })->when($request->has('id'), function ($query) use ($request){
+        })->where([
+            ['status_perpustakaan', '=', (boolean) 1],
+            ['status_subkomponent', '=', (boolean) 1],
+            ['status_buktifisik', '=', (boolean) 1],
+        ])->when($request->has('id'), function ($query) use ($request){
             $query->where('id', request("id"));
         })->paginate($request->limit ?? "10");
+
+        return OperatorListKomponen::collection($pleno);
     }
     
     /**

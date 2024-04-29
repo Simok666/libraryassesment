@@ -36,11 +36,12 @@ class VerifikatorDeskController extends Controller
             $textEditor = null;
             $user = $user::find($request->user_id);
             $operator = Operator::first();
+            $countdataPleno = [];
             $setStatusSubKomponen = [];
             $setStatusBuktiFisik = [];
             $setTypeData = [];
 
-            $data = collect($request->repeater)->map(function ($val) use ($subkomponen, $user, $request, $operator, &$setStatusSubKomponen, &$setStatusBuktiFisik, &$setTypeData) {
+            $data = collect($request->repeater)->map(function ($val) use ($subkomponen, $user, $request, $operator, &$setStatusSubKomponen, &$setStatusBuktiFisik, &$setTypeData, &$countdataPleno) {
                 
                 $val['user_id'] = $request->user_id;
                 $val['type'] = $request->type;
@@ -62,17 +63,19 @@ class VerifikatorDeskController extends Controller
                 if(!empty($textEditor)) {
                     $dom = new \domdocument();
                     $dom->loadHtml($textEditor, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
-                    $images = $dom->getelementsbytagname('img');
-        
+                    $images = $dom->getElementsByTagName('img');
+                    
                     foreach($images as $key => $img) {
+                        
                         $data = $img->getattribute('src');
                         list($type, $data) = explode(';', $data);
                         list(, $data)      = explode(',', $data);
-
+                        
                         $data = base64_decode($data);
-                        $image_name= time().$k.'.png';
-                        $path = public_path() .'/'. $image_name;
-
+                         
+                        $image_name= time().$key.'.png';
+                        $path = public_path() .'/editor/'. $image_name;
+                        
                         file_put_contents($path, $data);
 
                         $img->removeattribute('src');
@@ -83,15 +86,17 @@ class VerifikatorDeskController extends Controller
                 } else {
                     $detail = null;
                 }
-
+               
                 if (auth()->user()->currentAccessToken()->getAttributeValue('abilities')[0] == 'role:operator') {
-                
+                    
+                    $countdataPleno[] = $detail;
+
                     $subKomponen = $user->with(['komponen' => function ($query) use ($val, $detail) {
-                        $query->where('id', $val['id'])->update(['komentar_pleno' =>  $detail , 'is_pleno' => 1]);
+                        $query->where('id', $val['id'])->update(['komentar_pleno' =>  $detail]);
                     }])->find($val['user_id']);
 
                 } elseif (auth()->user()->currentAccessToken()->getAttributeValue('abilities')[0] == 'role:verifikator_desk') {
-                    
+
                     $status = (boolean) $val['status'];
                     $setTypeData[] = $val['type'];
                     
@@ -157,7 +162,34 @@ class VerifikatorDeskController extends Controller
                     }
 
                 } else {
-                    $subKomponen->verifikasi_lapangan = $detail;
+                   
+                    if($val['type'] == 'perpustakaan') {
+                        $val['library_id'] = $request->library_id;
+                        
+                        $user->library->verifikasi_lapangan = $detail;
+
+                        $postMail = [
+                            'email' => [$user->email, $operator->email],
+                            'title' => 'Form Data Perpustakaan sudah di verifikasi lapangan',
+                            'status' => 'profil_perpustakaan',
+                            'body' => $user->library,
+                        ];
+
+                        dispatch(new SendEmailJob($postMail));
+            
+                        $user->library->save();
+                    
+                    } elseif ($val['type'] == 'subkomponen') {
+                        $subKomponen = $user->with(['komponen' => function ($query) use ($val, $detail) {
+                            $query->where('id', $val['id'])->update(['verifikasi_lapangan' =>  $detail]);
+                        }])->find($val['user_id']);
+                        
+                    } elseif ($val['type'] == 'bukti_fisik') {
+                        $buktiFisik = $user->with(['buktiFisik' => function ($query) use ($val, $detail) {
+                            $query->where('id', $val['id'])->update(['verifikasi_lapangan' =>  $detail]);
+                        }])->find($val['user_id']);
+        
+                    }
                 }
                
                 $user->save();
@@ -218,6 +250,10 @@ class VerifikatorDeskController extends Controller
                 }
     
                 $user->save();
+            } else if (auth()->user()->currentAccessToken()->getAttributeValue('abilities')[0] == 'role:operator') {
+                if (count($countdataPleno) == 9) {
+                    $user->is_pleno = (boolean) true;
+                }
             }
 
             return response()->json(['message' => 'success save notes'], HttpResponse::HTTP_CREATED);

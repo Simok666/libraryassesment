@@ -46,35 +46,39 @@ class UserController extends Controller
     {
         try {
             
-            if( !$this->checkUserInsert($request->user()->id, 'library') )
-            {
-                DB::beginTransaction();
-                $store = $library::create(array_merge($request->validated(), ['user_id' => $request->user()->id] ));
-                $user = User::find($request->user()->id)->update(['type_insert' => '1']);
+            DB::beginTransaction();
+            
+            $store = $library::updateOrCreate(
+                ['user_id' => $request->user()->id],
+                array_merge($request->validated(), ['user_id' => $request->user()->id])
+            );
+            $user = User::find($request->user()->id)->update(['type_insert' => '1']);
 
-                if ($images = $request->data_perpustakaan_image) {
-                    foreach ($images as $image) {
-                        $store->addMedia($image)->toMediaCollection('images');
-                    }
+            if ($images = $request->data_perpustakaan_image) {
+                foreach ($images as $image) {
+                    $store->addMedia($image)->toMediaCollection('images');
                 }
-                DB::commit();
-
-                $admin = Admin::first();
-                $operator = Operator::first();
-
-                
-                $postMail = [
-                    'email' => [$admin->email, $operator->email],
-                    'title' => 'Pengusul Melengkapi Data Perpustakaan',
-                    'status' => 'insert perpus',
-                    'body' => $store,
-                ];
-
-                dispatch(new SendEmailJob($postMail));
-                
-                return response()->json(['success' => 'success save data'], HttpResponse::HTTP_CREATED);
             }
-            return response()->json(['message' => 'duplicate data not allowed'], 409);
+            DB::commit();
+
+            $admin = Admin::first();
+            $operator = Operator::first();
+
+            
+            $postMail = [
+                'email' => [$admin->email, $operator->email],
+                'title' => 'Pengusul Melengkapi Data Perpustakaan',
+                'status' => 'insert perpus',
+                'body' => $store,
+            ];
+
+            dispatch(new SendEmailJob($postMail));
+            
+            return response()->json(['success' => 'success save data'], HttpResponse::HTTP_CREATED);
+            // if( !$this->checkUserInsert($request->user()->id, 'library') )
+            // {
+            // }
+            // return response()->json(['message' => 'duplicate data not allowed'], 409);
 
         } catch(\Exception $e) {
             DB::rollBack();
@@ -124,7 +128,11 @@ class UserController extends Controller
             $now = now();
             $stores = [];
             foreach ($request->all() as $data) {
-                $store = $subKomponen->create([
+
+                $store = $subKomponen::updateOrCreate([
+                    'user_id' => $request->user()->id,
+                    'subkomponen_id' => $data['subkomponen_id'],
+                ], [
                     'user_id' => $request->user()->id,
                     'subkomponen_id' => $data['subkomponen_id'],
                     'skor_subkomponen' => $data['skor_subkomponen'],
@@ -135,6 +143,7 @@ class UserController extends Controller
                 ]);
                 
                 if (isset($data['bukti_dukung'])) {
+                    $store->clearMediaCollection('images');
                     $store->addMedia($data['bukti_dukung'])->toMediaCollection('images');
                     
                 }
@@ -198,14 +207,22 @@ class UserController extends Controller
             $now = now();
             $stores = [];
             foreach ($request->all() as $data) {
-                $store = $buktiFisik->create([
-                    'user_id' => $request->user()->id,
-                    'bukti_fisik_data_id' => $data['bukti_fisik_data_id'],
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ]);
+
+                $store = $buktiFisik::updateOrCreate(
+                        [
+                            'user_id' => $request->user()->id,
+                            'bukti_fisik_data_id' => $data['bukti_fisik_data_id']
+                        ],
+                        [
+                            'user_id' => $request->user()->id,
+                            'bukti_fisik_data_id' => $data['bukti_fisik_data_id'],
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                        ]
+                    );
                 
                 if (isset($data['bukti_fisik_upload'])) {
+                    $store->clearMediaCollection('images');
                     $store->addMedia($data['bukti_fisik_upload'])->toMediaCollection('images');
                     
                 }
