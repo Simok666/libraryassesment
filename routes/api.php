@@ -53,6 +53,8 @@ Route::middleware(['auth:sanctum', 'type.user'])->group(function () {
         Route::post('user/storeBuktiFisik', [UserController::class, 'storeBuktiFisik']);
         
         Route::get('user/getDetailLibrary', [UserController::class, 'getDetailLibrary']);
+        Route::get('user/getDetailKomponen', [UserController::class, 'getDetailKomponen']);
+        Route::get('user/getDetailBuktiFisik', [UserController::class, 'getDetailBuktiFisik']);
         
         //logout 
         Route::post('user/logout', [UserAuthController::class, 'destory']);

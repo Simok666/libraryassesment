@@ -20,6 +20,7 @@ class OperatorListKomponen extends JsonResource
             'pic_name' => $this->name,
             'pic_email' => $this->email,
             'status_subkomponent' => $this->status_subkomponent,
+            'is_pleno' => $this->is_pleno,
             'subkomponen' => UserSubKomponenResource::collection($this->komponen)
         ];
     }
