@@ -20,6 +20,8 @@ use App\Http\Resources\Backend\User\UserKomponenResource;
 use App\Http\Resources\Backend\User\UserSubKomponenResource;
 use App\Http\Resources\Backend\User\UserBuktiFisikDataResource;
 use App\Http\Resources\Backend\User\UserBuktiFisikResource;
+use App\Http\Resources\Backend\Operator\OperatorListKomponen;
+use App\Http\Resources\Backend\Operator\OperatorListBuktiFisik;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use App\Jobs\SendEmailJob;
@@ -31,6 +33,20 @@ class UserController extends Controller
     {
         $library = User::find($request->user()->id)->library;
         return ($library !== null) ? new UserResource($library) : null;
+    }
+
+    public function getDetailKomponen(Request $request, Komponen $komponen)
+    {
+        $komponen = User::find($request->user()->id)->komponen;
+  
+        return ($komponen !== null) ? UserSubKomponenResource::collection($komponen) : null;
+    }
+
+    public function getDetailBuktiFisik(Request $request, BuktiFisik $buktiFisik)
+    {
+        $bukti = User::find($request->user()->id)->buktiFisik;
+        
+        return ($bukti !== null) ?  UserBuktiFisikResource::collection($bukti) : null;
     }
 
     /**
