@@ -43,7 +43,10 @@
         <th>KOMENTAR</th>
       </tr>
       {{$no = 1}}
+      
       @foreach ($subKomponen->komponen as $key => $sk) 
+    
+
         <tr>
             <td>{{$no++}}</td>
             <td>{{$sk['komponen']->title_komponens}}</td>
@@ -52,7 +55,21 @@
             <td>{{$sk['komponen']->bobot}}</td>
             <td>{{$sk->nilai}}</td>
             <td>{{($sk->is_verified) ? 'Lolos Verifikasi' : 'Tidak Lolos Verifikasi' }}</td>
-            <td class="text-center"><a href="#" class="openPopup" link="">View File</a></td>
+            <td class="text-center">
+                {{-- <a href="#" class="openPopup" link="http://127.0.0.1:8000/editor/17143046690.png"> View File</a> --}}
+                {{-- <iframe src="http://127.0.0.1:8000/storage/42/RACHMAD-FIDHANI.pdf" style="width:600px; height:500px;" frameborder="0"></iframe> --}}
+              
+                {{-- {{$sk->getMedia('images')[0]->getFullUrl()}} --}}
+                    {{-- <embed
+                    src={{$sk->getMedia('images')[0]->getFullUrl()}}
+                    type="application/pdf"
+                    frameBorder="0"
+                    scrolling="auto"
+                    height="100%"
+                    width="100%"
+                ></embed> --}}
+            </td>
+
             <td>{{$sk->notes}}</td>
             <td>{{$sk->komentar_pleno}}</td>
         </tr>

@@ -235,7 +235,9 @@ class OperatorController extends Controller
         
         $view = view('pdf.pleno',compact('subKomponen'))->render();
     
-        $pdf = PDF::loadHTML($view)->setPaper('a3', 'landscape');
+        $pdf = PDF::loadHTML($view)
+                ->setPaper('a3', 'landscape')
+                ->set_option('isHtml5ParserEnabled', true);
 
         // return $pdf->download('pleno-'."$subKomponen->id"."-"."$subKomponen->library_name".'.pdf');
         return $pdf->stream();
@@ -259,7 +261,7 @@ class OperatorController extends Controller
         ])->when($request->has('id'), function ($query) use ($request){
             $query->where('id', request("id"));
         })->paginate($request->limit ?? "10");
-
+      
         return OperatorListKomponen::collection($pleno);
     }
     
@@ -270,13 +272,14 @@ class OperatorController extends Controller
      * @param Pleno $pleno
      * 
      */
-    public function upload(PlenoUploadRequest $request, Pleno $pleno) 
+    public function upload(PlenoUploadRequest $request, Pleno $pleno, User $user) 
     {
         try {
             DB::beginTransaction();
                 if((auth()->user()->currentAccessToken()->getAttributeValue('abilities')[0] == 'role:operator')) {
                     
                     $store = $pleno::create(array_merge($request->validated(), ['user_id' => request("id")]));
+                    
                     if ($images = $request->pleno_upload) {
                         foreach ($images as $image) {
                             $store->addMedia($image)->toMediaCollection('pleno_file');
@@ -288,43 +291,54 @@ class OperatorController extends Controller
                         }
                     }
 
-                } elseif ((auth()->user()->currentAccessToken()->getAttributeValue('abilities')[0] == 'role:pimpinan_sesban')) {
+                    if($store) {
+                        $pimpinan = pimpinan::first();
+                        $postMail = [
+                            'email' => $pimpinan->email,
+                            'title' => 'Operator Has Been Upload Pleno and Draft Sk',
+                            'status' => 'pleno',
+                            'body' => User::with(['pleno'])->whereHas("pleno", function ($query) use ($request) {
+                                $query->where("user_id", $request->id);
+                            })->first(),
+                        ];
+                        dispatch(new SendEmailJob($postMail));
+                    }
+
+                } elseif ((auth()->user()->currentAccessToken()->getAttributeValue('abilities')[0] == 'role:pimpinan')) {
                     $sesban = Pleno::where('user_id', request("id"));
-                    $sesban->update();
+                   
+                    $sesban = Pleno::updateOrCreate(
+                        ['user_id' => request("id")],
+                        ['user_id' => request("id")]
+                    );
+                
                     if($skPimpinan = $request->sk_upload_pimpinan) {
                         foreach ($skPimpinan as $pimpinan) {
                             $sesban->addMedia($pimpinan)->toMediaCollection('sk_upload_pimpinan');
                         }
                     }
-                } elseif (auth()->user()->currentAccessToken()->getAttributeValue('abilities')[0] == 'role:pimpinan_kaban') {
+                } elseif (auth()->user()->currentAccessToken()->getAttributeValue('abilities')[0] == 'role:pimpinankaban') {
+                    
                     $kaban = Pleno::find(request("id"));
-                    User::with(['komponen.komponen'])->whereHas('komponen', function ($query) use ($request) {
-                        $query->update('is_pleno', 1);
-                    })->when($request->has("id"), function ($query) use ($request){
-                        $query->where('id', request("id"));
-                    });
+                    // User::with(['komponen.komponen'])->whereHas('komponen', function ($query) use ($request) {
+                    //     $query->update('is_pleno', 1);
+                    // })->when($request->has("id"), function ($query) use ($request){
+                    //     $query->where('id', request("id"));
+                    // });
+                    $kaban = Pleno::updateOrCreate(
+                        ['user_id' => request("id")],
+                        ['user_id' => request("id")]
+                    );
 
-                    $kaban->update();
                     if($skPimpinanKaban = $request->sk_upload_pimpinan_kaban) {
                         foreach ($skPimpinanKaban as $pimpinanKaban) {
-                            $sesban->addMedia($pimpinanKaban)->toMediaCollection('sk_upload_pimpinan_kaban');
+                            $kaban->addMedia($pimpinanKaban)->toMediaCollection('sk_upload_pimpinan_kaban');
                         }
                     }
                 }
             DB::commit();
             
-            if($store) {
-                $pimpinan = pimpinan::first();
-                $postMail = [
-                    'email' => $pimpinan->email,
-                    'title' => 'Operator Has Been Upload Pleno and Draft Sk',
-                    'status' => 'pleno',
-                    'body' => User::with(['pleno'])->whereHas("pleno", function ($query) use ($request) {
-                        $query->where("user_id", $request->id);
-                    })->first(),
-                ];
-                dispatch(new SendEmailJob($postMail));
-            }
+            
             return response()->json(['success' => 'success save data'], HttpResponse::HTTP_CREATED);
         } catch (\Illuminate\Database\QueryException $ex) {
             DB::rollBack();

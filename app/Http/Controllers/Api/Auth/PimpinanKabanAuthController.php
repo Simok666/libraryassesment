@@ -21,7 +21,7 @@ class PimpinanKabanAuthController extends Controller
      */
     public function login(PimpinanKabanRequest $request)
     {   
-        $request["role"] = "pimpinan_kaban";
+        $request["role"] = "pimpinankaban";
         $pimpinan = PimpinanKaban::where('email', $request->email)->first();
 
         if (!$pimpinan || !Hash::check($request->password, $pimpinan->password)) {
@@ -29,7 +29,8 @@ class PimpinanKabanAuthController extends Controller
                 'email' => ['The provided credentials are incorrect.'],
             ]);
         }
-
+        $pimpinan->role = "pimpinankaban";
+       
         return new AuthResource($pimpinan);
     }
 
