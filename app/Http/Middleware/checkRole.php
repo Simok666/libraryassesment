@@ -22,7 +22,7 @@ class checkRole
              {
             $roleIds = ['type.operator' => 'role:operator', 'type.verifikator_desk' => 'role:verifikator_desk', 'type.verifikator_field' => 'role:verifikator_field'];
         } else {
-            $roleIds = ['type.operator' => 'role:operator', 'type.pimpinan_sesban' => 'role:pimpinan_sesban'];
+            $roleIds = ['type.operator' => 'role:operator', 'type.pimpinan' => 'role:pimpinan' , 'type.pimpinankaban' => 'role:pimpinankaban'];
         }
         
         $allowedRoleIds = [];
@@ -34,7 +34,8 @@ class checkRole
            }
         }
         $allowedRoleIds = array_unique($allowedRoleIds); 
-        
+        // dd($allowedRoleIds);
+        // dd(auth()->user()->currentAccessToken()->getAttributeValue('abilities')[0]);
         if(auth()->user()) {
           if(in_array(auth()->user()->currentAccessToken()->getAttributeValue('abilities')[0], $allowedRoleIds)) {
             return $next($request);

@@ -37,8 +37,8 @@ Route::group(['namespace' => 'Api', 'prefix' => 'v1'], function () {
     Route::get('getListKomponen', [OperatorController::class, 'getListKomponen'])->middleware(['auth:sanctum', 'checkRole:type.operator,type.verifikator_desk,type.verifikator_field']);
     Route::get('getListBuktiFisik', [OperatorController::class, 'getListBuktiFisik'])->middleware(['auth:sanctum', 'checkRole:type.operator,type.verifikator_desk,type.verifikator_field']);
     Route::post('storeTextEditor', [VerifikatorDeskController::class, 'store'])->middleware(['auth:sanctum', 'checkRole:type.operator,type.verifikator_desk,type.verifikator_field']);
-    Route::post('uploadPleno/{id}', [OperatorController::class, 'upload'])->middleware(['auth:sanctum', 'checkRole:type.operator,type.pimpinan_sesban,type.pimpinan_kaban']);
-    Route::get('getListPleno', [OperatorController::class, 'getListPleno'])->middleware(['auth:sanctum', 'checkRole:type.operator,type.pimpinan_sesban,type.pimpinan_kaban']);
+    Route::post('uploadPleno/{id}', [OperatorController::class, 'upload'])->middleware(['auth:sanctum', 'checkRole:type.operator,type.pimpinan,type.pimpinankaban']);
+    Route::get('getListPleno', [OperatorController::class, 'getListPleno'])->middleware(['auth:sanctum', 'checkRole:type.operator,type.pimpinan,type.pimpinankaban']);
 
     Route::post('verifikatordesk/login', [VerifikatorDeskAuthController::class, 'login']);
     Route::post('verifikatorfield/login', [VerifikatorFieldAuthController::class, 'login']);
