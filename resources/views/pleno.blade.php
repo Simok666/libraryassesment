@@ -136,8 +136,8 @@
                      <td class="text-center">                        
                         <a href="#" class="btn btn-warning btn-sm btn-isi-pleno mb-1" title="Isi Pleno" data-id="${data.id}">Isi Pleno</a>
                     </td>
-                    <td class="text-center">                        
-                        ${(data.is_pleno)? `<a href="#" class="btn btn-warning btn-sm btn-generate-pdf mb-1" title="Verify Generate Pdf" data-id="${data.id}">Generate Pdf</a>` : '-'}
+                    <td class="text-center">
+                        ${(data.is_pleno == 1 ? `<a href="#" class="openPopup" link="${baseUrl + `/generatePdf/${data.id}`}">View File</a>` : "" )}
                     </td>
                 </tr>
             `
