@@ -41,7 +41,8 @@
             "Pleno Pimpinan Sesban",
             "Pleno Pimpinan Kaban",
             "Isi Komentar Pleno",
-            "Generate PDF"
+            "Generate PDF",
+            "Action"
         ] , 'pagination' => true])
     </div>
 </div>
@@ -98,6 +99,52 @@
     </div>
 </div>
 
+<div class="modal fade text-left" id="modal-upload-pleno" tabindex="-1" role="dialog"
+    aria-labelledby="myModalLabel4" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel4">Upload Pleno</h4>
+                <button type="button" class="close" data-bs-dismiss="modal"
+                    aria-label="Close">
+                    <i data-feather="x"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="form-upload-pleno">
+                    <input type="hidden" name="user_id">
+                    <table class="table table-striped table-komponent after-loading">
+                        <tbody>
+                            <tr>
+                                <th>Draft SK</th>
+                                <td>
+                                    <input type="file" name="draft_sk_upload[]" class="form-control">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Draft SK</th>
+                                <td>
+                                    <input type="file" name="pleno_upload[]" class="form-control">
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light-secondary"
+                    data-bs-dismiss="modal">
+                    <i class="bx bx-x d-block d-sm-none"></i>
+                    <span class="d-none d-sm-block">Close</span>
+                </button>
+                <button type="submit" form="form-upload-pleno" class="btn btn-primary ml-1">
+                    <span class="d-none d-sm-block">Accept</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @endsection
 @section('scripts')
 <script src="{{ asset('vendors/summernote/summernote-lite.min.js') }}"></script>
@@ -138,6 +185,9 @@
                     </td>
                     <td class="text-center">
                         ${(data.is_pleno == 1 ? `<a href="#" class="openPopup" link="${baseUrl + `/generatePdf/${data.id}`}">View File</a>` : "" )}
+                    </td>
+                    <td class="text-center">
+                        <a href="#" class="btn btn-warning btn-sm btn-upload-pleno mb-1" title="Upload Pleno" data-id="${data.id}">Upload Pleno</a>
                     </td>
                 </tr>
             `
@@ -199,6 +249,11 @@
         });
     });
 
+    $(document).on('click', '.btn-upload-pleno', function() {
+        $('#modal-upload-pleno').modal('show');
+        $('#modal-upload-pleno').find('form')[0].reset();
+        $("#modal-upload-pleno [name=user_id]").val($(this).data('id'));
+    });
 
     function settingSummerNote(selector) {
         $(selector).summernote({
@@ -226,7 +281,6 @@
         });
     }
 
-
     $("#form-pleno").on('submit', function(e) {
         e.preventDefault();
         let url = `${baseUrl}/api/v1/storeTextEditor/`;
@@ -239,6 +293,21 @@
             GetData(req,"libraries", formatlibraries);
         }, function(data) {
             loadingButton($("#form-pleno"), false)
+        });
+    });
+
+    $("#form-upload-pleno").on('submit', function(e) {
+        e.preventDefault();
+        const url = `${baseUrl}/api/v1/uploadPleno/${$(this).find('[name=user_id]').val()}`;
+        const data = new FormData(this);
+        loadingButton($(this))
+        ajaxDataFile(url, 'POST', data, function(resp) {
+            toast("Data has been saved");
+            $('#modal-upload-pleno').modal('hide');
+            loadingButton($("#upload-pleno"), false)
+            GetData(req,"libraries", formatlibraries);
+        }, function(data) {
+            loadingButton($("#upload-pleno"), false)
         });
     });
     
