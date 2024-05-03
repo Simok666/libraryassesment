@@ -40,62 +40,9 @@
             "Pleno",
             "Pleno Pimpinan Sesban",
             "Pleno Pimpinan Kaban",
-            "Isi Komentar Pleno",
             "Generate PDF",
             "Action"
         ] , 'pagination' => true])
-    </div>
-</div>
-
-<div class="modal fade text-left" id="modal-pleno" tabindex="-1" role="dialog"
-    aria-labelledby="myModalLabel4" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-full" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="myModalLabel4">Isi Komentar Pleno</h4>
-                <button type="button" class="close" data-bs-dismiss="modal"
-                    aria-label="Close">
-                    <i data-feather="x"></i>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="text-center loading">
-                    <div class="spinner-border text-primary" role="status">
-                        <span class="visually-hidden"></span>
-                    </div>
-                </div>
-                <form id="form-pleno">
-                    <input type="hidden" name="user_id">
-                    <table class="table table-striped table-komponent after-loading">
-                        <thead>
-                            <tr>
-                                <th>NO.</th>
-                                <th>KOMPONEN</th>
-                                <th>JUMLAH INDIKATOR KUNCI (IK)</th>
-                                <th>SKOR SUBKOMPONEN</th>
-                                <th>BOBOT</th>
-                                <th>NILAI</th>
-                                <th>VERIFIKASI</th>
-                                <th>BUKTI DUKUNG</th>
-                                <th width="30%">Catatan</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-light-secondary"
-                    data-bs-dismiss="modal">
-                    <i class="bx bx-x d-block d-sm-none"></i>
-                    <span class="d-none d-sm-block">Close</span>
-                </button>
-                <button type="submit" form="form-pleno" class="btn btn-primary ml-1">
-                    <span class="d-none d-sm-block">Accept</span>
-                </button>
-            </div>
-        </div>
     </div>
 </div>
 
@@ -104,7 +51,7 @@
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="myModalLabel4">Upload Pleno</h4>
+                <h4 class="modal-title" id="myModalLabel4">Upload SK Pleno</h4>
                 <button type="button" class="close" data-bs-dismiss="modal"
                     aria-label="Close">
                     <i data-feather="x"></i>
@@ -116,15 +63,9 @@
                     <table class="table table-striped table-komponent after-loading">
                         <tbody>
                             <tr>
-                                <th>Draft SK</th>
+                                <th>SK Pleno</th>
                                 <td>
-                                    <input type="file" name="draft_sk_upload[]" class="form-control">
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>Pleno</th>
-                                <td>
-                                    <input type="file" name="pleno_upload[]" class="form-control">
+                                    <input type="file" name="sk_upload_pimpinan[]" class="form-control">
                                 </td>
                             </tr>
                         </tbody>
@@ -179,9 +120,6 @@
                     </td>
                     <td class="text-center">                        
                         ${!empty(data.sk_upload_pimpinan_kaban) ? `<a href="#" class="openPopup" link="${data.sk_upload_pimpinan_kaban[0].url}">View File</a> `: "-"}
-                    </td>
-                     <td class="text-center">                        
-                        <a href="#" class="btn btn-warning btn-sm btn-isi-pleno mb-1" title="Isi Pleno" data-id="${data.id}">Isi Pleno</a>
                     </td>
                     <td class="text-center">
                         ${(data.is_pleno == 1 ? `<a href="#" class="openPopup" link="${baseUrl + `/generatePdf/${data.id}`}">View File</a>` : "" )}

@@ -39,7 +39,8 @@
                             <select class="form-select" id="role" required>
                                 <option value="" disabled readonly selected>--- Select Role ---</option>
                                 <option value="admin">Admin</option>
-                                <option value="pimpinan">Pimpinan</option>
+                                <option value="pimpinanSesban">Pimpinan Sesban</option>
+                                <option value="pimpinanKaban">Pimpinan Kaban</option>
                                 <option value="operator">Operator</option>
                                 <option value="user">User</option>
                                 <option value="verifikatordesk">Verifikator Desk</option>

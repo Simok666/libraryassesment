@@ -9,7 +9,9 @@ const menuByRole = {
     "user" : ["dashboard","profile-perpustakaan", "profile-komponent" , "profile-buktifisik"],
     "operator" : ["dashboard", "users", "libraries", "proofOfWork", "komponent", "verifikator", "pleno"],
     "verifikator_desk" : ["dashboard", "libraries", "proofOfWork", "komponent", "verifikator-desk"],
-    "verifikator_field" : ["dashboard", "libraries", "proofOfWork", "komponent", "verifikator-field"]
+    "verifikator_field" : ["dashboard", "libraries", "proofOfWork", "komponent", "verifikator-field"],
+    "pimpinan" : ["dashboard", "pleno-sesban"],
+    "pimpinankaban" : ["dashboard", "pleno-kaban"]
 }
 
 const sidebarItems = [
@@ -62,7 +64,17 @@ const sidebarItems = [
       url: "pleno",
       icon: "bi bi-people-fill",
       label: "Pleno"
-    }
+    },
+    {
+      url: "pleno-sesban",
+      icon: "bi bi-person-lines-fill",
+      label: "Pleno Sesban"
+    },
+    {
+      url: "pleno-kaban",
+      icon: "bi bi-person-lines-fill",
+      label: "Pleno Kaban"
+    },
 ];
 // jquery set default header
 $.ajaxSetup({
