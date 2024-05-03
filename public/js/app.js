@@ -7,7 +7,7 @@ var req = {
 const menuByRole = {
     "admin" : ["*"],
     "user" : ["dashboard","profile-perpustakaan", "profile-komponent" , "profile-buktifisik"],
-    "operator" : ["dashboard", "users", "libraries", "proofOfWork", "komponent", "verifikator"],
+    "operator" : ["dashboard", "users", "libraries", "proofOfWork", "komponent", "verifikator", "pleno"],
     "verifikator_desk" : ["dashboard", "libraries", "proofOfWork", "komponent", "verifikator-desk"],
     "verifikator_field" : ["dashboard", "libraries", "proofOfWork", "komponent", "verifikator-field"]
 }
@@ -57,6 +57,11 @@ const sidebarItems = [
       url: "verifikator-field",
       icon: "bi bi-book",
       label: "Verifikator Field"
+    },
+    {
+      url: "pleno",
+      icon: "bi bi-people-fill",
+      label: "Pleno"
     }
 ];
 // jquery set default header
