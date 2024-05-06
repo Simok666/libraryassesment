@@ -254,6 +254,7 @@ class VerifikatorDeskController extends Controller
                 if (count($countdataPleno) == 9) {
                     $user->is_pleno = (boolean) true;
                 }
+                $user->save();
             }
 
             return response()->json(['message' => 'success save notes'], HttpResponse::HTTP_CREATED);

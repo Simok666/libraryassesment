@@ -10,6 +10,8 @@ use App\Models\Komponen;
 use App\Models\SubKomponen;
 use App\Models\pimpinan;
 use App\Models\Pleno;
+use App\Models\Evaluation;
+use App\Models\Grading;
 use App\Models\BuktiFisikData;
 use App\Models\BuktiFisik;
 use App\Models\VerifikatorDesk;
@@ -19,11 +21,13 @@ use Mail;
 use App\Mail\PostMail;
 use App\Jobs\SendEmailJob;
 use App\Http\Requests\Backend\Operator\PlenoUploadRequest;
+use App\Http\Requests\Backend\Operator\BuktiEvaluasiRequest;
 use App\Http\Requests\Backend\Operator\OperatorVerifiedRequest;
 use App\Http\Resources\Backend\Operator\OperatorResource;
 use App\Http\Resources\Backend\Operator\OperatorVerifiedResource;
 use App\Http\Resources\Backend\Operator\OperatorListLibrary;
 use App\Http\Resources\Backend\Operator\OperatorListKomponen;
+use App\Http\Resources\Backend\Operator\OperatorListGrading;
 use App\Http\Resources\Backend\Operator\OperatorListBuktiFisik;
 use App\Http\Resources\Backend\Operator\OperatorDetailLibrary;
 use App\Http\Resources\Backend\Operator\OperatorDetailKomponen;
@@ -282,11 +286,13 @@ class OperatorController extends Controller
                     
                     if ($images = $request->pleno_upload) {
                         foreach ($images as $image) {
+                            $store->clearMediaCollection('pleno_file');
                             $store->addMedia($image)->toMediaCollection('pleno_file');
                         }
                     }
                     if ($draftSk = $request->draft_sk_upload) {
                         foreach ($draftSk as $sk) {
+                            $store->clearMediaCollection('sk_file');
                             $store->addMedia($sk)->toMediaCollection('sk_file');
                         }
                     }
@@ -314,6 +320,7 @@ class OperatorController extends Controller
                 
                     if($skPimpinan = $request->sk_upload_pimpinan) {
                         foreach ($skPimpinan as $pimpinan) {
+                            $sesban->clearMediaCollection('sk_upload_pimpinan');
                             $sesban->addMedia($pimpinan)->toMediaCollection('sk_upload_pimpinan');
                         }
                     }
@@ -326,12 +333,18 @@ class OperatorController extends Controller
                     //     $query->where('id', request("id"));
                     // });
                     $kaban = Pleno::updateOrCreate(
-                        ['user_id' => request("id")],
-                        ['user_id' => request("id")]
+                        [
+                            'user_id' => request("id"),
+                        ],
+                        [
+                            'user_id' => request("id"),
+                            'is_final' => (boolean) true
+                        ]
                     );
 
                     if($skPimpinanKaban = $request->sk_upload_pimpinan_kaban) {
                         foreach ($skPimpinanKaban as $pimpinanKaban) {
+                            $kaban->clearMediaCollection('sk_upload_pimpinan_kaban');
                             $kaban->addMedia($pimpinanKaban)->toMediaCollection('sk_upload_pimpinan_kaban');
                         }
                     }
@@ -342,19 +355,123 @@ class OperatorController extends Controller
             return response()->json(['success' => 'success save data'], HttpResponse::HTTP_CREATED);
         } catch (\Illuminate\Database\QueryException $ex) {
             DB::rollBack();
-            return response()->json(['error' => 'An error occurred while creating account: '. $ex->getMessage()], 400);
+            return response()->json(['error' => 'An error occurred while creating or updating: '. $ex->getMessage()], 400);
         } catch (\Exception $e) {
             DB::rollBack();
             return response()->json(['error' => 'An error occurred while upload pleno: ' . $e->getMessage()], 400);
         }
-
-        /**
-         * public function
-         * 
-         * 
-         * 
-         */
         
+    }
+
+    /**
+     * 
+     * @param Request $request
+     * @param user $user
+     * 
+     */
+    public function getPlenoFinal(Request $request) {
+        $pleno =  User::with(['pleno'])
+        ->whereHas('pleno', function($query) use ($request) {
+            $query->where('is_final', (boolean) true);
+        })
+        // ->whereHas('evaluation', function ($query) use ($request) {
+        //     $query->where('is_evaluasi', (boolean) true);
+        // })
+        ->whereHas('komponen', function ($query) use ($request) {
+            $query->where('status', $request->status);
+        })->where([
+            ['status_perpustakaan', '=', (boolean) 1],
+            ['status_subkomponent', '=', (boolean) 1],
+            ['status_buktifisik', '=', (boolean) 1],
+        ])->when($request->has('id'), function ($query) use ($request){
+            $query->where('id', request("id"));
+        })->paginate($request->limit ?? "10");
+        
+        return OperatorListKomponen::collection($pleno);
+    }
+
+    /**
+     * function store grade pleno 
+     * 
+     * @param Request $request
+     * @param User $user
+     * 
+     */
+    public function storeGradePleno (Request $request, User $user) {
+        try {
+            $user = $user::find(request("id"));
+            
+            DB::beginTransaction();
+                $store = $user;
+                $store->update(['grade' => request("grade")]);
+                // if(request("grade") == "C" || request("grade") == "D") {
+                //     $user->update(['type_insert' => '1']);
+                //     $user->save();
+                // } else {
+                    
+                // }
+                $store->save();
+            DB::commit();        
+            return response()->json(['success' => 'success save data'], HttpResponse::HTTP_CREATED);
+        } catch (\Illuminate\Database\QueryException $ex) {
+            DB::rollBack();
+            return response()->json(['error' => 'An error occurred while creating or updating: '. $ex->getMessage()], 400);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json(['error' => 'An error occurred while upload pleno: ' . $e->getMessage()], 400);
+        }
+    }
+
+    /**
+     * function get grading details
+     */
+    public function getGrading() {
+        return OperatorListGrading::collection(Grading::all());
+    }
+    
+     /**
+     * function upload bukti evaluasi
+     * 
+     * @param Request $request
+     * @param User $user
+     * 
+     */
+    public function storeBuktiEvaluasi(BuktiEvaluasiRequest $request, User $user) {
+        try {
+            $user = $user::find(request("id"));
+            DB::beginTransaction();
+                $evaluasi = Evaluation::find(request("id"));
+                
+                $evaluasi = Evaluation::updateOrCreate(
+                    [
+                        'user_id' => request("id"),
+                    ],
+                    [
+                        'user_id' => request("id"),
+                        'is_evaluasi' => (boolean) request("is_evaluasi")
+                    ]
+                );
+
+                if ((boolean) request("is_evaluasi")) {
+                    $user->update(['type_insert' => '1']);
+                    $user->save();
+                }
+                
+                if($buktiEvaluasi = $request->bukti_evaluasi) {
+                    foreach ($buktiEvaluasi as $buktiEvaluations) {
+                        $evaluasi->clearMediaCollection('bukti_evaluasi');
+                        $evaluasi->addMedia($buktiEvaluations)->toMediaCollection('bukti_evaluasi');
+                    }
+                }
+            DB::commit();        
+            return response()->json(['success' => 'success save data'], HttpResponse::HTTP_CREATED);
+        } catch (\Illuminate\Database\QueryException $ex) {
+            DB::rollBack();
+            return response()->json(['error' => 'An error occurred while creating or updating: '. $ex->getMessage()], 400);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json(['error' => 'An error occurred while upload pleno: ' . $e->getMessage()], 400);
+        }
     }
 
 }

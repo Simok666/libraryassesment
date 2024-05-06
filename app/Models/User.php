@@ -41,7 +41,8 @@ class User extends Authenticatable implements HasMedia
         'number_telephone',
         'library_email',
         'type_insert',
-        'status_perpustakaan'
+        'status_perpustakaan',
+        'grade'
     ];
 
     /**
@@ -78,6 +79,22 @@ class User extends Authenticatable implements HasMedia
     public function pleno(): HasOne
     {
         return $this->hasOne(Pleno::class, 'user_id', 'id');
+    }
+
+    /**
+     * Get the customer Evaluation associated with the user.
+     */
+    public function evaluation(): HasOne
+    {
+        return $this->hasOne(Evaluation::class, 'user_id', 'id');
+    }
+
+    /**
+     * Get the grading associated with the user.
+     */
+    public function grading(): HasOne
+    {
+        return $this->hasOne(Grading::class, 'grade', 'grade');
     }
 
     /**
