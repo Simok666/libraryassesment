@@ -39,6 +39,7 @@ Route::group(['namespace' => 'Api', 'prefix' => 'v1'], function () {
     Route::post('storeTextEditor', [VerifikatorDeskController::class, 'store'])->middleware(['auth:sanctum', 'checkRole:type.operator,type.verifikator_desk,type.verifikator_field']);
     Route::post('uploadPleno/{id}', [OperatorController::class, 'upload'])->middleware(['auth:sanctum', 'checkRole:type.operator,type.pimpinan,type.pimpinankaban']);
     Route::get('getListPleno', [OperatorController::class, 'getListPleno'])->middleware(['auth:sanctum', 'checkRole:type.operator,type.pimpinan,type.pimpinankaban']);
+    Route::get('getPlenoFinal', [OperatorController::class, 'getPlenoFinal'])->middleware(['auth:sanctum', 'checkRole:type.operator,type.verifikator_desk,type.verifikator_field,type.user']);
 
     Route::post('verifikatordesk/login', [VerifikatorDeskAuthController::class, 'login']);
     Route::post('verifikatorfield/login', [VerifikatorFieldAuthController::class, 'login']);
@@ -87,8 +88,9 @@ Route::middleware(['auth:sanctum', 'type.operator'])->group(function () {
         Route::get('operator/getListVerifikatorField', [OperatorController::class, 'getListVerifikatorField']);
 
         Route::post('operator/notifyEmailVerifikator/{id}', [OperatorController::class, 'notifyEmailVerifikator']);
-        
-
+        Route::post('operator/storeGradePleno', [OperatorController::class, 'storeGradePleno']);
+        Route::post('operator/storeBuktiEvaluasi', [OperatorController::class, 'storeBuktiEvaluasi']);
+        Route::get('operator/getGrading', [OperatorController::class, 'getGrading']);
         Route::post('operator/store/{id}', [OperatorController::class, 'notifyEmailVerifikator']);
         
          //logout 

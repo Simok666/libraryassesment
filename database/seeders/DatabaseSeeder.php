@@ -24,7 +24,8 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             SubKomponenSeeder::class,
             BuktiFisikSeeder::class,
-            LibrariesSeeder::class
+            LibrariesSeeder::class,
+            Grading::class
            ]);
     }
 }

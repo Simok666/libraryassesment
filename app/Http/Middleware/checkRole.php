@@ -21,6 +21,8 @@ class checkRole
              $request->getPathInfo() === "/api/v1/getListKomponen" || $request->getPathInfo() === "/api/v1/getListBuktiFisik") 
              {
             $roleIds = ['type.operator' => 'role:operator', 'type.verifikator_desk' => 'role:verifikator_desk', 'type.verifikator_field' => 'role:verifikator_field'];
+        } else if ($request->getPathInfo() === "/api/v1/getPlenoFinal") {
+            $roleIds = ['type.operator' => 'role:operator', 'type.verifikator_desk' => 'role:verifikator_desk', 'type.verifikator_field' => 'role:verifikator_field', 'type.user' => 'role:user'];
         } else {
             $roleIds = ['type.operator' => 'role:operator', 'type.pimpinan' => 'role:pimpinan' , 'type.pimpinankaban' => 'role:pimpinankaban'];
         }
@@ -34,8 +36,7 @@ class checkRole
            }
         }
         $allowedRoleIds = array_unique($allowedRoleIds); 
-        // dd($allowedRoleIds);
-        // dd(auth()->user()->currentAccessToken()->getAttributeValue('abilities')[0]);
+        
         if(auth()->user()) {
           if(in_array(auth()->user()->currentAccessToken()->getAttributeValue('abilities')[0], $allowedRoleIds)) {
             return $next($request);

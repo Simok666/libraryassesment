@@ -16,8 +16,7 @@ class OperatorListKomponen extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        // debug($this->pleno?->getMedia('pleno_file'));
-        // return parent::toArray($request);
+        
         return [
             'id' => $this->id,
             'pic_name' => $this->name,
@@ -28,6 +27,8 @@ class OperatorListKomponen extends JsonResource
             'pleno_upload' => ((!empty($this->pleno?->getMedia('sk_file'))) ? ImageResource::collection($this->pleno->getMedia('pleno_file')) : null),
             'sk_upload_pimpinan' => ((!empty($this->pleno?->getMedia('sk_file'))) ? ImageResource::collection($this->pleno->getMedia('sk_upload_pimpinan')) : null),
             'sk_upload_pimpinan_kaban' => ((!empty($this->pleno?->getMedia('sk_file'))) ? ImageResource::collection($this->pleno->getMedia('sk_upload_pimpinan_kaban')) : null),
+            'grade' => $this->grading?->details ?? null,
+            'bukti_evaluasi' => ((!empty($this->evaluation?->getMedia('bukti_evaluasi'))) ? ImageResource::collection($this->evaluation->getMedia('bukti_evaluasi')) : null),
             'subkomponen' => UserSubKomponenResource::collection($this->komponen)
         ];
     }
