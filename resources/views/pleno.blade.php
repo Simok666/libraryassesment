@@ -145,6 +145,91 @@
     </div>
 </div>
 
+<div class="modal fade text-left" id="modal-grade-pleno" tabindex="-1" role="dialog"
+    aria-labelledby="myModalLabel4" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel4">Grade Pleno</h4>
+                <button type="button" class="close" data-bs-dismiss="modal"
+                    aria-label="Close">
+                    <i data-feather="x"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="form-grade-pleno">
+                    <input type="hidden" name="id">
+                    <table class="table table-striped table-komponent after-loading">
+                        <tbody>
+                            <tr>
+                                <th>Grade</th>
+                                <td>
+                                    <select name="grade" class="form-control list-grade" required>
+                                        <option value="" disabled sekected>Pilih Grade</option>
+                                    </select>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light-secondary"
+                    data-bs-dismiss="modal">
+                    <i class="bx bx-x d-block d-sm-none"></i>
+                    <span class="d-none d-sm-block">Close</span>
+                </button>
+                <button type="submit" form="form-grade-pleno" class="btn btn-primary ml-1">
+                    <span class="d-none d-sm-block">Accept</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade text-left" id="modal-evaluasi-pleno" tabindex="-1" role="dialog"
+    aria-labelledby="myModalLabel4" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel4">Evaluasi Pleno</h4>
+                <button type="button" class="close" data-bs-dismiss="modal"
+                    aria-label="Close">
+                    <i data-feather="x"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-warning evaluasi-alert" role="alert" id="alert-evaluasi-pleno">
+                </div>
+                <form id="form-evaluasi-pleno">
+                    <input type="hidden" name="id">
+                    <input type="hidden" name="is_evaluasi">
+                    <table class="table table-striped table-komponent after-loading">
+                        <tbody>
+                            <tr>
+                                <th>Bukti Evaluasi</th>
+                                <td>
+                                    <input type="file" name="bukti_evaluasi[]" class="form-control" required>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light-secondary"
+                    data-bs-dismiss="modal">
+                    <i class="bx bx-x d-block d-sm-none"></i>
+                    <span class="d-none d-sm-block">Close</span>
+                </button>
+                <button type="submit" form="form-evaluasi-pleno" class="btn btn-primary ml-1">
+                    <span class="d-none d-sm-block">Accept</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @endsection
 @section('scripts')
 <script src="{{ asset('vendors/summernote/summernote-lite.min.js') }}"></script>
@@ -152,7 +237,7 @@
     $(document).ready(function() {
         req.status = "Baru";
         GetData(req,"libraries", formatlibraries);
-
+        getListGrade()
         $(".dropdown-status").change(function() {
             req.status = $(this).val();
             req.page = 1;
@@ -163,6 +248,7 @@
     function formatlibraries(data) {
         var result = "";
         $.each(data, function(index, data) {
+            let evaluasiFile = (data.bukti_evaluasi[0].url !== undefined) ? data.bukti_evaluasi[0].url: "";
             result += `
                 <tr>
                     <td>${index + 1}</td>
@@ -186,8 +272,12 @@
                     <td class="text-center">
                         ${(data.is_pleno == 1 ? `<a href="#" class="openPopup" link="${baseUrl + `/generatePdf/${data.id}`}">View File</a>` : "" )}
                     </td>
-                    <td class="text-center">
+                    <td class="text-center" role="group">
+                        <div class="btn-group-vertical">
                         <a href="#" class="btn btn-warning btn-sm btn-upload-pleno mb-1" title="Upload Pleno" data-id="${data.id}">Upload Pleno</a>
+                        <a href="#" class="btn btn-warning btn-sm btn-grade-pleno mb-1" title="Grade Pleno" data-grade="${data.grade}" data-id="${data.id}">Grade Pleno</a>
+                        <a href="#" class="btn btn-warning btn-sm btn-evaluasi-pleno mb-1" title="Evaluasi Pleno" data-file="${evaluasiFile}" data-id="${data.id}">Evaluasi Pleno</a>
+                        </div>
                     </td>
                 </tr>
             `
@@ -314,5 +404,80 @@
     $(document).on('click', '.openPopup', function() {
         window.open($(this).attr('link'), 'popup', 'width=800,height=600');
     })
+
+    let getListGrade = () => {
+        const url = `${baseUrl}/api/v1/operator/getGrading`;
+        ajaxData(url, 'GET', [], function(resp) {
+            let data = resp.data;
+            let option = ``;
+            data.forEach(element => {
+                console.log(element)
+                option += `<option value="${element.grade}">${element.details}</option>`;
+            });
+            $(".list-grade").append(option);
+        }, function(data) {
+            
+        });
+    }
+
+    $(document).on('click', '.btn-grade-pleno', function() {
+        $(".list-grade").val("").trigger("change");
+        $('#modal-grade-pleno').modal('show');
+        $("#modal-grade-pleno [name=id]").val($(this).data('id'));
+        const grade = $(this).data('grade'); 
+        if (!empty(grade)) {
+            var selectedOption = $(".list-grade option").filter(function() {
+                return $(this).text() === grade;
+            });
+            console.log(selectedOption)
+            selectedOption.prop("selected", true);
+        } else {
+            $(".list-grade").val("").trigger("change");
+        }
+    });
+
+    $("#form-grade-pleno").on('submit', function(e) {
+        e.preventDefault();
+        const url = `${baseUrl}/api/v1/operator/storeGradePleno`;
+        const data = $(this).serialize();
+        loadingButton($(this))
+        ajaxData(url, 'POST', data, function(resp) {
+            toast("Data has been saved");
+            $('#modal-grade-pleno').modal('hide');
+            loadingButton($("#form-grade-pleno"), false)
+            GetData(req,"libraries", formatlibraries);
+        }, function(data) {
+            loadingButton($("#form-grade-pleno"), false)
+        });
+    });
+
+    $(document).on('click', '.btn-evaluasi-pleno', function() {
+        $(".evaluasi-alert").hide();
+        $("#modal-evaluasi-pleno").modal('show');
+        $('#modal-evaluasi-pleno').find('form')[0].reset();
+        $("#modal-evaluasi-pleno [name=id]").val($(this).data('id'));
+        $("#modal-evaluasi-pleno [name=is_evaluasi]").val(1);
+        fileOld = $(this).data('file');
+        if (!empty(fileOld)) {
+            $(".evaluasi-alert").show();
+            $("#modal-evaluasi-pleno .evaluasi-alert").html(`File Sebelumnya : <a href="${baseUrl}/storage/${fileOld}" target="_blank">Download</a>`);
+        }
+    })
+
+    $("#form-evaluasi-pleno").on('submit', function(e) {
+        e.preventDefault();
+        const url = `${baseUrl}/api/v1/operator/storeBuktiEvaluasi`;
+        const data = new FormData(this);
+        loadingButton($(this))
+        ajaxDataFile(url, 'POST', data, function(resp) {
+            toast("Data has been saved");
+            $('#modal-evaluasi-pleno').modal('hide');
+            loadingButton($("#form-evaluasi-pleno"), false)
+            GetData(req,"libraries", formatlibraries);
+        }, function(data) {
+            loadingButton($("#form-evaluasi-pleno"), false)
+        });
+    });
+
 </script>
 @endsection
