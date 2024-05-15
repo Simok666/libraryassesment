@@ -248,7 +248,10 @@
     function formatlibraries(data) {
         var result = "";
         $.each(data, function(index, data) {
-            let evaluasiFile = (data.bukti_evaluasi[0].url !== undefined) ? data.bukti_evaluasi[0].url: "";
+            let evaluasiFile = '';
+            if(data.bukti_evaluasi !== null) {
+                evaluasiFile = (data.bukti_evaluasi[0].url !== undefined) ? data.bukti_evaluasi[0].url: "";
+            } 
             result += `
                 <tr>
                     <td>${index + 1}</td>

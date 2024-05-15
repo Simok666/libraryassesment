@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\Komponen;
 use App\Models\SubKomponen;
 use App\Models\pimpinan;
+use App\Models\PimpinanKaban;
 use App\Models\Pleno;
 use App\Models\Evaluation;
 use App\Models\Grading;
@@ -301,7 +302,7 @@ class OperatorController extends Controller
                         $pimpinan = pimpinan::first();
                         $postMail = [
                             'email' => $pimpinan->email,
-                            'title' => 'Operator Has Been Upload Pleno and Draft Sk',
+                            'title' => 'Operator Sudah Upload Pleno and Draft Sk',
                             'status' => 'pleno',
                             'body' => User::with(['pleno'])->whereHas("pleno", function ($query) use ($request) {
                                 $query->where("user_id", $request->id);
@@ -324,6 +325,18 @@ class OperatorController extends Controller
                             $sesban->addMedia($pimpinan)->toMediaCollection('sk_upload_pimpinan');
                         }
                     }
+
+                    if ($sesban) {
+                        $postMail = [
+                            'email' => PimpinanKaban::first()->email,
+                            'title' => 'Mohon check upload sesban telah melakukan upload',
+                            'status' => 'pleno_sesban',
+                            'body' => User::find(request("id")),
+                        ];
+                            
+                        dispatch(new SendEmailJob($postMail));
+                    }
+                    
                 } elseif (auth()->user()->currentAccessToken()->getAttributeValue('abilities')[0] == 'role:pimpinankaban') {
                     
                     $kaban = Pleno::find(request("id"));
@@ -341,6 +354,17 @@ class OperatorController extends Controller
                             'is_final' => (boolean) true
                         ]
                     );
+
+                    if($kaban) {
+                        $postMail = [
+                            'email' => $user::find(request("id"))->email,
+                            'title' => 'Cek SK dan Hasil Pleno dari Operator',
+                            'status' => 'pleno_kaban',
+                            'body' => 'mohon check sk dan hasil pleno di dashboard',
+                        ];
+                            
+                        dispatch(new SendEmailJob($postMail));
+                    }
 
                     if($skPimpinanKaban = $request->sk_upload_pimpinan_kaban) {
                         foreach ($skPimpinanKaban as $pimpinanKaban) {
@@ -404,12 +428,10 @@ class OperatorController extends Controller
             DB::beginTransaction();
                 $store = $user;
                 $store->update(['grade' => request("grade")]);
-                // if(request("grade") == "C" || request("grade") == "D") {
-                //     $user->update(['type_insert' => '1']);
-                //     $user->save();
-                // } else {
-                    
-                // }
+                if(request("grade") == "C" || request("grade") == "D") {
+                    $user->update(['type_insert' => '0']);
+                    $user->save();
+                } 
                 $store->save();
             DB::commit();        
             return response()->json(['success' => 'success save data'], HttpResponse::HTTP_CREATED);
@@ -451,11 +473,27 @@ class OperatorController extends Controller
                         'is_evaluasi' => (boolean) request("is_evaluasi")
                     ]
                 );
+            
+                if($user) {
+                    $user->library->update(['status' => 'Selesai']);
+                    $user->library->save();
+                   
+                    $subKomponen = $user->with(['komponen' => function ($query) use ($request) {
+                        $query->where('user_id', $request->id)->update(['status' => 'Selesai']);
+                    }])->find($request->id);
+                    
+                    $buktiFisik = $user->with(['buktiFisik' => function ($query) use ($request) {
+                        $query->where('user_id', $request->id)->update(['status' =>  'Selesai']);
+                    }])->find($request->id);
 
-                if ((boolean) request("is_evaluasi")) {
-                    $user->update(['type_insert' => '1']);
                     $user->save();
                 }
+
+                // $user->library->update(['type_insert' => '1']);
+                // if ((boolean) request("is_evaluasi")) {
+                //     $user->update(['type_insert' => '1']);
+                //     $user->save();
+                // }
                 
                 if($buktiEvaluasi = $request->bukti_evaluasi) {
                     foreach ($buktiEvaluasi as $buktiEvaluations) {

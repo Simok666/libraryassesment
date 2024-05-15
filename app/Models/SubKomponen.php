@@ -26,7 +26,8 @@ class SubKomponen extends Model implements HasMedia
         'is_verified',
         'notes',
         'komentar_pleno',
-        'status_subkomponent'
+        'status_subkomponent',
+        'status',
     ];
 
     /**
