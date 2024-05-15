@@ -313,9 +313,9 @@
                         ${(data.status_buktifisik) ? `<span class="bi bi-check-circle-fill text-success"></span>` : `<span class="bi bi-x-circle-fill text-danger"></span>`}
                     </td>
                     <td class="text-center btn-group-vertical" width="100%">                        
-                        ${!(data.status_perpustakaan)? `<a href="#" class="btn btn-warning btn-sm btn-verify-perpustakaan mb-1" title="Verify Perpustakaan" data-id="${data.id}">Verify Perpustakaan</a>` : ''}
-                        ${!(data.status_subkomponent)? `<a href="#" class="btn btn-warning btn-sm btn-verify-subkomponen mb-1" title="Verify Subkomponen" data-id="${data.id}">Verify Subkomponen</a>` : ''}
-                        ${!(data.status_buktifisik)? `<a href="#" class="btn btn-warning btn-sm btn-verify-bukti-fisik" title="Verify Bukti Fisik" data-id="${data.id}">Verifi Bukti Fisik</a>` : ''}
+                        ${`<a href="#" class="btn btn-warning btn-sm btn-verify-perpustakaan mb-1" title="Verify Perpustakaan" data-id="${data.id}">Verify Perpustakaan</a>`}
+                        ${`<a href="#" class="btn btn-warning btn-sm btn-verify-subkomponen mb-1" title="Verify Subkomponen" data-id="${data.id}">Verify Subkomponen</a>`}
+                        ${`<a href="#" class="btn btn-warning btn-sm btn-verify-bukti-fisik" title="Verify Bukti Fisik" data-id="${data.id}">Verifi Bukti Fisik</a>`}
                     </td>
                 </tr>
             `
@@ -356,7 +356,7 @@
             $("#modal-perpustakaan").find('[name=user_id]').val(result.user_id);
             $("#modal-perpustakaan").find('[name=library_id]').val(result.library_id);
             $("#modal-perpustakaan").find('.dropdown-status-perpustakaan').val(result.status_verifikasi).trigger('change');
-            $("#modal-perpustakaan").find('.sumernote-perpustakaan').val(result.notes).trigger('change');
+            $("#modal-perpustakaan").find('.sumernote-perpustakaan').val(result.verifikasi_lapangan).trigger('change');
 
             settingSummerNote($(".sumernote-perpustakaan"))
         },
@@ -403,7 +403,7 @@
                         <td>
                             <input type="hidden" name="repeater[${index}][id]" value="${data.id}">
                             <textarea class="form-control sumernote-komponent" id="sumkomp${index}" name="repeater[${index}][verifikasi_lapangan]" placeholder="notes">
-                            ${data.notes ?? ""}
+                            ${data.verifikasi_lapangan ?? ""}
                             </textarea>
                         </td>
                     </tr>

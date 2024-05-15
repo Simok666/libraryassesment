@@ -36,6 +36,7 @@ class Library extends Model implements HasMedia
         'nama_kepala_instansi',
         'induk',
         'visi',
+        'status',
         'misi',
     ];
 

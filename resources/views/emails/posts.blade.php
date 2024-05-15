@@ -238,7 +238,23 @@
                                 <p><strong>Website:</strong> {{ $postMail['body']->website }}</p>
                                 <p><strong>Library Email:</strong> {{ $postMail['body']->library_email }}</p>
                                 
-                            <?php }?>
+                            <?php } elseif ($postMail['status'] == 'pleno') {?>
+                                <p><strong>Name:</strong> {{ $postMail['body']->name }}</p>
+                                <p><strong>Email:</strong> {{ $postMail['body']->email }}</p>
+                                <p><strong>Instance Name:</strong> {{ $postMail['body']->instance_name }}</p>
+                                <p><strong>Leader Instance Name:</strong> {{ $postMail['body']->leader_instance_name }}</p>
+                                <p><strong>Library Name:</strong> {{ $postMail['body']->library_name }}</p>
+                                
+                            <?php } elseif ($postMail['status'] == 'pleno_sesban') { ?>
+                                <p><strong>Name:</strong> {{ $postMail['body']->nameq }}</p>
+                                <p><strong>Email:</strong> {{ $postMail['body']->email }}</p>
+                                <p><strong>Instance Name:</strong> {{ $postMail['body']->instance_name }}</p>
+                                <p><strong>Leader Instance Name:</strong> {{ $postMail['body']->leader_instance_name }}</p>
+                                <p><strong>Library Name:</strong> {{ $postMail['body']->library_name }}</p>
+                                
+                              <?php } elseif ($postMail['status'] == 'pleno_kaban') { ?>
+                                <p><strong>{{$postMail['body']}}</strong> </p>
+                              <?php } ?>
                         </p></td>
                        </tr>
                        <tr>

@@ -25,6 +25,7 @@ class UserSubKomponenResource extends JsonResource
             'status' => $this->status,
             'status_verifikasi' => $this->status_verifikator,
             'notes' => $this->notes,
+            'verifikasi_lapangan' => $this->verifikasi_lapangan,
             'komentar_pleno' => $this->komentar_pleno,
             'bukti_dukung' => ImageResource::collection($this->getMedia('images')),
             'komponen' => $this->komponen,
