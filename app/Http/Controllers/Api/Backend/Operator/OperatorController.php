@@ -402,7 +402,9 @@ class OperatorController extends Controller
         //     $query->where('is_evaluasi', (boolean) true);
         // })
         ->whereHas('komponen', function ($query) use ($request) {
-            $query->where('status', $request->status);
+            if (!empty($request->status)) {
+                $query->where('status', $request->status);
+            }
         })->where([
             ['status_perpustakaan', '=', (boolean) 1],
             ['status_subkomponent', '=', (boolean) 1],
