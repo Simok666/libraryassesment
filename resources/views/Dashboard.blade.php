@@ -165,7 +165,7 @@
             "id" : $(this).data('id'),
             "status" : $(".dropdown-status").val()
         }, function(resp) {
-            const result = resp.data[0]?.subkomponen;
+            const result = resp.data;
             if (!result) {
                 setTimeout(() => {
                     modal.modal('hide')
