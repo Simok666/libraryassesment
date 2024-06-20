@@ -1,8 +1,8 @@
 @extends('layout.admin')
 
-@section('title', 'Libraries')
-@section('title_page', 'Libraries')
-@section('desc_page', 'List of all Libraries')
+@section('title', 'Perpustakaan')
+@section('title_page', 'Perpustakaan')
+@section('desc_page', 'Daftar semua Perpustakaan')
 @section('styles')
     <link rel="stylesheet" href="{{ asset('vendors/perfect-scrollbar/perfect-scrollbar.css') }}">
 

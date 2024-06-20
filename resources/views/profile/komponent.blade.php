@@ -1,7 +1,7 @@
 @extends('layout.admin')
 
-@section('title', 'Component Libraries')
-@section('title_page', 'Component Libraries')
+@section('title', 'Komponen Perpustakaan')
+@section('title_page', 'Komponen Perpustakaan')
 @section('desc_page', '')
 @section('content')
 <div class="card">

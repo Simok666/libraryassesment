@@ -1,7 +1,7 @@
 @extends('layout.admin')
 
-@section('title', 'Component Libraries')
-@section('title_page', 'Component Libraries')
+@section('title', 'Bukti Fisik')
+@section('title_page', 'Bukti Fisik')
 @section('desc_page', '')
 @section('content')
 <div class="card">
@@ -13,7 +13,7 @@
             @include('components.table-pagenation', ['table' => 'buktifisik' , 'url' => '/api/v1/user/getBuktiFisikData' , 'headers' => [
             "NO.",
             "TITLE" ,
-            "BUKTI Fisik"
+            "BUKTI FISIK"
             ] , 'pagination' => false])
             <div class="row d-flex justify-content-end">
                 <button type="submit" class="btn btn-primary">Simpan</button>

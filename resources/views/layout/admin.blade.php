@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Library Assesment @yield("title")</title>
+    <title>Penilaian Perpustakaan @yield("title")</title>
 
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
@@ -26,7 +26,7 @@
                     <div class="d-flex justify-content-between">
                         <div class="logo">
                             {{-- <a href="index.html"><img src="assets/images/logo/logo.png" alt="Library Assesment" srcset=""></a> --}}
-                            <h3>Library Assesment</h3>
+                            <h3>Penilaian Perpustakaan</h3>
                         </div>
                         <div class="toggler">
                             <a href="" class="sidebar-hide d-xl-none d-block"><i class="bi bi-x bi-middle"></i></a>

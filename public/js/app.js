@@ -170,7 +170,8 @@ function checkLogin() {
     } else {
         ajaxData(baseUrl + '/api/v1/user', 'POST', {}, function (resp) {
             $(".display-user-name").html(resp.data.name);
-            $(".display-user-role").html(resp.data.role);
+            let role = (resp.data.role == "user" ? "PIC" : resp.data.role); ;
+            $(".display-user-role").html(role);
             setSession("role", resp.data.role);
             checkUserAccess()
             setMenuByRole();
