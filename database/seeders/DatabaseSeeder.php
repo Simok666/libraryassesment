@@ -25,7 +25,7 @@ class DatabaseSeeder extends Seeder
             SubKomponenSeeder::class,
             BuktiFisikSeeder::class,
             LibrariesSeeder::class,
-            Grading::class
+            GradingSeeder::class
            ]);
     }
 }

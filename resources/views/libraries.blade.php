@@ -1,8 +1,8 @@
 @extends('layout.admin')
 
-@section('title', 'Libraries')
-@section('title_page', 'Libraries')
-@section('desc_page', 'List of all Libraries')
+@section('title', 'Perpustakaan')
+@section('title_page', 'Perpustakaan')
+@section('desc_page', 'List of all Perpustakaan')
 @section('content')
 <div class="card">
     <div class="card-body">
