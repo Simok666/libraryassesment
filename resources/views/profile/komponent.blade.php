@@ -17,8 +17,8 @@
             "SKOR SUBKOMPONEN" ,
             "BOBOT" ,
             "NILAI" ,
-            "VERIFIKASI" ,
-            "BUKTI DUKUNG"
+            "BUKTI DUKUNG",
+            "CONTOH"
             ] , 'pagination' => false])
             <div class="row d-flex justify-content-end">
                 <button type="submit" class="btn btn-primary">Simpan</button>
@@ -84,13 +84,10 @@
                     <td><input required class="form-control skor" name="${index}[skor_subkomponen]" type="number" value="0"></td>
                     <td class="bobot">${data.bobot}</td>
                     <td class="nilai">0</td>
-                    <td>
-                        <select name="${index}[is_verified]" class="form-control form-select">
-                            <option value="0">Not Verified</option>
-                            <option value="1">Verified</option>
-                        </select>
-                    </td>
                     <td><input required class="form-control" name="${index}[bukti_dukung]" type="file"></td>
+                    <td>
+                        ${(!empty(data.contoh)) ? `<a href="${data.contoh}" target="_blank">View File Contoh</a>` : `-`}
+                    </td>
                 </tr>
             `
         });

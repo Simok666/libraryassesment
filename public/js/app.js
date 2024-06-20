@@ -46,11 +46,6 @@ const sidebarItems = [
       label: "Verifikator"
     },
     {
-      url: "profile-perpustakaan",
-      icon: "bi bi-person",
-      label: "Profile Perpustakaan"
-    },
-    {
       url: "verifikator-desk",
       icon: "bi bi-book",
       label: "Verifikator Desk"
@@ -74,6 +69,23 @@ const sidebarItems = [
       url: "pleno-kaban",
       icon: "bi bi-person-lines-fill",
       label: "Pleno Kaban"
+    },
+
+///// PIC Menu
+    {
+        url: "profile-perpustakaan",
+        icon: "bi bi-person",
+        label: "Profile Perpustakaan"
+    },
+    {
+        url: "profile-komponent",
+        icon: "bi bi-collection",
+        label: "Komponen Utama"
+    },
+    {
+        url: "profile-buktifisik",
+        icon: "bi bi-collection",
+        label: "Bukti Fisik"
     },
 ];
 // jquery set default header
@@ -246,19 +258,19 @@ function checkSpecialAction(resp) {
         const pattern = new RegExp('\\b(' + Object.values(pageMapping).join('|') + ')\\b', 'i');
         const isWordIncluded = pattern.test(pathname);
         const filename = pathname.split('/').pop();
-        if ((isWordIncluded && parseInt(resp.type_insert) in pageMapping) || parseInt(resp.type_insert) < 3) {
-            const patternSamePage = new RegExp('\\b(' + pageMapping[resp.type_insert] + ')\\b', 'i');
-            console.log(patternSamePage.test(filename))
-            if (patternSamePage.test(filename)) {
-                return;
-            }
-            window.location = `${baseUrl}/${pageMapping[parseInt(resp.type_insert)]}.html`;
-        } else if (isWordIncluded && parseInt(resp.type_insert) >= 3) {
-            window.location = `${baseUrl}/dashboard.html`;
-        } else {
-            let a = $(".sidebar-menu .menu").find("a[href='profile-perpustakaan.html']").parent().remove();
-            console.log(a);
-        };         
+        // if ((isWordIncluded && parseInt(resp.type_insert) in pageMapping) || parseInt(resp.type_insert) < 3) {
+        //     const patternSamePage = new RegExp('\\b(' + pageMapping[resp.type_insert] + ')\\b', 'i');
+        //     console.log(patternSamePage.test(filename))
+        //     if (patternSamePage.test(filename)) {
+        //         return;
+        //     }
+        //     window.location = `${baseUrl}/${pageMapping[parseInt(resp.type_insert)]}.html`;
+        // } else if (isWordIncluded && parseInt(resp.type_insert) >= 3) {
+        //     window.location = `${baseUrl}/dashboard.html`;
+        // } else {
+        //     let a = $(".sidebar-menu .menu").find("a[href='profile-perpustakaan.html']").parent().remove();
+        //     console.log(a);
+        // };         
     } else if (resp.role == "admin") {
         
     } else if (resp.role == "superadmin") {
