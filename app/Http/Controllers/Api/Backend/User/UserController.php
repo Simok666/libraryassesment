@@ -155,7 +155,7 @@ class UserController extends Controller
                     'subkomponen_id' => $data['subkomponen_id'],
                     'skor_subkomponen' => $data['skor_subkomponen'],
                     'nilai' => $data['nilai'],
-                    'is_verified' => $data['is_verified'],
+                    // 'is_verified' => $data['is_verified'],
                     'created_at' => now(),
                     'updated_at' => now(),
                 ]);
@@ -244,7 +244,6 @@ class UserController extends Controller
                 if (isset($data['bukti_fisik_upload'])) {
                     $store->clearMediaCollection('images');
                     $store->addMedia($data['bukti_fisik_upload'])->toMediaCollection('images');
-                    
                 }
                 $stores[] = $store->id;
             }

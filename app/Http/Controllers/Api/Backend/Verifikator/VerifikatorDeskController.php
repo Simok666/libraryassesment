@@ -64,24 +64,24 @@ class VerifikatorDeskController extends Controller
                     $dom = new \domdocument();
                     $dom->loadHtml($textEditor, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
                     $images = $dom->getElementsByTagName('img');
-                    
+                   
                     foreach($images as $key => $img) {
                         
                         $data = $img->getattribute('src');
-                        list($type, $data) = explode(';', $data);
-                        list(, $data)      = explode(',', $data);
-                        
-                        $data = base64_decode($data);
-                         
-                        $image_name= time().$key.'.png';
-                        $path = public_path() .'/editor/'. $image_name;
-                        
-                        file_put_contents($path, $data);
+                        if (strpos($data, 'data:image') !== false) {
+                            list($type, $data) = explode(';', $data);
+                            list(, $data)      = explode(',', $data);
+                            $data = base64_decode($data);
+                            
+                            $image_name= '/editor/' . time().$key.'.png';
+                            $path = public_path() . $image_name;
+                            
+                            file_put_contents($path, $data);
 
-                        $img->removeattribute('src');
-                        $img->setattribute('src', $image_name);
+                            $img->removeattribute('src');
+                            $img->setattribute('src', $image_name);
+                        }
                     }
-
                     $detail = $dom->savehtml();
                 } else {
                     $detail = null;
@@ -278,7 +278,7 @@ class VerifikatorDeskController extends Controller
             return response()->json(['error' => 'An error occurred while store data: ' . $e->getMessage()], 400);
         } catch (\Illuminate\Database\QueryException $ex) {
             DB::rollBack();
-            return response()->json(['error' => 'An error occurred while store data: ' . $ex->getMessage()], 400);
+            return response()->json(['error' => 'An error occurred while store data in database: ' . $ex->getMessage()], 400);
         } 
     }
 
