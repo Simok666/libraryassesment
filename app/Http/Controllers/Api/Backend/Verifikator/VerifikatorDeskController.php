@@ -112,6 +112,8 @@ class VerifikatorDeskController extends Controller
                                 'email' => [$user->email, $operator->email],
                                 'title' => 'Form Data Perpustakaan sudah sesuai',
                                 'status' => 'profil_perpustakaan',
+                                'role' => 'Verifikator Desk',
+                                'role_to' => 'PIC & Operator',
                                 'body' => $user->library,
                             ];
 
@@ -127,6 +129,8 @@ class VerifikatorDeskController extends Controller
                                 'email' => [$user->email, $operator->email],
                                 'title' => 'Form Data Perpustakaan tidak sesuai',
                                 'status' => 'profil_perpustakaan',
+                                'role' => 'Verifikator Desk',
+                                'role_to' => 'PIC & Operator',
                                 'body' => $user->library,
                             ];
 
@@ -172,6 +176,8 @@ class VerifikatorDeskController extends Controller
                             'email' => [$user->email, $operator->email],
                             'title' => 'Form Data Perpustakaan sudah di verifikasi lapangan',
                             'status' => 'profil_perpustakaan',
+                            'role' => 'Verifikator Desk',
+                            'role_to' => 'PIC & Operator',
                             'body' => $user->library,
                         ];
 
@@ -204,6 +210,8 @@ class VerifikatorDeskController extends Controller
                         'email' => [$user->email, $operator->email],
                         'title' => 'Form Data komponen sudah Sesuai',
                         'status' => 'komponen_perpustakaan',
+                        'role' => 'Verifikator Desk',
+                        'role_to' => 'PIC & Operator',
                         'body' => $user,
                     ];
     
@@ -217,6 +225,8 @@ class VerifikatorDeskController extends Controller
                             'email' => [$user->email, $operator->email],
                             'title' => 'Form Data komponen tidak sesuai',
                             'status' => 'komponen_perpustakaan',
+                            'role' => 'Verifikator Desk',
+                            'role_to' => 'PIC & Operator',
                             'body' => $user,
                         ];
         
@@ -231,6 +241,8 @@ class VerifikatorDeskController extends Controller
                         'email' => [$user->email, $operator->email],
                         'title' => 'Form Data bukti fisik sudah Sesuai',
                         'status' => 'bukti_fisik_perpustakaan',
+                        'role' => 'Verifikator Desk',
+                        'role_to' => 'PIC & Operator',
                         'body' => $user,
                     ];
     
@@ -242,6 +254,8 @@ class VerifikatorDeskController extends Controller
                             'email' => [$user->email, $operator->email],
                             'title' => 'Form Data bukti fisik tidak Sesuai',
                             'status' => 'bukti_fisik_perpustakaan',
+                            'role' => 'Verifikator Desk',
+                            'role_to' => 'PIC & Operator',
                             'body' => $user,
                         ];
     

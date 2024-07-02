@@ -108,9 +108,9 @@
                          <table cellpadding="0" cellspacing="0" width="100%" class="es-menu">
                           <tbody>
                            <tr>
-                            <td align="center" valign="top" width="33.33%" class="es-p10t es-p10b es-p5r es-p5l" id="esd-menu-id-0"><a target="_blank" href="https://viewstripo.email" style="color: #666666;">Home</a></td>
-                            <td align="center" valign="top" width="33.33%" class="es-p10t es-p10b es-p5r es-p5l" id="esd-menu-id-1"><a target="_blank" href="https://viewstripo.email" style="color: #666666;">Product</a></td>
-                            <td align="center" valign="top" width="33.33%" class="es-p10t es-p10b es-p5r es-p5l" id="esd-menu-id-2"><a target="_blank" href="https://viewstripo.email" style="color: #666666;">Blog</a></td>
+                            <td align="center" valign="top" width="33.33%" class="es-p10t es-p10b es-p5r es-p5l" id="esd-menu-id-0"><a target="_blank" href="https://viewstripo.email" style="color: #666666;"></a></td>
+                            <td align="center" valign="top" width="33.33%" class="es-p10t es-p10b es-p5r es-p5l" id="esd-menu-id-1"><strong>Notifikasi ini dikirimkan dari {{ $postMail['role'] ?? null }} untuk {{ $postMail['role_to'] ?? null}} </strong></td>
+                            <td align="center" valign="top" width="33.33%" class="es-p10t es-p10b es-p5r es-p5l" id="esd-menu-id-2"><a target="_blank" href="https://viewstripo.email" style="color: #666666;"></a></td>
                            </tr>
                           </tbody>
                          </table></td>
@@ -246,7 +246,7 @@
                                 <p><strong>Library Name:</strong> {{ $postMail['body']->library_name }}</p>
                                 
                             <?php } elseif ($postMail['status'] == 'pleno_sesban') { ?>
-                                <p><strong>Name:</strong> {{ $postMail['body']->nameq }}</p>
+                                <p><strong>Name:</strong> {{ $postMail['body']->name }}</p>
                                 <p><strong>Email:</strong> {{ $postMail['body']->email }}</p>
                                 <p><strong>Instance Name:</strong> {{ $postMail['body']->instance_name }}</p>
                                 <p><strong>Leader Instance Name:</strong> {{ $postMail['body']->leader_instance_name }}</p>
@@ -259,7 +259,7 @@
                        </tr>
                        <tr>
                         <?php if($postMail['status'] == 'verifikasi') { ?>
-                            <td align="center" class="esd-block-button es-p20t"><span class="es-button-border" style="background: #588b8b;"><a href="https://viewstripo.email" class="es-button es-button-1631175539112" target="_blank" style="padding: 15px 45px; background: #588b8b; border-color: #588b8b;">Link Login</a></span> <esd-config-block value="{&quot;configClass&quot;:&quot;es-button-1631175539112&quot;,&quot;rule&quot;:&quot;[data-ogsb] .es-button.es-button-1631175539112&quot;,&quot;properties&quot;:{&quot;padding&quot;:&quot;15px 45px !important&quot;}}" name="btnIndentSettingsControl" style="display: none;"></esd-config-block></td>
+                            <td align="center" class="esd-block-button es-p20t"><span class="es-button-border" style="background: #588b8b;"><a href="{{ url('auth-login.html') }}" class="es-button es-button-1631175539112" target="_blank" style="padding: 15px 45px; background: #588b8b; border-color: #588b8b;">Link Login</a></span> <esd-config-block value="{&quot;configClass&quot;:&quot;es-button-1631175539112&quot;,&quot;rule&quot;:&quot;[data-ogsb] .es-button.es-button-1631175539112&quot;,&quot;properties&quot;:{&quot;padding&quot;:&quot;15px 45px !important&quot;}}" name="btnIndentSettingsControl" style="display: none;"></esd-config-block></td>
                         <?php } ?>
                        </tr>
                        <tr>

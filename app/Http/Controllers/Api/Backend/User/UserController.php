@@ -85,6 +85,8 @@ class UserController extends Controller
                 'email' => [$admin->email, $operator->email],
                 'title' => 'Pengusul Melengkapi Data Perpustakaan',
                 'status' => 'insert perpus',
+                'role' => 'PIC',
+                'role_to' => 'Admin & Operator',
                 'body' => $store,
             ];
 
@@ -175,6 +177,8 @@ class UserController extends Controller
                     'email' => [$admin->email, $operator->email],
                     'title' => 'Pengusul Melengkapi Data Komponen',
                     'status' => 'insert komponen',
+                    'role' => 'PIC',
+                    'role_to' => 'Admin & Operator',
                     'body' => Komponen::with((['subKomponens' => function ($query) use ($request) {
                                     $query->where('user_id', $request->user()->id); 
                                 }]))->where('jenis_perpustakaan', $jenisPerpus)->get(),
@@ -254,6 +258,8 @@ class UserController extends Controller
                     'email' => [$admin->email, $operator->email],
                     'title' => 'Pengusul Melengkapi Data Bukti Fisik',
                     'status' => 'insert bukti fisik',
+                    'role' => 'PIC',
+                    'role_to' => 'Admin & Operator',
                     'body' => BuktiFisikData::with((['buktiFisik' => function ($query) use ($request) {
                                 $query->where('user_id', $request->user()->id); 
                             }]))->get(),
