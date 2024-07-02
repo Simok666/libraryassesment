@@ -32,6 +32,8 @@ class SendEmailJob implements ShouldQueue
         Mail::to($this->postMail['email'])->send(new PostMail([
             'title' => $this->postMail['title'],
             'status' => $this->postMail['status'],
+            'role' => $this->postMail['role'],
+            'role_to' => $this->postMail['role_to'],
             'body' => $this->postMail['body'],
         ]));
     }

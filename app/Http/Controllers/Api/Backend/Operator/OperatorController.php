@@ -83,6 +83,8 @@ class OperatorController extends Controller
                     'email' => $users->email,
                     'title' => 'Your Account Has Been Verified',
                     'status' => 'verifikasi',
+                    'role' => auth()->user()->toArray()['name'],
+                    'role_to' => 'PIC',
                     'body' => $users,
                 ];
                 
@@ -214,6 +216,8 @@ class OperatorController extends Controller
                 'email' => $verifikator->email,
                 'title' => 'Status usulan disetujui operator',
                 'status' => 'verifikator',
+                'role' => 'Operator',
+                'role_to' => 'Verifikator',
                 'body' => 'mohon check usulan dari PIC',
             ];
                 
@@ -304,6 +308,8 @@ class OperatorController extends Controller
                             'email' => $pimpinan->email,
                             'title' => 'Operator Sudah Upload Pleno and Draft Sk',
                             'status' => 'pleno',
+                            'role' => 'Operator',
+                            'role_to' => 'Pimpinan Sesban',
                             'body' => User::with(['pleno'])->whereHas("pleno", function ($query) use ($request) {
                                 $query->where("user_id", $request->id);
                             })->first(),
@@ -331,6 +337,8 @@ class OperatorController extends Controller
                             'email' => PimpinanKaban::first()->email,
                             'title' => 'Mohon check upload sesban telah melakukan upload',
                             'status' => 'pleno_sesban',
+                            'role' => 'Operator',
+                            'role_to' => 'Pimpinan Kaban',
                             'body' => User::find(request("id")),
                         ];
                             
@@ -360,6 +368,8 @@ class OperatorController extends Controller
                             'email' => $user::find(request("id"))->email,
                             'title' => 'Cek SK dan Hasil Pleno dari Operator',
                             'status' => 'pleno_kaban',
+                            'role' => 'Pimpinan Kaban',
+                            'role_to' => 'PIC',
                             'body' => 'mohon check sk dan hasil pleno di dashboard',
                         ];
                             
