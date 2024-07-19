@@ -22,6 +22,7 @@ use App\Http\Resources\Backend\User\UserBuktiFisikDataResource;
 use App\Http\Resources\Backend\User\UserBuktiFisikResource;
 use App\Http\Resources\Backend\Operator\OperatorListKomponen;
 use App\Http\Resources\Backend\Operator\OperatorListBuktiFisik;
+use App\Http\Requests\Backend\User\GoogleFormRequest;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use App\Jobs\SendEmailJob;
@@ -122,7 +123,7 @@ class UserController extends Controller
     {
         $users = $user::find($request->user()->id)->library;
 
-        return UserKomponenResource::collection(Komponen::where('jenis_perpustakaan', $users->jenis_perpustakaan)->get());
+        return UserKomponenResource::collection(Komponen::where('jenis_perpustakaan', $users->jenis_perpustakaan ?? 'empty')->get());
     }
 
     /**
@@ -292,5 +293,35 @@ class UserController extends Controller
             return true;
         }
         return false;
+    }
+
+    public function storeGoogleForm (GoogleFormRequest $request, User $user) {
+        try {
+            DB::beginTransaction(); 
+                $storeGoogleForm = $user::updateOrCreate(
+                    [
+                        'id' => $request->user()->id,
+                    ],
+                    [
+                        'id' => $request->user()->id,
+                        'is_upload_google_form' => (boolean) request("is_upload_google_form"),
+                    ]
+                );
+                
+                if($googleForms = $request->bukti_googleform) {
+                    foreach ($googleForms as $googleForm) {
+                        $storeGoogleForm->clearMediaCollection('bukti_googleform');
+                        $storeGoogleForm->addMedia($googleForm)->toMediaCollection('bukti_googleform');
+                    }
+                }
+            DB::commit();        
+            return response()->json(['success' => 'success save data'], HttpResponse::HTTP_CREATED);
+        } catch (\Illuminate\Database\QueryException $ex) {
+            DB::rollBack();
+            return response()->json(['error' => 'An error occurred while creating or updating: '. $ex->getMessage()], 400);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json(['error' => 'An error occurred while upload pleno: ' . $e->getMessage()], 400);
+        }
     }
 }

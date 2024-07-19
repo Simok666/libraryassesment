@@ -52,6 +52,7 @@ Route::middleware(['auth:sanctum', 'type.user'])->group(function () {
         Route::post('user/storeKomponen', [UserController::class, 'storeKomponen']);
         Route::get('user/getBuktiFisikData', [UserController::class, 'getBuktiFisikData']);
         Route::post('user/storeBuktiFisik', [UserController::class, 'storeBuktiFisik']);
+        Route::post('user/storeGoogleForm', [UserController::class, 'storeGoogleForm']);
         
         Route::get('user/getDetailLibrary', [UserController::class, 'getDetailLibrary']);
         Route::get('user/getDetailKomponen', [UserController::class, 'getDetailKomponen']);
@@ -72,7 +73,7 @@ Route::middleware(['auth:sanctum', 'type.admin'])->group(function () {
     });
 });
 
-Route::middleware(['auth:sanctum', 'type.operator'])->group(function () {
+Route::middleware(['auth:sanctum', 'checkRole:type.operator,type.admin'])->group(function () {
     Route::group(['prefix' => 'v1'], function () {
         Route::get('operator/getUser', [OperatorController::class, 'getUserAccount']);
         Route::put('operator/verified/{id}', [OperatorController::class, 'verified']);
@@ -92,7 +93,8 @@ Route::middleware(['auth:sanctum', 'type.operator'])->group(function () {
         Route::post('operator/storeBuktiEvaluasi', [OperatorController::class, 'storeBuktiEvaluasi']);
         Route::get('operator/getGrading', [OperatorController::class, 'getGrading']);
         Route::post('operator/store/{id}', [OperatorController::class, 'notifyEmailVerifikator']);
-        
+        Route::post('operator/storeLinkGoogleForm', [OperatorController::class, 'storeLinkGoogleForm']);
+        Route::get('operator/getLinkGoogleForm', [OperatorController::class, 'getLinkGoogleForm']);
          //logout 
          Route::post('operator/logout', [OperatorAuthController::class, 'destory']);
     });

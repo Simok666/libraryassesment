@@ -42,7 +42,8 @@ class User extends Authenticatable implements HasMedia
         'library_email',
         'type_insert',
         'status_perpustakaan',
-        'grade'
+        'grade',
+        'is_upload_google_form'
     ];
 
     /**
