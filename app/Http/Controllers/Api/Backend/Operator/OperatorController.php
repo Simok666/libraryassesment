@@ -12,6 +12,7 @@ use App\Models\pimpinan;
 use App\Models\PimpinanKaban;
 use App\Models\Pleno;
 use App\Models\Evaluation;
+use App\Models\GoogleForm;
 use App\Models\Grading;
 use App\Models\BuktiFisikData;
 use App\Models\BuktiFisik;
@@ -29,6 +30,7 @@ use App\Http\Resources\Backend\Operator\OperatorVerifiedResource;
 use App\Http\Resources\Backend\Operator\OperatorListLibrary;
 use App\Http\Resources\Backend\Operator\OperatorListKomponen;
 use App\Http\Resources\Backend\Operator\OperatorListGrading;
+use App\Http\Resources\Backend\Operator\OperatorLinkGoogle;
 use App\Http\Resources\Backend\Operator\OperatorListBuktiFisik;
 use App\Http\Resources\Backend\Operator\OperatorDetailLibrary;
 use App\Http\Resources\Backend\Operator\OperatorDetailKomponen;
@@ -515,6 +517,41 @@ class OperatorController extends Controller
                 }
             DB::commit();        
             return response()->json(['success' => 'success save data'], HttpResponse::HTTP_CREATED);
+        } catch (\Illuminate\Database\QueryException $ex) {
+            DB::rollBack();
+            return response()->json(['error' => 'An error occurred while creating or updating: '. $ex->getMessage()], 400);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json(['error' => 'An error occurred while upload pleno: ' . $e->getMessage()], 400);
+        }
+    }
+
+    public function storeLinkGoogleForm(Request $request) {
+        try {
+            DB::beginTransaction();
+                $store = GoogleForm::updateOrCreate(
+                    [
+                        'title' => 'link'
+                    ],
+                    [
+                        'link' => request("link")
+                    ]
+                );
+            DB::commit();        
+            return response()->json(['success' => 'success save data'], HttpResponse::HTTP_CREATED);
+        } catch (\Illuminate\Database\QueryException $ex) {
+            DB::rollBack();
+            return response()->json(['error' => 'An error occurred while creating or updating: '. $ex->getMessage()], 400);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json(['error' => 'An error occurred while upload pleno: ' . $e->getMessage()], 400);
+        }
+    }   
+
+    public function getLinkGoogleForm(GoogleForm $googleForm) {
+        try {
+            $googleForm = $googleForm->first();
+            return new OperatorLinkGoogle($googleForm);
         } catch (\Illuminate\Database\QueryException $ex) {
             DB::rollBack();
             return response()->json(['error' => 'An error occurred while creating or updating: '. $ex->getMessage()], 400);

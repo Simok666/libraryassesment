@@ -25,7 +25,8 @@ class DatabaseSeeder extends Seeder
             SubKomponenSeeder::class,
             BuktiFisikSeeder::class,
             LibrariesSeeder::class,
-            GradingSeeder::class
+            GradingSeeder::class,
+            GoogleFormSeeder::class
            ]);
     }
 }
