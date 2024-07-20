@@ -83,11 +83,11 @@ class UserAuthController extends Controller
     public function login(UserAuthLoginRequest $request) {
         $user = User::where('email', $request->email)->first();
         
-        // if (!$user || !Hash::check($request->password, $user->password) || $user->is_verified == 0 ) {
-        //     throw ValidationException::withMessages([
-        //         'email' => ['The provided credentials are incorrect or Your account has not been verified'],
-        //     ]);
-        // }
+        if (!$user || !Hash::check($request->password, $user->password) || $user->is_verified == 0 ) {
+            throw ValidationException::withMessages([
+                'email' => ['The provided credentials are incorrect or Your account has not been verified'],
+            ]);
+        }
         $user->role = "user";
         
         return new AuthResource($user);
