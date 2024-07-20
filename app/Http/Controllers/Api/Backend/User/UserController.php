@@ -23,6 +23,7 @@ use App\Http\Resources\Backend\User\UserBuktiFisikDataResource;
 use App\Http\Resources\Backend\User\UserBuktiFisikResource;
 use App\Http\Resources\Backend\Operator\OperatorListKomponen;
 use App\Http\Resources\Backend\Operator\OperatorListBuktiFisik;
+use App\Http\Resources\Backend\Operator\OperatorLinkGoogle;
 use App\Http\Requests\Backend\User\GoogleFormRequest;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
