@@ -9,7 +9,7 @@
 
     </div>
 </div>
-<div class="card google-form">
+<div class="card google-form d-none">
     <div class="card-body">
         <form id="form-google">
             <input type="hidden">
@@ -25,6 +25,7 @@
                         <th>Upload Bukti SS Google Form</th>
                         <td>
                             <input type="file" name="bukti_googleform" class="form-control">
+                            <input type="hidden" name="is_upload_google_form" value="1" class="form-control">
                         </td>
                     </tr>
                 </tbody>
@@ -119,11 +120,15 @@
         }
 
         if (role === "user") {
+            $(".google-form").removeClass("d-none");
             const googleForm = ajaxData(`${baseUrl}/api/v1/user/getLinkGoogleForm`, 'GET', [], function(resp) {
                 if (!empty(resp.data.link)) {
                     $(".link-google-form").html(`<a href="${resp.data.link}" target="_blank" class="">${resp.data.link}</a>`);
                 }}
             )
+            if (session("is_upload_google_form")) {
+                $("#form-google").find("[type=submit]").attr("disabled", true);
+            }
         }
     });
 

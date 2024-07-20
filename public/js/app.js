@@ -7,7 +7,7 @@ var req = {
 const menuByRole = {
     "admin" : ["*"],
     "user" : ["dashboard","profile-perpustakaan", "profile-komponent" , "profile-buktifisik"],
-    "operator" : ["dashboard", "users", "libraries", "proofOfWork", "komponent", "verifikator", "pleno", "googleform"],
+    "operator" : ["dashboard", "users", "libraries", "proofOfWork", "komponent", "verifikator", "pleno", "googleform", "settingComponent"],
     "verifikator_desk" : ["dashboard", "libraries", "proofOfWork", "komponent", "verifikator-desk"],
     "verifikator_field" : ["dashboard", "libraries", "proofOfWork", "komponent", "verifikator-field"],
     "pimpinan" : ["dashboard", "pleno-sesban"],
@@ -74,6 +74,11 @@ const sidebarItems = [
         url: "googleform",
         icon: "bi bi-google",
         label: "Google Form"
+    },
+    {
+        url: "settingComponent",
+        icon: "bi bi-gear",
+        label: "Contoh Komponen"
     },
 
 ///// PIC Menu
@@ -195,6 +200,7 @@ function checkLogin() {
             let role = (resp.data.role == "user" ? "PIC" : resp.data.role); ;
             $(".display-user-role").html(role);
             setSession("role", resp.data.role);
+            setSession("is_upload_google_form", resp.data.is_upload_google_form);
             checkUserAccess()
             setMenuByRole();
             checkSpecialAction(resp.data)
