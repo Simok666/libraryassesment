@@ -22,8 +22,7 @@ class GoogleFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'bukti_googleform' =>  ['required', 'array'] ,
-            'bukti_googleform.*' => ['mimes:jpg,png,jpeg,gif,svg,pdf','max:2048']
+            'bukti_googleform' => ['required','mimes:jpg,png,jpeg,gif,svg,pdf','max:2048']
         ];
     }
 }
