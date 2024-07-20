@@ -4,6 +4,7 @@ namespace App\Http\Resources\Backend\User;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Http\Resources\ImageResource;
 
 class UserKomponenResource extends JsonResource
 {
@@ -19,7 +20,8 @@ class UserKomponenResource extends JsonResource
             'title_komponens' => $this->title_komponens,
             'jumlah_indikator_kunci' => $this->jumlah_indikator_kunci,
             'bobot' => $this->bobot,
-            'jenis_perpustakaan' => $this->jenis_perpustakaan
+            'jenis_perpustakaan' => $this->jenis_perpustakaan,
+            'contoh' => ImageResource::collection($this->getMedia('example_komponen')),
         ];
     }
 }
