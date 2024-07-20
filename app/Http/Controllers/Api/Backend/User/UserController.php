@@ -12,6 +12,7 @@ use App\Models\BuktiFisikData;
 use App\Models\BuktiFisik;
 use App\Models\Admin;
 use App\Models\Operator;
+use App\Models\GoogleForm;
 use App\Http\Requests\Backend\User\UserRequest;
 use App\Http\Requests\Backend\User\UserKomponenRequest;
 use App\Http\Requests\Backend\User\UserBuktiFisikRequest;
@@ -322,6 +323,18 @@ class UserController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             return response()->json(['error' => 'An error occurred while upload pleno: ' . $e->getMessage()], 400);
+        }
+    }
+    public function getLinkGoogleForm(GoogleForm $googleForm) {
+        try {
+            $googleForm = $googleForm->first();
+            return new OperatorLinkGoogle($googleForm);
+        } catch (\Illuminate\Database\QueryException $ex) {
+            DB::rollBack();
+            return response()->json(['error' => 'An error occurred while creating or updating: '. $ex->getMessage()], 400);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json(['error' => 'An error occurred while upload data: ' . $e->getMessage()], 400);
         }
     }
 }

@@ -39,6 +39,7 @@ use App\Http\Resources\Backend\Verifikator\VerifikatorDeskResource;
 use App\Http\Resources\Backend\Verifikator\VerifikatorFieldResource;
 use App\Http\Resources\Backend\User\UserResource;
 use App\Http\Resources\Backend\User\UserSubKomponenResource;
+use App\Http\Resources\Backend\User\UserKomponenResource;
 use Illuminate\Http\JsonResponse;
 use PDF;
 use DB;
@@ -544,7 +545,7 @@ class OperatorController extends Controller
             return response()->json(['error' => 'An error occurred while creating or updating: '. $ex->getMessage()], 400);
         } catch (\Exception $e) {
             DB::rollBack();
-            return response()->json(['error' => 'An error occurred while upload pleno: ' . $e->getMessage()], 400);
+            return response()->json(['error' => 'An error occurred while upload data: ' . $e->getMessage()], 400);
         }
     }   
 
@@ -557,8 +558,43 @@ class OperatorController extends Controller
             return response()->json(['error' => 'An error occurred while creating or updating: '. $ex->getMessage()], 400);
         } catch (\Exception $e) {
             DB::rollBack();
-            return response()->json(['error' => 'An error occurred while upload pleno: ' . $e->getMessage()], 400);
+            return response()->json(['error' => 'An error occurred while upload data: ' . $e->getMessage()], 400);
         }
+    }
+
+    public function storeKomponenExample(Komponen $komponen) {
+        try {
+            DB::beginTransaction();
+            $komponens = $komponen::find(request("id"));
+                
+                $komponens = $komponen::updateOrCreate(
+                    [
+                        'id' => request("id"),
+                    ],
+                    [
+                        'id' => request("id"),
+                    ]
+                );
+
+                if($exmpleKomponens = request("example")) {
+                    foreach ($exmpleKomponens as $exmpleKomponen) {
+                        $komponens->clearMediaCollection('example_komponen');
+                        $komponens->addMedia($exmpleKomponen)->toMediaCollection('example_komponen');
+                    }
+                }
+             DB::commit();  
+             return response()->json(['success' => 'success save data'], HttpResponse::HTTP_CREATED);
+        } catch (\Illuminate\Database\QueryException $ex) {
+            DB::rollBack();
+            return response()->json(['error' => 'An error occurred while creating or updating: '. $ex->getMessage()], 400);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json(['error' => 'An error occurred while upload data: ' . $e->getMessage()], 400);
+        }
+    }
+
+    public function getKomponen(Komponen $komponen) {
+        return  UserKomponenResource::collection($komponen->get());
     }
 
 }

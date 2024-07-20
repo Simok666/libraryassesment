@@ -57,7 +57,7 @@ Route::middleware(['auth:sanctum', 'type.user'])->group(function () {
         Route::get('user/getDetailLibrary', [UserController::class, 'getDetailLibrary']);
         Route::get('user/getDetailKomponen', [UserController::class, 'getDetailKomponen']);
         Route::get('user/getDetailBuktiFisik', [UserController::class, 'getDetailBuktiFisik']);
-        
+        Route::get('user/getLinkGoogleForm', [UserController::class, 'getLinkGoogleForm']);
         //logout 
         Route::post('user/logout', [UserAuthController::class, 'destory']);
     });
@@ -73,7 +73,7 @@ Route::middleware(['auth:sanctum', 'type.admin'])->group(function () {
     });
 });
 
-Route::middleware(['auth:sanctum', 'checkRole:type.operator,type.admin'])->group(function () {
+Route::middleware(['auth:sanctum', 'type.operator'])->group(function () {
     Route::group(['prefix' => 'v1'], function () {
         Route::get('operator/getUser', [OperatorController::class, 'getUserAccount']);
         Route::put('operator/verified/{id}', [OperatorController::class, 'verified']);
@@ -95,6 +95,9 @@ Route::middleware(['auth:sanctum', 'checkRole:type.operator,type.admin'])->group
         Route::post('operator/store/{id}', [OperatorController::class, 'notifyEmailVerifikator']);
         Route::post('operator/storeLinkGoogleForm', [OperatorController::class, 'storeLinkGoogleForm']);
         Route::get('operator/getLinkGoogleForm', [OperatorController::class, 'getLinkGoogleForm']);
+        Route::post('operator/storeKomponenExample', [OperatorController::class, 'storeKomponenExample']);
+        Route::get('operator/getKomponen', [OperatorController::class, 'getKomponen']);
+
          //logout 
          Route::post('operator/logout', [OperatorAuthController::class, 'destory']);
     });
