@@ -150,7 +150,11 @@
                             </div>
                             <div class="col-md-9 col-12 form-group">
                                 <input required type="file" class="form-control" name="data_perpustakaan_image[]" placeholder="File">
+                                 <div class="col-md-12 d-none">
+                                    File Sebelumnya : <a target="_blank" class="prev-file" href="">Download</a>
+                                </div>
                             </div>
+                           
                             <div class="col-md-12">
                                 Download Template : <a download href="{{ asset('file/template/perpustakaan.xlsx') }}">Download</a>
                             </div>
@@ -180,12 +184,26 @@
                 loadingButton($("#form-perpustakaan"), false)
                 // delay redirect subkomponent
                 setTimeout(function() {
-                    window.location = "{{ url('dashboard.html') }}";
+                    // window.location = "{{ url('dashboard.html') }}";
                 })
             }, function(data) {
                 loadingButton($("#form-perpustakaan"), false)
             });
         });
+
+        const getDetail = ajaxData( `${baseUrl}/api/v1/user/getDetailLibrary`, "GET", [] , function(resp) {
+            $.each(resp.data, function(index, data) {
+                $(`#form-perpustakaan [name="${index}"]`).val(data).trigger("change")
+            }) 
+
+            resp = resp.data
+            // get last array
+            if (!empty(resp.data_perpustakaan_image)) {
+                $("[name='data_perpustakaan_image[]']").removeAttr("required")
+                $(".prev-file").attr("href", resp.data_perpustakaan_image.pop().url)
+                $(".prev-file").parent().removeClass("d-none")
+            }
+        })
     });
 
 </script>

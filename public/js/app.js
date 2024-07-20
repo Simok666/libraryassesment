@@ -7,7 +7,7 @@ var req = {
 const menuByRole = {
     "admin" : ["*"],
     "user" : ["dashboard","profile-perpustakaan", "profile-komponent" , "profile-buktifisik"],
-    "operator" : ["dashboard", "users", "libraries", "proofOfWork", "komponent", "verifikator", "pleno"],
+    "operator" : ["dashboard", "users", "libraries", "proofOfWork", "komponent", "verifikator", "pleno", "googleform"],
     "verifikator_desk" : ["dashboard", "libraries", "proofOfWork", "komponent", "verifikator-desk"],
     "verifikator_field" : ["dashboard", "libraries", "proofOfWork", "komponent", "verifikator-field"],
     "pimpinan" : ["dashboard", "pleno-sesban"],
@@ -70,6 +70,11 @@ const sidebarItems = [
       icon: "bi bi-person-lines-fill",
       label: "Pleno Kaban"
     },
+    {
+        url: "googleform",
+        icon: "bi bi-google",
+        label: "Google Form"
+    },
 
 ///// PIC Menu
     {
@@ -108,9 +113,9 @@ function ajaxData(url, type, data , successFunc = "", errorFunc = "") {
             }
         },
         error: function (data) {
-            let code = data.responseJSON.code;
+            let code = data.responseJSON?.code;
             if (code >= 500) toast("Something went wrong, please try again", 'danger');
-            else toast(data.responseJSON.message ?? data.responseJSON.error, 'warning')
+            else toast(data.responseJSON?.message ?? data.responseJSON?.error, 'warning')
             if(typeof errorFunc === "function") {
                 errorFunc(data);
             }
@@ -153,6 +158,11 @@ function toast(message, type = "success") {
         case 'info': type = '#0dcaf0'; break;
         default: type = '#6c757d';
     }
+
+    if (empty(message)) {
+        return;
+    }
+
     Toastify({
         text: message,
         duration: 3000,

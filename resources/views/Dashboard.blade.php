@@ -6,7 +6,31 @@
 @section('content')
 <div class="card pleno d-none">
     <div class="card-body">
-        
+
+    </div>
+</div>
+<div class="card google-form">
+    <div class="card-body">
+        <form id="form-google">
+            <input type="hidden">
+            <table class="table after-loading">
+                <tbody>
+                    <tr>
+                        <th width="30%">Link Google Form</th>
+                        <td class="link-google-form">
+                            <a href="" target="_blank" class="">Link Google Form</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Upload Bukti SS Google Form</th>
+                        <td>
+                            <input type="file" name="bukti_googleform" class="form-control">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <button type="submit" class="btn btn-primary">Simpan</button>
+        </form>
     </div>
 </div>
 <div class="card pleno">
@@ -41,14 +65,12 @@
 </div>
 
 
-<div class="modal fade text-left" id="pleno-detail" tabindex="-1" role="dialog"
-    aria-labelledby="myModalLabel4" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+<div class="modal fade text-left" id="pleno-detail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel4" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title" id="myModalLabel4">Detail Pleno</h4>
-                <button type="button" class="close" data-bs-dismiss="modal"
-                    aria-label="Close">
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                     <i data-feather="x"></i>
                 </button>
             </div>
@@ -65,8 +87,7 @@
                 </table>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-light-secondary"
-                    data-bs-dismiss="modal">
+                <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
                     <i class="bx bx-x d-block d-sm-none"></i>
                     <span class="d-none d-sm-block">Close</span>
                 </button>
@@ -95,6 +116,14 @@
                 req.page = 1;
                 GetData(req, "pleno2", formatlibraries2);
             });
+        }
+
+        if (role === "user") {
+            const googleForm = ajaxData(`${baseUrl}/api/v1/user/getLinkGoogleForm`, 'GET', [], function(resp) {
+                if (!empty(resp.data.link)) {
+                    $(".link-google-form").html(`<a href="${resp.data.link}" target="_blank" class="">${resp.data.link}</a>`);
+                }}
+            )
         }
     });
 
@@ -158,26 +187,26 @@
 
 
     $(document).on('click', '.btn-detail-pleno', function() {
-        let modal = $("#pleno-detail"); 
+        let modal = $("#pleno-detail");
         modal.modal('show');
-        loading(modal , true);
+        loading(modal, true);
         ajaxData(`${baseUrl}/api/v1/getPlenoFinal`, 'GET', {
-            "id" : $(this).data('id'),
-            "status" : $(".dropdown-status").val()
-        }, function(resp) {
-            const result = resp.data;
-            if (!result) {
-                setTimeout(() => {
-                    modal.modal('hide')
-                    toast("Data not found", 'warning');
-                }, 1000);
-                return;
-            }
-            loading(modal , false);
-            
-            let dataDetail = "";
-            data = result[0];
-            dataDetail += `
+                "id": $(this).data('id')
+                , "status": $(".dropdown-status").val()
+            }, function(resp) {
+                const result = resp.data;
+                if (!result) {
+                    setTimeout(() => {
+                        modal.modal('hide')
+                        toast("Data not found", 'warning');
+                    }, 1000);
+                    return;
+                }
+                loading(modal, false);
+
+                let dataDetail = "";
+                data = result[0];
+                dataDetail += `
                 <tr>
                     <td>Draft Sk</td>
                     <td class="text-center">                        
@@ -203,13 +232,27 @@
                     </td>
                 </tr>
             `
-            modal.find('tbody').html(dataDetail);
-        },
-        function() {
-            loading(modal);
-            setTimeout(function() {
-                modal.modal('hide');
-            }, 1000);
+                modal.find('tbody').html(dataDetail);
+            }
+            , function() {
+                loading(modal);
+                setTimeout(function() {
+                    modal.modal('hide');
+                }, 1000);
+            });
+    });
+
+    $("#form-google").on('submit', function(e) {
+        e.preventDefault();
+        let url = `${baseUrl}/api/v1/user/storeGoogleForm`;
+        const data = new FormData(this);
+        loadingButton($(this))
+        ajaxDataFile(url, 'POST', data, function(resp) {
+            toast("Data has been saved");
+            loadingButton($("#form-google"), false)
+            GetData(req,"libraries", formatlibraries);
+        }, function(data) {
+            loadingButton($("#form-google"), false)
         });
     });
 

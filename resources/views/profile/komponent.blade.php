@@ -31,9 +31,22 @@
 @section('scripts')
 <script>
     $(document).ready(function() {
-        GetData(req, "components", formatTable);
+        GetData(req, "components", formatTable, function(resp){
+            ajaxData( `${baseUrl}/api/v1/user/getDetailKomponen`, "GET", [] , function(resp) {
+                if (!empty(resp.data)) {
+                    $.each(resp.data, function(index, item) {
+                        $(`.subkomponen-${item.subkomponen_id} .skor`).val(item.skor_subkomponen).trigger("change");
+                        if (!empty(item.bukti_dukung)) {
+                            $(`.subkomponen-${item.subkomponen_id} .bukti-dukung input`).removeAttr('required');
+                            $(`.subkomponen-${item.subkomponen_id} .bukti-dukung`).append(`<a href="${item.bukti_dukung.pop().url}" target="_blank">Download File Sebelumnya</a>`);
+                        }
+                        $(`.subkomponen-${item.subkomponen_id} .bukti-dukung`).val(item.skor_subkomponen).trigger("change");
+                    })  
+                }
+            });
+        });
         
-        $('.datatable-components').on('keyup', ".skor" ,  function() {
+        $('.datatable-components').on('keyup change', ".skor" ,  function() {
             let tr = $(this).parents('tr');
             ik = parseInt(tr.find('.jml-ik').text());
             skor = $(this).val();
@@ -73,7 +86,7 @@
                 `
             }
             result += `
-                <tr>
+                <tr class="subkomponen-${data.id}">
                     <td>
                         ${index+1}
                         <input type="hidden" name="${index}[subkomponen_id]" value="${data.id}">
@@ -84,7 +97,7 @@
                     <td><input required class="form-control skor" name="${index}[skor_subkomponen]" type="number" value="0"></td>
                     <td class="bobot">${data.bobot}</td>
                     <td class="nilai">0</td>
-                    <td><input required class="form-control" name="${index}[bukti_dukung]" type="file"></td>
+                    <td class="bukti-dukung"><input required class="form-control" name="${index}[bukti_dukung]" type="file"></td>
                     <td>
                         ${(!empty(data.contoh)) ? `<a href="${data.contoh[0].url}" target="_blank">View File Contoh</a>` : `-`}
                     </td>

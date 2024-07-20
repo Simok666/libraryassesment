@@ -26,7 +26,18 @@
 @section('scripts')
 <script>
     $(document).ready(function() {
-        GetData(req, "buktifisik", formatTable);
+        GetData(req, "buktifisik", formatTable, function(resp) {
+            ajaxData( `${baseUrl}/api/v1/user/getDetailBuktiFisik`, "GET", [] , function(resp) {
+                if (!empty(resp.data)) {
+                    $.each(resp.data, function(index, item) {
+                        if (!empty(item.bukti_fisik_upload)) {
+                            $(`.bukti-${item.bukti_fisik_data_id} .bukti-dukung`).append(`<a href="${item.bukti_fisik_upload.pop().url}" target="_blank">Download File Sebelumnya</a>`);
+                            $(`.bukti-${item.bukti_fisik_data_id} .bukti-dukung input`).removeAttr("required");
+                        }
+                    })  
+                }
+            });
+        });
         // submit form 
         $("#form-buktifisik").submit(function(e) {
             e.preventDefault();
@@ -36,7 +47,7 @@
                     toast("Save data success", 'success');
                     loadingButton($("form"), false);
                     setTimeout(function() {
-                        window.location = "{{ url('Dashboard.html') }}";
+                        // window.location = "{{ url('Dashboard.html') }}";
                     }, 3000);
                 },
                 function (data) {
@@ -50,13 +61,13 @@
         var result = "";
         $.each(data, function(index, data) {
             result += `
-                <tr>
+                <tr class="bukti-${data.id}">
                     <td>
                         ${index+1}
                         <input type="hidden" name="${index}[bukti_fisik_data_id]" value="${data.id}">
                     </td>
                     <td>${data.title_bukti_fisik}</td>
-                    <td><input required class="form-control" name="${index}[bukti_fisik_upload]" type="file"></td>
+                    <td class="bukti-dukung"><input required class="form-control" name="${index}[bukti_fisik_upload]" type="file"></td>
                 </tr>
             `
         });
