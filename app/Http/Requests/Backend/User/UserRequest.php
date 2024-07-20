@@ -43,7 +43,7 @@ class UserRequest extends FormRequest
             'jenis_perpustakaan' => ['required', Rule::in(['Perpustakaan Khusus', 'Perpustakaan Perguruan Tinggi'])],
             'visi' => ['required', 'string' ,'max:100'],
             'misi' => ['required', 'string' ,'max:100'],
-            'data_perpustakaan_image' => ['required','array'],
+            'data_perpustakaan_image' => ['array'],
             'data_perpustakaan_image.*' => ['mimes:jpg,png,jpeg,gif,svg,pdf','max:2048'],
         ];
     }

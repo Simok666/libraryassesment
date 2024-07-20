@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}" />
-    <title>Registration - Penilaian Perpustakaan</title>
+    <title>Pendaftaran - Penilaian Perpustakaan</title>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/bootstrap.css') }}">
     <link rel="stylesheet" href="{{ asset('vendors/bootstrap-icons/bootstrap-icons.css') }}">
@@ -23,10 +23,10 @@
                         {{-- <a href="index.html"><img src="assets/images/logo/logo.png" alt="Logo"></a> --}}
                         <h3>Penilaian Perpustakaan</h3>
                     </div>
-                    <h1 class="auth-title">Registration</h1>
+                    <h1 class="auth-title">Pendaftaran</h1>
                     <form action="index.html">
                         <div class="form-group position-relative has-icon-left mb-4">
-                            <input type="text" name="name" minlength="3" class="form-control form-control-xl" placeholder="Name" required>
+                            <input type="text" name="name" minlength="3" class="form-control form-control-xl" placeholder="Nama" required>
                             <div class="form-control-icon">
                                 <i class="bi bi-person"></i>
                             </div>
@@ -38,41 +38,41 @@
                             </div>
                         </div>
                         <div class="form-group position-relative has-icon-left mb-4">
-                            <input type="password" min="8" name="password" class="form-control form-control-xl" placeholder="Password" required>
+                            <input type="password" min="8" name="password" class="form-control form-control-xl" placeholder="Kata Sandi" required>
                             <div class="form-control-icon">
                                 <i class="bi bi-shield-lock"></i>
                             </div>
                         </div>
                         <div class="form-group position-relative has-icon-left mb-4">
-                            <input type="text" name="instance_name" minlength="3" class="form-control form-control-xl" placeholder="Instance Name" required>
+                            <input type="text" name="instance_name" minlength="3" class="form-control form-control-xl" placeholder="Nama Instansi" required>
                             <div class="form-control-icon">
                                 <i class="bi bi-building"></i>
                             </div>
                         </div>
                         <div class="form-group position-relative has-icon-left mb-4">
-                            <input type="text" name="pic_name" minlength="3" class="form-control form-control-xl" placeholder="PIC Name" required>
+                            <input type="text" name="pic_name" minlength="3" class="form-control form-control-xl" placeholder="Nama PIC" required>
                             <div class="form-control-icon">
                                 <i class="bi bi-person"></i>
                             </div>
                         </div>
                         <div class="mb-4 position-relative has-icon-left">
-                            <label for="sk_image">Sk Image</label>
+                            <label for="sk_image">Gambar Sk</label>
                             <input type="file" name="sk_image[]" id="sk_image" class="form-control form-control-xl" placeholder="Choose Image" required>
                         </div>
                         <div class="form-group position-relative has-icon-left mb-4">
-                            <input type="text" name="leader_instance_name" class="form-control form-control-xl" placeholder="Leader Instance Name">
+                            <input type="text" name="leader_instance_name" class="form-control form-control-xl" placeholder="Nama Instansi Pemimpin">
                             <div class="form-control-icon">
                                 <i class="bi bi-building"></i>
                             </div>
                         </div>
                         <div class="form-group position-relative has-icon-left mb-4">
-                            <input type="text" name="library_name" class="form-control form-control-xl" placeholder="Library Name">
+                            <input type="text" name="library_name" class="form-control form-control-xl" placeholder="Nama Perpustakaan">
                             <div class="form-control-icon">
                                 <i class="bi bi-building"></i>
                             </div>
                         </div>
                         <div class="form-group position-relative has-icon-left mb-4">
-                            <input type="text" name="head_library_name" class="form-control form-control-xl" placeholder="Head Library Name">
+                            <input type="text" name="head_library_name" class="form-control form-control-xl" placeholder="Nama Kepala Perpustakaan">
                             <div class="form-control-icon">
                                 <i class="bi bi-building"></i>
                             </div>
@@ -84,7 +84,7 @@
                             </div>
                         </div>
                         <div class="form-group position-relative has-icon-left mb-4">
-                            <input type="text" name="address" class="form-control form-control-xl" placeholder="Address" required>
+                            <input type="text" name="address" class="form-control form-control-xl" placeholder="Alamat" required>
                             <div class="form-control-icon">
                                 <i class="bi bi-geo-alt"></i>
                             </div>
@@ -94,25 +94,25 @@
                             <input type="hidden" name="map_coordinates" id="map_coordinates" value="" required>
                         </div>
                         <div class="form-group position-relative has-icon-left mb-4">
-                            <input type="text" min="5" name="village" id="village" class="form-control form-control-xl" placeholder="Village" required>
+                            <input type="text" min="5" name="village" id="village" class="form-control form-control-xl" placeholder="Kelurahan" required>
                             <div class="form-control-icon">
                                 <i class="bi bi-building"></i>
                             </div>
                         </div>
                         <div class="form-group position-relative has-icon-left mb-4">
-                            <input type="text" min="5" name="subdistrict" id="subdistrict" class="form-control form-control-xl" placeholder="Subdistrict" required>
+                            <input type="text" min="5" name="subdistrict" id="subdistrict" class="form-control form-control-xl" placeholder="Kecamatan" required>
                             <div class="form-control-icon">
                                 <i class="bi bi-geo-alt"></i>
                             </div>
                         </div>
                         <div class="form-group position-relative has-icon-left mb-4">
-                            <input type="text" min="5" name="city" id="city" class="form-control form-control-xl" placeholder="City" required>
+                            <input type="text" min="5" name="city" id="city" class="form-control form-control-xl" placeholder="Kota/Kabupaten" required>
                             <div class="form-control-icon">
                                 <i class="bi bi-geo-alt"></i>
                             </div>
                         </div>
                         <div class="form-group position-relative has-icon-left mb-4">
-                            <input type="text" min="5" name="province" id="province" class="form-control form-control-xl" placeholder="Province" required>
+                            <input type="text" min="5" name="province" id="province" class="form-control form-control-xl" placeholder="Provinsi" required>
                             <div class="form-control-icon">
                                 <i class="bi bi-geo-alt"></i>
                             </div>
@@ -124,7 +124,7 @@
                             </div>
                         </div>
                         <div class="form-group position-relative has-icon-left mb-4">
-                            <input type="email" name="library_email" id="library_email" class="form-control form-control-xl" placeholder="Library Email example@gmail.com" value="">
+                            <input type="email" name="library_email" id="library_email" class="form-control form-control-xl" placeholder="Email perpustakaan example@gmail.com" value="">
                             <div class="form-control-icon">
                                 <i class="bi bi-envelope"></i>
                             </div>
@@ -135,11 +135,10 @@
                                 <i class="bi bi-globe"></i>
                             </div>
                         </div>
-                        <button class="btn btn-primary btn-block btn-lg shadow-lg mt-5" type="submit">Submit</button>
+                        <button class="btn btn-primary btn-block btn-lg shadow-lg mt-5" type="submit">Simpan</button>
                     </form>
                     <div class="text-center mt-5 text-lg fs-4">
-                        <p class='text-gray-600'>Already have an account? <a href="{{ url('auth-login.html') }}" class="font-bold">Log
-                                in</a>.</p>
+                        <p class='text-gray-600'>Sudah punya akun? <a href="{{ url('auth-login.html') }}" class="font-bold">Masuk</a>.</p>
                     </div>
                 </div>
             </div>

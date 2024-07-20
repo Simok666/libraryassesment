@@ -50,8 +50,7 @@
                         <button class="btn btn-primary btn-block btn-lg shadow-lg mt-5" type="submit">Log in</button>
                     </form>
                     <div class="text-center mt-5 text-lg fs-4">
-                        <p class="text-gray-600">Don't have an account? <a href="{{ url("auth-register.html") }}" class="font-bold">Sign
-                                up As User</a>.</p>
+                        <p class="text-gray-600">Belum Punya Akun? <a href="{{ url("auth-register.html") }}" class="font-bold">Daftar Sebagai PIC</a>.</p>
                     </div>
                 </div>
             </div>

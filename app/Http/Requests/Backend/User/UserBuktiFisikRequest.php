@@ -24,7 +24,7 @@ class UserBuktiFisikRequest extends FormRequest
         return [
             // 'user_id' => ['required', 'numeric'],
             '*.bukti_fisik_data_id' => ['required', 'numeric'],
-            '*.bukti_fisik_upload' => ['required', 'mimes:jpg,png,jpeg,gif,svg,pdf', 'max:2048'],
+            '*.bukti_fisik_upload' => ['mimes:jpg,png,jpeg,gif,svg,pdf', 'max:2048'],
             // '*.bukti_fisik_upload.*' => ['mimes:jpg,png,jpeg,gif,svg,pdf','max:2048'],
         ];
     }
