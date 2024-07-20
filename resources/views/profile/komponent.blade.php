@@ -99,7 +99,7 @@
                     <td class="nilai">0</td>
                     <td class="bukti-dukung"><input required class="form-control" name="${index}[bukti_dukung]" type="file"></td>
                     <td>
-                        ${(!empty(data.contoh)) ? `<a href="${data.contoh[0].url}" target="_blank">View File Contoh</a>` : `-`}
+                        ${(!empty(data.contoh)) ? `<a href="${data.contoh.pop().url}" target="_blank">View File Contoh</a>` : `-`}
                     </td>
                 </tr>
             `
