@@ -22,8 +22,7 @@ class ExampleKomponenRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'example' =>  ['required', 'array'] ,
-            'example.*' => ['mimes:jpg,png,jpeg,gif,svg,pdf','max:2048']
+            'example' => ['required','mimes:jpg,png,jpeg,gif,svg,pdf','max:2048']
         ];
     }
 }
