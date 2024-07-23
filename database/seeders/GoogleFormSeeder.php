@@ -6,6 +6,7 @@ use App\Models\GoogleForm;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use DB;
 class GoogleFormSeeder extends Seeder
 {
     /**
@@ -13,9 +14,19 @@ class GoogleFormSeeder extends Seeder
      */
     public function run(): void
     {
-        GoogleForm::create([
-            'title' => 'link',
-            'link' => 'example.com'
+        DB::table('google_forms')->insert([
+            [
+                'title' => 'link-1',
+                'link' => 'link-1.com',
+            ],
+            [
+                'title' => 'link-2',
+                'link' => 'link-2.com',
+            ],
+            [
+                'title' => 'link-3',
+                'link' => 'link-3.com',
+            ],
         ]);
     }
 }

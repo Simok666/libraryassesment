@@ -366,9 +366,11 @@ class OperatorController extends Controller
                         ]
                     );
 
+                    $operator = Operator::first();
+
                     if($kaban) {
                         $postMail = [
-                            'email' => $user::find(request("id"))->email,
+                            'email' => [$user::find(request("id"))->email, $operator->email],
                             'title' => 'Cek SK dan Hasil Pleno dari Operator',
                             'status' => 'pleno_kaban',
                             'role' => 'Pimpinan Kaban',
@@ -529,16 +531,20 @@ class OperatorController extends Controller
 
     public function storeLinkGoogleForm(Request $request) {
         try {
-            DB::beginTransaction();
-                $store = GoogleForm::updateOrCreate(
-                    [
-                        'title' => 'link'
-                    ],
-                    [
-                        'link' => request("link")
-                    ]
-                );
-            DB::commit();        
+           $data = collect($request->repeater)->map(function ($item) {
+                DB::beginTransaction();   
+                    GoogleForm::updateOrCreate(
+                            [
+                                'title' => $item['title'],
+                            ],
+                            [
+                                'title' => $item['title'],
+                                'link' => $item['link'],
+                            ]
+                        );
+                DB::commit();
+            });
+                    
             return response()->json(['success' => 'success save data'], HttpResponse::HTTP_CREATED);
         } catch (\Illuminate\Database\QueryException $ex) {
             DB::rollBack();
@@ -551,7 +557,8 @@ class OperatorController extends Controller
 
     public function getLinkGoogleForm(GoogleForm $googleForm) {
         try {
-            $googleForm = $googleForm->first();
+            
+            $googleForm = $googleForm->get();
             return new OperatorLinkGoogle($googleForm);
         } catch (\Illuminate\Database\QueryException $ex) {
             DB::rollBack();
