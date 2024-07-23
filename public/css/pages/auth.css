@@ -23,7 +23,8 @@ body {
   color: #a8aebb;
 }
 #auth #auth-left .auth-logo {
-  margin-bottom: 7rem;
+  margin-bottom: 2rem;
+  /* before is 7rem */
 }
 #auth #auth-left .auth-logo img {
   height: 2rem;
