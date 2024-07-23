@@ -297,26 +297,30 @@ class UserController extends Controller
         return false;
     }
 
-    public function storeGoogleForm (GoogleFormRequest $request, User $user) {
+    public function storeGoogleForm (Request $request, User $user) {
         try {
-            DB::beginTransaction(); 
-                $storeGoogleForm = $user::updateOrCreate(
-                    [
-                        'id' => $request->user()->id,
-                    ],
-                    [
-                        'id' => $request->user()->id,
-                        'is_upload_google_form' => (boolean) request("is_upload_google_form"),
-                    ]
-                );
-                
-                if($googleForms = $request->bukti_googleform) {
-                    foreach ($googleForms as $googleForm) {
-                        $storeGoogleForm->clearMediaCollection('bukti_googleform');
-                        $storeGoogleForm->addMedia($googleForm)->toMediaCollection('bukti_googleform');
+            $userId = $request->user()->id;
+            $data = collect($request->repeater)->map(function ($item) use ($userId, $user) {
+                DB::beginTransaction(); 
+                    $storeGoogleForm = $user::updateOrCreate(
+                        [
+                            'id' => $userId,
+                        ],
+                        [
+                            'id' => $userId,
+                            'is_upload_google_form' => (boolean) request("is_upload_google_form"),
+                        ]
+                    );
+                    
+                    if($googleForms = $item['bukti_googleform']) {
+                        // foreach ($googleForms as $googleForm) {
+                        //     dd('tes');
+                            $storeGoogleForm->clearMediaCollection('bukti_googleform');
+                            $storeGoogleForm->addMedia($googleForms)->toMediaCollection('bukti_googleform');
+                        // }
                     }
-                }
-            DB::commit();        
+                DB::commit();        
+            });
             return response()->json(['success' => 'success save data'], HttpResponse::HTTP_CREATED);
         } catch (\Illuminate\Database\QueryException $ex) {
             DB::rollBack();
@@ -328,7 +332,7 @@ class UserController extends Controller
     }
     public function getLinkGoogleForm(GoogleForm $googleForm) {
         try {
-            $googleForm = $googleForm->first();
+            $googleForm = $googleForm->get();
             return new OperatorLinkGoogle($googleForm);
         } catch (\Illuminate\Database\QueryException $ex) {
             DB::rollBack();

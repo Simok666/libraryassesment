@@ -16,19 +16,46 @@
             <table class="table after-loading">
                 <tbody>
                     <tr>
-                        <th width="30%">Link Google Form</th>
-                        <td class="link-google-form">
+                        <th width="30%">Link Google Form 1</th>
+                        <td class="link-google-form-0">
                             <a href="" target="_blank" class="">Link Google Form</a>
                         </td>
                     </tr>
                     <tr>
-                        <th>Upload Bukti SS Google Form</th>
+                        <th width="30%">Link Google Form 2</th>
+                        <td class="link-google-form-1">
+                            <a href="" target="_blank" class="">Link Google Form</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="30%">Link Google Form 3</th>
+                        <td class="link-google-form-2">
+                            <a href="" target="_blank" class="">Link Google Form</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Upload Bukti SS Google Form 1</th>
                         <td>
-                            <input type="file" name="bukti_googleform" class="form-control">
+                            <input type="file" name="repeater[0][bukti_googleform]" class="form-control">
                             <input type="hidden" name="is_upload_google_form" value="1" class="form-control">
                         </td>
                     </tr>
+                    <tr>
+                        <th>Upload Bukti SS Google Form 2</th>
+                        <td>
+                            <input type="file" name="repeater[1][bukti_googleform]" class="form-control">
+                            {{-- <input type="hidden" name="is_upload_google_form" value="1" class="form-control"> --}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Upload Bukti SS Google Form 3</th>
+                        <td>
+                            <input type="file" name="repeater[2][bukti_googleform]" class="form-control">
+                            {{-- <input type="hidden" name="is_upload_google_form" value="1" class="form-control"> --}}
+                        </td>
+                    </tr>
                 </tbody>
+                
             </table>
             <button type="submit" class="btn btn-primary">Simpan</button>
         </form>
@@ -122,11 +149,14 @@
         if (role === "user") {
             $(".google-form").removeClass("d-none");
             const googleForm = ajaxData(`${baseUrl}/api/v1/user/getLinkGoogleForm`, 'GET', [], function(resp) {
-                if (!empty(resp.data.link)) {
-                    $(".link-google-form").html(`<a href="${resp.data.link}" target="_blank" class="">${resp.data.link}</a>`);
+                if (!empty(resp.data)) {
+                    resp.data.forEach(function(data, index) {
+                        $(`.link-google-form-${index}`).html(`<a href="${data.link}" target="_blank" class="">${data.link}</a>`);
+                    })
                 }}
             )
-            if (session("is_upload_google_form")) {
+            
+            if (session("is_upload_google_form") === "1") {
                 $("#form-google").find("[type=submit]").attr("disabled", true);
             }
         }
@@ -145,10 +175,10 @@
                         ${!empty(data.grade) ? data.grade : "-"}
                     </td>
                     <td class="text-center">
-                        ${!empty(data.bukti_evaluasi) ? `<a href="#" class="openPopup" link="${data.bukti_evaluasi[0].url}">View File</a> `: "-"}
+                     ${session("is_upload_google_form") === "1" ? !empty(data.bukti_evaluasi) ? `<a href="#" class="openPopup" link="${data.bukti_evaluasi[0].url}">View File</a> `: "-" : "-"}
                     </td>
                     <td class="text-center">
-                        <a href="#" class="btn btn-warning btn-sm btn-detail-pleno mb-1" title="Detail" data-id="${data.id}">Detail</a>
+                        ${session("is_upload_google_form") === "1" ? ` <a href="#" class="btn btn-warning btn-sm btn-detail-pleno mb-1" title="Detail" data-id="${data.id}">Detail</a>` : "-"}
                     </td>
                 </tr>
             `

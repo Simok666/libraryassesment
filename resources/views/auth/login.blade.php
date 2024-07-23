@@ -56,7 +56,7 @@
             </div>
             <div class="col-lg-6 d-none d-lg-block">
                 <div id="auth-right">
-
+                <img src="{{ asset('img/DEF_slide1.jpg') }}" style="height: inherit" alt="">
                 </div>
             </div>
         </div>

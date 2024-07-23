@@ -25,8 +25,14 @@
                 <div class="sidebar-header">
                     <div class="d-flex justify-content-between">
                         <div class="logo">
-                            {{-- <a href="index.html"><img src="assets/images/logo/logo.png" alt="Library Assesment" srcset=""></a> --}}
-                            <h3>Penilaian Perpustakaan</h3>
+                            {{-- <div class="row"> --}}
+                                {{-- <div class="col-4"> --}}
+                                    <img src="{{ asset('icon/icon-4.png') }}" style="height: 150px" alt="">
+                                {{-- </div> --}}
+                                {{-- <div class="col-8">
+                                    <h3>Penilaian Perpustakaan</h3>
+                                </div> --}}
+                            {{-- </div> --}}
                         </div>
                         <div class="toggler">
                             <a href="" class="sidebar-hide d-xl-none d-block"><i class="bi bi-x bi-middle"></i></a>

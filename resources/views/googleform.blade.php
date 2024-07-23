@@ -12,9 +12,20 @@
             <table class="table table-striped table-komponent after-loading">
                 <tbody>
                     <tr>
-                        <th>Link</th>
+                        <th>Link 1</th>
+                        <th>Link 2</th>
+                        <th>Link 3</th>
                         <td>
-                            <input type="text" name="link" class="form-control">
+                            <input type="hidden" name="repeater[0][title]" value="link-1" class="form-control">
+                            <input type="text" name="repeater[0][link]" class="form-control">
+                        </td>
+                        <td>
+                            <input type="hidden" name="repeater[1][title]" value="link-2" class="form-control">
+                            <input type="text" name="repeater[1][link]" class="form-control">
+                        </td>
+                        <td>
+                            <input type="hidden" name="repeater[2][title]" value="link-3" class="form-control">
+                            <input type="text" name="repeater[2][link]" class="form-control">
                         </td>
                     </tr>
                 </tbody>
@@ -30,7 +41,9 @@
     $(document).ready(function() {
         const getData = ajaxData(`${baseUrl}/api/v1/operator/getLinkGoogleForm`, 'GET', [], function(resp) {
             if (!empty(resp.data)) {
-                $("#form-google input[name='link']").val(resp.data.link);
+                resp.data.forEach(function(data, index) {
+                    $(`#form-google input[name='repeater[${index}][link]']`).val(data.link);
+                })
             }
         });
     });
