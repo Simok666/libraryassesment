@@ -214,13 +214,13 @@ function checkLogin() {
 function checkUserAccess(){
     const role = session("role");
     console.log(menuByRole[role]);
+    let pathname = window.location.pathname.replace(/\.html$/, '').replace(/[/]/g, '');
     const accessMenu = menuByRole[`${role}`].filter(item => {
-        let pathname = window.location.pathname.replace(/\.html$/, '').replace(/[/]/g, '');
         let menuUrl = item.replace(/_/g, '-');
         if (item == "*") return true;
         return pathname == menuUrl
     });
-
+    console.log(accessMenu, pathname);
     if (empty(accessMenu)) {
         toast("Access Denied", 'danger');
         setTimeout(function(){
