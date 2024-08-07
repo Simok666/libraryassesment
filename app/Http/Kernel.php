@@ -71,6 +71,6 @@ class Kernel extends HttpKernel
         'type.pimpinankaban' => \App\Http\Middleware\PimpinanKabanMiddleware::class,
         'type.verifikator_desk' => \App\Http\Middleware\VerifikatorDeskMiddleware::class,
         'type.verifikator_field' => \App\Http\Middleware\VerifikatorFieldMiddleware::class,
-        'checkRole' => \App\Http\Middleware\CheckRole::class,
+        'checkRole' => \App\Http\Middleware\checkRole::class,
     ];
 }
