@@ -1,5 +1,5 @@
 var laravelCsrf = $('meta[name="csrf-token"]').attr('content');
-var baseUrl = window.location.origin;
+var baseUrl = window.location.origin + "/limes/public";
 var req = {
     page:1
 };
@@ -213,14 +213,24 @@ function checkLogin() {
 
 function checkUserAccess(){
     const role = session("role");
-    console.log(menuByRole[role]);
-    let pathname = window.location.pathname.replace(/\.html$/, '').replace(/[/]/g, '');
+    // let pathname = window.location.pathname.replace(/\.html$/, '').replace(/[/]/g, '');
+    // const accessMenu = menuByRole[`${role}`].filter(item => {
+    //     let menuUrl = item.replace(/_/g, '-');
+    //     if (item == "*") return true;
+    //     return pathname == menuUrl
+    // });
+    let pathname = window.location.pathname;
+    let pathSegments = pathname.split('/');
+    let dashboard = pathSegments.pop().replace('.html', '');
+
     const accessMenu = menuByRole[`${role}`].filter(item => {
         let menuUrl = item.replace(/_/g, '-');
         if (item == "*") return true;
-        return pathname == menuUrl
+        return dashboard == menuUrl;
     });
-    console.log(accessMenu, pathname);
+    
+    console.log(accessMenu, dashboard);
+
     if (empty(accessMenu)) {
         toast("Access Denied", 'danger');
         setTimeout(function(){
