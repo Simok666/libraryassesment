@@ -44,7 +44,8 @@
                   <v:fill type="tile" src="https://tlr.stripocdn.email/content/guids/CABINET_f065e32f7fc1208f44642e067d64d1a2/images/17071631173272231.png" color="#ECE8DD" origin="0.5, 0" position="0.5, 0"></v:fill>
               </v:background>
           <![endif]-->
-     <table class="es-wrapper" width="100%" cellspacing="0" cellpadding="0" background="https://efduqns.stripocdn.email/content/guids/CABINET_f065e32f7fc1208f44642e067d64d1a2/images/17071631173272231.png" esd-img-prev-position="center center" style="background-position: center center;">
+          {{-- background="https://efduqns.stripocdn.email/content/guids/CABINET_f065e32f7fc1208f44642e067d64d1a2/images/17071631173272231.png" --}}
+     <table class="es-wrapper" width="100%" cellspacing="0" cellpadding="0" background="{{ asset('img/logo-email.png') }}"  esd-img-prev-position="center center" style="background-position: center center;">
       <tbody>
        <tr>
         <td class="esd-email-paddings" valign="top">
@@ -83,7 +84,9 @@
              <table class="es-header-body" align="center" cellpadding="0" cellspacing="0" width="600" style="border-left:4px solid #588b8b;border-right:4px solid #588b8b;border-top:4px solid #588b8b;background-color: transparent;">
               <tbody>
                <tr>
-                <td class="es-p20t es-p20r es-p20l esd-structure" align="left" background="https://efduqns.stripocdn.email/content/guids/CABINET_f065e32f7fc1208f44642e067d64d1a2/images/39821631177477487.png" esd-img-prev-position="left top" style="background-image: url(https://efduqns.stripocdn.email/content/guids/CABINET_f065e32f7fc1208f44642e067d64d1a2/images/39821631177477487.png); background-repeat: no-repeat; background-position: left top;">
+                {{-- background="https://efduqns.stripocdn.email/content/guids/CABINET_f065e32f7fc1208f44642e067d64d1a2/images/39821631177477487.png" --}}
+                {{-- background-image: url(https://efduqns.stripocdn.email/content/guids/CABINET_f065e32f7fc1208f44642e067d64d1a2/images/39821631177477487.png); --}}
+                <td class="es-p20t es-p20r es-p20l esd-structure" align="left"  esd-img-prev-position="left top" style="background-repeat: no-repeat; background-position: left top;">
                  <table cellpadding="0" cellspacing="0" width="100%">
                   <tbody>
                    <tr>
@@ -91,8 +94,10 @@
                      <table cellpadding="0" cellspacing="0" width="100%">
                       <tbody>
                        <tr>
-                        <td align="center" class="esd-block-image es-p10b" style="font-size: 0px;"><a target="_blank" href="https://viewstripo.email"><img src="https://efduqns.stripocdn.email/content/guids/CABINET_f065e32f7fc1208f44642e067d64d1a2/images/19511631174371339.png" alt="Logo" style="display: block;" title="Logo" height="70"></a></td>
-                       </tr>
+                        {{-- https://efduqns.stripocdn.email/content/guids/CABINET_f065e32f7fc1208f44642e067d64d1a2/images/19511631174371339.png --}}
+                        {{-- {{ asset('img/logo-email.png')}} --}}
+                        <td align="center" class="esd-block-image es-p10b" style="font-size: 0px;"><a target="_blank" href="https://viewstripo.email"><img src="https://i.ibb.co.com/pzDrTzZ/logo-email.png" alt="Logo" style="display: block;" title="Logo" height="70"></a></td>
+                      </tr>
                        <tr>
                         <td align="center" class="esd-block-spacer es-p5t es-p5b es-p20r es-p20l" style="font-size:0">
                          <table border="0" width="80%" height="100%" cellpadding="0" cellspacing="0">
@@ -133,7 +138,9 @@
              <table class="es-content-body" style="border-left:4px solid #588b8b;border-right:4px solid #588b8b;border-bottom:4px solid #588b8b;background-color: transparent;" width="600" cellspacing="0" cellpadding="0" align="center">
               <tbody>
                <tr>
-                <td class="esd-structure es-p20t es-p20r es-p20l" align="left" background="https://efduqns.stripocdn.email/content/guids/CABINET_f065e32f7fc1208f44642e067d64d1a2/images/39821631177477487.png" esd-img-prev-position="left top" style="background-image: url(https://efduqns.stripocdn.email/content/guids/CABINET_f065e32f7fc1208f44642e067d64d1a2/images/39821631177477487.png); background-repeat: repeat; background-position: left top;">
+                {{-- background="https://efduqns.stripocdn.email/content/guids/CABINET_f065e32f7fc1208f44642e067d64d1a2/images/39821631177477487.png" --}}
+                {{-- background-image: url(https://efduqns.stripocdn.email/content/guids/CABINET_f065e32f7fc1208f44642e067d64d1a2/images/39821631177477487.png); --}}
+                <td class="esd-structure es-p20t es-p20r es-p20l" align="left" esd-img-prev-position="left top" style=" background-repeat: repeat; background-position: left top;">
                  <table width="100%" cellspacing="0" cellpadding="0">
                   <tbody>
                    <tr>
@@ -269,6 +276,9 @@
                            <tr>
                             <td style="border-bottom: 1px solid #223e3e; background: none; height: 1px; width: 100%; margin: 0px;"></td>
                            </tr>
+                           <tr>
+                            <td align="center" class="esd-block-image es-p10b" style="font-size: 0px;"><a target="_blank" href="https://viewstripo.email"><img src="https://i.ibb.co.com/7CF6KRw/icon-4-removebg-preview.png" alt="Logo" style="display: block; margin: 5px 5px 5px 5px;" title="Logo" height="70"></a></td>
+                           </tr>
                           </tbody>
                          </table></td>
                        </tr>
@@ -279,7 +289,9 @@
                  </table></td>
                </tr>
                <tr>
-                <td class="esd-structure es-p20" align="left" background="https://efduqns.stripocdn.email/content/guids/CABINET_f065e32f7fc1208f44642e067d64d1a2/images/39821631177477487.png" esd-img-prev-position="left top" style="background-image: url(https://efduqns.stripocdn.email/content/guids/CABINET_f065e32f7fc1208f44642e067d64d1a2/images/39821631177477487.png); background-repeat: no-repeat; background-position: left top;">
+                {{-- background="https://efduqns.stripocdn.email/content/guids/CABINET_f065e32f7fc1208f44642e067d64d1a2/images/39821631177477487.png" --}}
+                {{-- background-image: url(https://efduqns.stripocdn.email/content/guids/CABINET_f065e32f7fc1208f44642e067d64d1a2/images/39821631177477487.png); --}}
+                <td class="esd-structure es-p20" align="left"  esd-img-prev-position="left top" style=" background-repeat: no-repeat; background-position: left top;">
                  <!--[if mso]><table width="552" cellpadding="0" cellspacing="0"><tr><td width="190" valign="top"><![endif]-->
                  <table cellpadding="0" cellspacing="0" class="es-left" align="left">
                   <tbody>

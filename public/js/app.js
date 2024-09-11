@@ -1,5 +1,6 @@
 var laravelCsrf = $('meta[name="csrf-token"]').attr('content');
-var baseUrl = window.location.origin + "/limes/public";
+// var baseUrl = window.location.origin + "/limes/public";
+var baseUrl = window.location.origin;
 var req = {
     page:1
 };
