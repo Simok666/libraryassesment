@@ -376,7 +376,7 @@
 
     $("#form-pleno").on('submit', function(e) {
         e.preventDefault();
-        let url = `${baseUrl}/api/v1/storeTextEditor/`;
+        let url = `${baseUrl}/api/v1/storeTextEditor`;
         const data = $(this).serialize();
         loadingButton($(this))
         ajaxData(url, 'POST', data, function(resp) {

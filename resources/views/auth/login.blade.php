@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}" />
-    <title>Login - Penilaian Perpustakaan</title>
+    <title>Login - LIMES</title>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/bootstrap.css') }}">
     <link rel="stylesheet" href="{{ asset('vendors/bootstrap-icons/bootstrap-icons.css') }}">
@@ -18,7 +18,7 @@
             <div class="col-lg-6 col-12">
                 <div id="auth-left">
                     <div class="auth-logo">
-                        <img src="{{ asset('icon/icon-4.png') }}" style="height: 200px" alt="">
+                        <img src="{{ asset('icon/icon-4.jpg') }}" style="height: 100px" alt="">
                         {{-- <a href="index.html"><img src="assets/images/logo/logo.png" alt="Logo"></a> --}}
                         {{-- <h3>Penilaian Perpustakaan</h3> --}}
                     </div>
@@ -43,7 +43,7 @@
                                 <option value="pimpinanSesban">Pimpinan Sesban</option>
                                 <option value="pimpinanKaban">Pimpinan Kaban</option>
                                 <option value="operator">Operator</option>
-                                <option value="user">PIC</option>
+                                <option value="user">PIC Perpustakaan</option>
                                 <option value="verifikatordesk">Verifikator Desk</option>
                                 <option value="verifikatorfield">Verifikator Field</option>
                             </select>
@@ -51,7 +51,7 @@
                         <button class="btn btn-primary btn-block btn-lg shadow-lg mt-5" type="submit">Log in</button>
                     </form>
                     <div class="text-center mt-5 text-lg fs-4">
-                        <p class="text-gray-600">Belum Punya Akun? <a href="{{ url("auth-register.html") }}" class="font-bold">Daftar Sebagai PIC</a>.</p>
+                        <p class="text-gray-600">Belum Punya Akun? <a href="{{ url("auth-register.html") }}" class="font-bold">Daftar Sebagai PIC Perpustakaan</a>.</p>
                     </div>
                 </div>
             </div>

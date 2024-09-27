@@ -14,6 +14,7 @@ use App\Http\Controllers\Api\Auth\VerifikatorDeskAuthController;
 use App\Http\Controllers\Api\Auth\VerifikatorFieldAuthController;
 use App\Http\Controllers\Api\Backend\Verifikator\VerifikatorDeskController;
 
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -97,6 +98,13 @@ Route::middleware(['auth:sanctum', 'type.operator'])->group(function () {
         Route::get('operator/getLinkGoogleForm', [OperatorController::class, 'getLinkGoogleForm']);
         Route::post('operator/storeKomponenExample', [OperatorController::class, 'storeKomponenExample']);
         Route::get('operator/getKomponen', [OperatorController::class, 'getKomponen']);
+
+        Route::post('operator/eselonSatu', [OperatorController::class, 'eselonSatu']);
+        Route::post('operator/eselonDua', [OperatorController::class, 'eselonDua']);
+        Route::post('operator/eselonTiga', [OperatorController::class, 'eselonTiga']);
+        Route::post('operator/fungsi', [OperatorController::class, 'fungsi']);
+        
+        Route::get('operator/getEselonFungsi', [AdminController::class, 'getEselonFungsi']);
 
          //logout 
          Route::post('operator/logout', [OperatorAuthController::class, 'destory']);

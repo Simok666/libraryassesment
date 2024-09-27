@@ -20,8 +20,9 @@
             <div class="col-lg-12 col-12">
                 <div id="auth-left">
                     <div class="auth-logo">
+                        <img src="{{ asset('icon/icon-4.jpg') }}" style="height: 100px" alt="">
                         {{-- <a href="index.html"><img src="assets/images/logo/logo.png" alt="Logo"></a> --}}
-                        <h3>Penilaian Perpustakaan</h3>
+                        {{-- <h3>Penilaian Perpustakaan</h3> --}}
                     </div>
                     <h1 class="auth-title">Pendaftaran</h1>
                     <form action="index.html">
