@@ -331,7 +331,7 @@ function checkSpecialAction(resp) {
 function deleteSession() {
     localStorage.removeItem("isLogin");
     localStorage.removeItem("token");
-    window.location = '/';
+    window.location = baseUrl + '/auth-login.html';
 }
 
 
