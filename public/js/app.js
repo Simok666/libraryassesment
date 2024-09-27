@@ -1,6 +1,7 @@
 var laravelCsrf = $('meta[name="csrf-token"]').attr('content');
-// var baseUrl = window.location.origin + "/limes/public";
-var baseUrl = window.location.origin;
+var baseUrl = window.location.origin + "/limes/public";
+// var baseUrl = window.location.origin;
+
 var req = {
     page:1
 };
@@ -8,7 +9,7 @@ var req = {
 const menuByRole = {
     "admin" : ["*"],
     "user" : ["dashboard","profile-perpustakaan", "profile-komponent" , "profile-buktifisik"],
-    "operator" : ["dashboard", "users", "libraries", "proofOfWork", "komponent", "verifikator", "pleno", "googleform", "settingComponent"],
+    "operator" : ["dashboard", "users", "libraries", "proofOfWork", "komponent", "verifikator", "pleno", "googleform", "settingComponent", "eselon"],
     "verifikator_desk" : ["dashboard", "libraries", "proofOfWork", "komponent", "verifikator-desk"],
     "verifikator_field" : ["dashboard", "libraries", "proofOfWork", "komponent", "verifikator-field"],
     "pimpinan" : ["dashboard", "pleno-sesban"],
@@ -98,6 +99,11 @@ const sidebarItems = [
         icon: "bi bi-collection",
         label: "Bukti Fisik"
     },
+    {
+        url: "eselon",
+        icon: "bi bi-people-fill",
+        label: "Eselon Satu"
+    }
 ];
 // jquery set default header
 $.ajaxSetup({

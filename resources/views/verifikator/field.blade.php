@@ -486,7 +486,7 @@
 
     $("#form-subkomponent").on('submit', function(e) {
         e.preventDefault();
-        let url = `${baseUrl}/api/v1/storeTextEditor/`;
+        let url = `${baseUrl}/api/v1/storeTextEditor`;
         const data = $(this).serialize() + `&type=subkomponen`;
         loadingButton($(this))
         ajaxData(url, 'POST', data, function(resp) {
@@ -501,7 +501,7 @@
 
     $("#form-buktifisik").on('submit', function(e) {
         e.preventDefault();
-        let url = `${baseUrl}/api/v1/storeTextEditor/`;
+        let url = `${baseUrl}/api/v1/storeTextEditor`;
         const data = $(this).serialize() + `&type=bukti_fisik`;
         loadingButton($(this))
         ajaxData(url, 'POST', data, function(resp) {
@@ -517,7 +517,7 @@
 
     $("#form-perpustakaan").on('submit', function(e) {
         e.preventDefault();
-        let url = `${baseUrl}/api/v1/storeTextEditor/`;
+        let url = `${baseUrl}/api/v1/storeTextEditor`;
         const data = $(this).serialize() + `&type=perpustakaan`;
         loadingButton($(this))
         ajaxData(url, 'POST', data, function(resp) {

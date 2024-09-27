@@ -17,7 +17,7 @@ class checkRole
     {
         $roleIds = [];
         // dd($request->getPathInfo());
-        if($request->getPathInfo() === "/api/v1/getListLibrary" || $request->getPathInfo() === "/api/v1/storeTextEditor/" ||
+        if($request->getPathInfo() === "/api/v1/getListLibrary" || $request->getPathInfo() === "/api/v1/storeTextEditor" ||
              $request->getPathInfo() === "/api/v1/getListKomponen" || $request->getPathInfo() === "/api/v1/getListBuktiFisik") 
              {
             $roleIds = ['type.operator' => 'role:operator', 'type.verifikator_desk' => 'role:verifikator_desk', 'type.verifikator_field' => 'role:verifikator_field'];

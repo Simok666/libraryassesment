@@ -11,6 +11,7 @@ use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class User extends Authenticatable implements HasMedia
 {
@@ -43,7 +44,11 @@ class User extends Authenticatable implements HasMedia
         'type_insert',
         'status_perpustakaan',
         'grade',
-        'is_upload_google_form'
+        'is_upload_google_form',
+        'id_satuan_kerja_eselon_1',
+        'id_satuan_kerja_eselon_2',
+        'id_satuan_kerja_eselon_3',
+        'id_fungsi'
     ];
 
     /**
@@ -112,5 +117,21 @@ class User extends Authenticatable implements HasMedia
     public function buktiFisik(): HasMany
     {
         return $this->HasMany(BuktiFisik::class, 'user_id', 'id');
+    }
+
+    public function eselon_satu(): BelongsTo {
+        return $this->belongsTo(EselonSatu::class, 'id_satuan_kerja_eselon_1');
+    }
+    
+    public function eselon_dua(): BelongsTo {
+        return $this->belongsTo(EselonDua::class, 'id_satuan_kerja_eselon_2');
+    }
+    
+    public function eselon_tiga(): BelongsTo {
+        return $this->belongsTo(EselonTiga::class, 'id_satuan_kerja_eselon_3');
+    }
+
+    public function fungsi(): BelongsTo {
+        return $this->belongsTo(Fungsi::class, 'id_fungsi');
     }
 }
