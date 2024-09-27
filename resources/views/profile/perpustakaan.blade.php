@@ -180,7 +180,7 @@
             let data = new FormData(this);
             loadingButton($(this))
             ajaxDataFile(url, 'POST', data, function(resp) {
-                toast(resp.message);
+                toast("Data has been saved");
                 loadingButton($("#form-perpustakaan"), false)
                 // delay redirect subkomponent
                 setTimeout(function() {
