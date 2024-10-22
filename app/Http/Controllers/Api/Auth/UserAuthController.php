@@ -41,6 +41,10 @@ class UserAuthController extends Controller
                 'npp' => $request->npp,
                 'website' => $request->website,
                 'type_insert' => '0',
+                'id_satuan_kerja_eselon_1' => $request->id_satuan_kerja_eselon_1 == 'null' ? null : $request->id_satuan_kerja_eselon_1, 
+                'id_satuan_kerja_eselon_2' => $request->id_satuan_kerja_eselon_2 == 'null' ? null : $request->id_satuan_kerja_eselon_2, 
+                'id_satuan_kerja_eselon_3' => $request->id_satuan_kerja_eselon_3 == 'null' ? null : $request->id_satuan_kerja_eselon_3, 
+                'id_fungsi' => $request->id_fungsi == 'null' ? null : $request->id_fungsi, 
             ];
             
             $user = User::create(array_merge($validatedData, $otherData));

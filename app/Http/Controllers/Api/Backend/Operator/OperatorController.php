@@ -293,7 +293,7 @@ class OperatorController extends Controller
     {
         try {
             DB::beginTransaction();
-                if((auth()->user()->currentAccessToken()->getAttributeValue('abilities')[0] == 'role:operator')) {
+                if((auth()->user()->currentAccessToken()->getAttributeValue('abilities')[0] == 'role:operator') || (auth()->user()->currentAccessToken()->getAttributeValue('abilities')[0] == 'role:admin')) {
                     
                     $store = $pleno::create(array_merge($request->validated(), ['user_id' => request("id")]));
                     
@@ -769,6 +769,45 @@ class OperatorController extends Controller
             DB::rollBack();
             return response()->json(['error' => 'An error occurred while : ' . $e->getMessage()], 400);
         }
+    }
+
+    /**
+     * Get data Eselon
+     * 
+     * @param EselonSatu $eselonSatu
+     */
+    public function getEselon(EselonSatu $eselonSatu) {
+        return DataEselonFungsiResource::collection($eselonSatu->all());
+    }
+
+    /**
+     * get Data eselon dua
+     * 
+     * @param Request $request
+     * @param EselonDua $eselonDua
+     */
+    public function getEselonDua(Request $request, EselonDua $eselonDua) {
+        return DataEselonFungsiResource::collection($eselonDua::where('id_eselon_satu', $request->id_eselon_satu)->get() ?? null);
+    }
+
+    /**
+     * get Data eselon tiga
+     * 
+     * @param Request $request
+     * @param EselonTiga $eselonTiga
+     */
+    public function getEselonTiga(Request $request, EselonTiga $eselonTiga) {
+        return DataEselonFungsiResource::collection($eselonTiga::where('id_eselon_dua', $request->id_eselon_dua)->get() ?? null);
+    }
+
+    /**
+     * get Data eselon tiga
+     * 
+     * @param Request $request
+     * @param Fungsi $fungsi
+     */
+    public function getFungsi(Request $request, Fungsi $fungsi) {
+        return DataEselonFungsiResource::collection($fungsi::where('id_eselon_tiga', $request->id_eselon_tiga)->get() ?? null);
     }
 
 }

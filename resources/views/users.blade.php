@@ -9,7 +9,7 @@
         <h4 class="card-title"></h4>
     </div>
     <div class="card-body">
-        @include('components.table-pagenation', ['table' => 'users' , 'url' => '/api/v1/operator/getUser' , 'headers' => [
+        @include('components.table-pagenation', ['table' => 'users' , 'url' => '/api/v1/getUser' , 'headers' => [
             "Name",
             "Email",
             "Library",
@@ -219,7 +219,7 @@
     $(document).on('click', '.btn-detail', function() {
         $('#detailUser').modal('show');
         loading($("#detailUser") , true);
-        ajaxData(`${baseUrl}/api/v1/operator/getUser`, 'GET', {
+        ajaxData(`${baseUrl}/api/v1/getUser`, 'GET', {
             "id" : $(this).data('id')
         }, function(resp) {
             loading($("#detailUser") , false);

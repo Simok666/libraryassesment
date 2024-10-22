@@ -90,7 +90,7 @@ class User extends Authenticatable implements HasMedia
     /**
      * Get the customer Evaluation associated with the user.
      */
-    public function evaluation(): HasOne
+    public function evaluation()
     {
         return $this->hasOne(Evaluation::class, 'user_id', 'id');
     }

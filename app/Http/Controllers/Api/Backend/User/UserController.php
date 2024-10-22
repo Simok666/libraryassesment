@@ -13,6 +13,9 @@ use App\Models\BuktiFisik;
 use App\Models\Admin;
 use App\Models\Operator;
 use App\Models\GoogleForm;
+use App\Models\EselonSatu;
+use App\Models\EselonDua;
+use App\Models\EselonTiga;
 use App\Http\Requests\Backend\User\UserRequest;
 use App\Http\Requests\Backend\User\UserKomponenRequest;
 use App\Http\Requests\Backend\User\UserBuktiFisikRequest;
@@ -30,6 +33,7 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use App\Jobs\SendEmailJob;
 use Illuminate\Support\Facades\Validator;
 use DB;
+use App\Http\Resources\Backend\Operator\DataEselonFungsiResource;
 class UserController extends Controller
 {
     public function getDetailLibrary(Request $request, Library $library)
@@ -341,5 +345,234 @@ class UserController extends Controller
             DB::rollBack();
             return response()->json(['error' => 'An error occurred while upload data: ' . $e->getMessage()], 400);
         }
+    }
+
+
+    /**
+     * function data dashborad for eselon
+     * 
+     * @param User $user
+     * @param Request $request
+     * 
+     */
+    public function dashboardEselon(User $user, Request $request)
+    {
+        $userSelected = $user->find($request->user()->id);
+        $role = $request->user()->currentAccessToken()->abilities;
+        $role = explode(':', $role[0])[1] ?? "";
+        $bawahanEselon = [];
+        $isEselon1 = false;
+        $isEselon2 = false;
+
+        if ($userSelected !== null) {
+            if( $userSelected->eselon_satu  && $userSelected->eselon_dua == null && $userSelected->eselon_tiga == null && $role == 'user' ) {
+                $dataEselon2 = User::with('evaluation')
+                ->withCount([
+                    'evaluation as cek_evaluasi' => function ($query) {
+                        $query->where('is_evaluasi', 1);
+                    },
+                ])
+                ->where('id_satuan_kerja_eselon_1', $userSelected->id_satuan_kerja_eselon_1)
+                ->whereNotNull('id_satuan_kerja_eselon_2')
+                ->whereNull('id_satuan_kerja_eselon_3')
+                ->get();
+
+                $usersDataEselon2 = collect();
+    
+                foreach ($dataEselon2 as $user) {
+                    $usersDataEselon2->push([
+                        'nama' => $user->name,
+                        'email' => $user->email,
+                        'evaluasi' => $user->cek_evaluasi == 0 ? 'Belum Evaluasi' : 'Sudah Evaluasi',
+                    ]);
+                }
+
+                $dataEselon3 = User::with('evaluation')
+                ->withCount([
+                    'evaluation as cek_evaluasi' => function ($query) {
+                        $query->where('is_evaluasi', 1);
+                    },
+                ])
+                ->where('id_satuan_kerja_eselon_1', $userSelected->id_satuan_kerja_eselon_1)
+                ->whereNotNull('id_satuan_kerja_eselon_2')
+                ->whereNotNull('id_satuan_kerja_eselon_3')
+                ->get();
+                
+
+                $usersDataEselon3 = collect();
+    
+                foreach ($dataEselon3 as $user) {
+                    $usersDataEselon3->push([
+                        'nama' => $user->name,
+                        'email' => $user->email,
+                        'evaluasi' => $user->cek_evaluasi == 0 ? 'Belum Evaluasi' : 'Sudah Evaluasi',
+                    ]);
+                }
+
+                $bawahanEselon = [
+                    'eselon_2' => $usersDataEselon2,
+                    'eselon_3' => $usersDataEselon3
+                ];
+    
+                $isEselon1 = true;
+                $isEselon2 = false;
+            } elseif ( $userSelected->eselon_dua  && $userSelected->eselon_tiga == null && $role == 'user') {
+                $dataBawahan =  User::with('evaluation')
+                ->withCount([
+                    'evaluation as cek_evaluasi' => function ($query) {
+                        $query->where('is_evaluasi', 1);
+                    }
+                ])
+                ->where('id_satuan_kerja_eselon_2', $userSelected->id_satuan_kerja_eselon_2)
+                ->whereNotNull('id_satuan_kerja_eselon_3')
+                ->get();
+    
+                $usersDataBawahan = collect();
+
+                foreach ($dataBawahan as $user) {
+                    $usersDataBawahan->push([
+                        'nama' => $user->name,
+                        'email' => $user->email,
+                        'evaluasi' => $user->cek_evaluasi == 0 ? 'Belum Evaluasi' : 'Sudah Evaluasi',
+                    ]);
+                }
+
+                $bawahanEselon = $usersDataBawahan;
+                $isEselon1 = false;
+                $isEselon2 = true;
+            }
+        }
+
+        return response()->json([
+            'isEselon1' => $isEselon1,
+            'isEselon2' => $isEselon2,
+            'bawahan_eselon' => $bawahanEselon,
+        ]);
+    }
+
+    /**
+     * get all evaluasi data    
+     * 
+     * @param User $user    
+     * @param Request $request
+     */
+    public function listEvaluasi (User $user, Request $request) {
+        
+        $query = User::with(['pleno'])
+        ->whereHas('pleno', function ($query) {
+            $query->where('is_final', true);
+        })
+        ->where([
+            ['status_perpustakaan', '=', 1],
+            ['status_subkomponent', '=', 1],
+            ['status_buktifisik', '=', 1],
+        ]);
+
+        // Search functionality
+        if (!empty($request->search['value'])) {
+            $search = $request->search['value'];
+            $query->where(function ($query) use ($search) {
+                $query->where('name', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%")
+                    ->orWhere('grade', 'like', "%{$search}%");
+            });
+        }
+
+        // Eselon 1
+        if (!empty($request->eselonSatu)) {
+            $query->where('id_satuan_kerja_eselon_1', $request->eselonSatu);
+        }
+        // Eselon 2
+        if (!empty($request->eselonDua)) {
+            $query->where('id_satuan_kerja_eselon_2', $request->eselonDua);
+        }
+        // Eselon 3
+        if (!empty($request->eselonTiga)) {
+            $query->where('id_satuan_kerja_eselon_3', $request->eselonTiga);
+        }
+
+        // Ordering
+        if ($request->has('order')) {
+            $orderColumn = $request->columns[$request->order[0]['column']]['data'];
+            $orderDir = $request->order[0]['dir'];
+            $query->orderBy($orderColumn, $orderDir);
+        }
+
+        // Pagination
+        $limit = $request->length;
+        $offset = $request->start;
+        
+        $totalRecords = $query->count();
+        $evaluasi = $query->offset($offset)->limit($limit)->get();
+        // dd($evaluasi);
+        return response()->json([
+            'draw' => intval($request->draw),
+            'recordsTotal' => $totalRecords,
+            'recordsFiltered' => $totalRecords,
+            'data' => $evaluasi,
+        ]);
+        
+        // return OperatorListKomponen::collection($evaluasi);
+    }
+
+    /**
+     * Get data Eselon
+     * 
+     * @param EselonSatu $eselonSatu
+     */
+    public function getAllEselon(EselonSatu $eselonSatu) {
+        return DataEselonFungsiResource::collection($eselonSatu->all());
+    }
+
+    /**
+     * Get data Eselon 2
+     * 
+     * @param EselonDua $eselonDua
+     */
+    public function getAllEselon2(EselonDua $eselonDua) {
+        return DataEselonFungsiResource::collection($eselonDua->all());
+    }
+
+    /**
+     * Get data Eselon 3
+     * 
+     * @param EselonTiga $eselonTiga
+     */
+    public function getAllEselon3(EselonTiga $eselonTiga) {
+        return DataEselonFungsiResource::collection($eselonTiga->all());
+    }
+
+    /**
+     * search evaluasi    
+     * 
+     * @param User $user    
+     * @param Request $request
+     */
+    public function searchEvaluasi (User $user, Request $request) {
+        $searchTerm = $request->input('poin');
+        $evaluations = User::where('grade', 'like', '%' . $searchTerm . '%')
+        ->with(['pleno'])
+        ->whereHas('pleno', function($query) use ($request) {
+            $query->where('is_final', (boolean) true);
+        })
+        ->whereHas('komponen', function ($query) use ($request) {
+            if (!empty($request->status)) {
+                $query->where('status', $request->status);
+            }
+        })->where([
+            ['status_perpustakaan', '=', (boolean) 1],
+            ['status_subkomponent', '=', (boolean) 1],
+            ['status_buktifisik', '=', (boolean) 1],
+        ])->when($request->has('id'), function ($query) use ($request){
+            $query->where('id', request("id"));
+        })->get();
+      
+        if(count($evaluations) == 0) {
+            $evaluations = [
+                'message' => 'Evaluasi Tidak Ditemukan',
+            ];
+        }
+
+        return response()->json($evaluations);
     }
 }

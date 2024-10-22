@@ -260,6 +260,7 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="summer-note">Catatan</label>
+                                <input type="hidden" name="repeater[0][type_lapangan]" value='field'>
                                 <textarea class="form-control sumernote-perpustakaan" id="summer-note" name="repeater[0][verifikasi_lapangan]" placeholder="notes"></textarea>
                             </div>
                         </div>
@@ -386,7 +387,8 @@
             loading($("#modal-subkomponent") , false);
             
             let dataDetail = "";
-
+            console.log("tes dani");
+            
             $.each(result, function(index, data) {
                 let statusVerif = data.status_verifikasi;
                 dataDetail += `
@@ -402,6 +404,7 @@
                         <td class="text-center"><a href="#" class="openPopup" link="${data.bukti_dukung[0].url}">View File</a></td>
                         <td>
                             <input type="hidden" name="repeater[${index}][id]" value="${data.id}">
+                            <input type="hidden" name="repeater[${index}][type_lapangan]" value="field">
                             <textarea class="form-control sumernote-komponent" id="sumkomp${index}" name="repeater[${index}][verifikasi_lapangan]" placeholder="notes">
                             ${data.verifikasi_lapangan ?? ""}
                             </textarea>
@@ -449,6 +452,7 @@
                         <td><a href="#" class="openPopup" link="${data.bukti_fisik_upload[0].url}">View File</a></td>
                         <td>
                             <input type="hidden" name="repeater[${index}][id]" value="${data.id}">
+                            <input type="hidden" name="repeater[${index}][type_lapangan]" value="field">
                             <textarea class="form-control sumernote-buktifisik" id="sumkomp${index}" name="repeater[${index}][verifikasi_lapangan]" placeholder="notes">
                                 ${data.notes}
                             </textarea>
@@ -488,6 +492,7 @@
         e.preventDefault();
         let url = `${baseUrl}/api/v1/storeTextEditor`;
         const data = $(this).serialize() + `&type=subkomponen`;
+        console.log(data);
         loadingButton($(this))
         ajaxData(url, 'POST', data, function(resp) {
             toast("Data has been saved");
@@ -520,6 +525,8 @@
         let url = `${baseUrl}/api/v1/storeTextEditor`;
         const data = $(this).serialize() + `&type=perpustakaan`;
         loadingButton($(this))
+        console.log(data);
+        
         ajaxData(url, 'POST', data, function(resp) {
             toast("Data has been saved");
             $('#modal-perpustakaan').modal('hide');

@@ -38,6 +38,10 @@ class UserSeeder extends Seeder
                 'website' => Str::random(10),
                 'library_email' => Str::random(10),
                 'is_verified' => 1,
+                'id_satuan_kerja_eselon_1' => null,
+                'id_satuan_kerja_eselon_2' => null,
+                'id_satuan_kerja_eselon_3' => null,
+                'id_fungsi' => null,
             ]);
         }
     }

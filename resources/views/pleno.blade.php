@@ -323,6 +323,7 @@
                         <td class="text-center"><a href="#" class="openPopup ${data.bukti_dukung[0]?.url ? data.bukti_dukung[0]?.url :"d-none"}" link="${data.bukti_dukung[0]?.url ? data.bukti_dukung[0]?.url :""}">View File</a></td>
                         <td>
                             <input type="hidden" name="repeater[${index}][id]" value="${data.id}">
+                            <input type="hidden" name="repeater[${index}][type_lapangan]" value="pleno">
                             <textarea class="form-control sumernote-komponent" id="sumkomp${index}" name="repeater[${index}][pleno]" placeholder="notes">
                             ${data.komentar_pleno ?? ""}
                             </textarea>

@@ -40,24 +40,26 @@ class VerifikatorDeskController extends Controller
             $setStatusSubKomponen = [];
             $setStatusBuktiFisik = [];
             $setTypeData = [];
-
-            $data = collect($request->repeater)->map(function ($val) use ($subkomponen, $user, $request, $operator, &$setStatusSubKomponen, &$setStatusBuktiFisik, &$setTypeData, &$countdataPleno) {
-                
+            $typeLapangan = [];
+        //    dd($request->repeater);
+            $data = collect($request->repeater)->map(function ($val) use ($subkomponen, $user, $request, $operator, &$setStatusSubKomponen, &$setStatusBuktiFisik, &$setTypeData, &$countdataPleno, &$typeLapangan) {
                 $val['user_id'] = $request->user_id;
                 $val['type'] = $request->type;
-                
+                $typeLapangan[] = $val['type_lapangan'];
+
                 if (!$user) {
                     return response()->json(['message' => 'User id Not Found'], 404);
                 }
+              
                 
-                if(auth()->user()->currentAccessToken()->getAttributeValue('abilities')[0] == 'role:operator') {
+                if((auth()->user()->currentAccessToken()->getAttributeValue('abilities')[0] == 'role:operator' || auth()->user()->currentAccessToken()->getAttributeValue('abilities')[0] == 'role:admin') && $val['type_lapangan'] == 'pleno') {
                     $textEditor = $val['pleno'];
-                } elseif (auth()->user()->currentAccessToken()->getAttributeValue('abilities')[0] == 'role:verifikator_desk') {
+                } elseif ((auth()->user()->currentAccessToken()->getAttributeValue('abilities')[0] == 'role:verifikator_desk' || auth()->user()->currentAccessToken()->getAttributeValue('abilities')[0] == 'role:admin') && $val['type_lapangan'] == 'desk') {
                     $textEditor = ($val['type'] == 'subkomponen' || $val['type'] == 'bukti_fisik') ? $val['catatan'] : $val['notes'];
-                } else {
+                } elseif ((auth()->user()->currentAccessToken()->getAttributeValue('abilities')[0] == 'role:verifikator_field' || auth()->user()->currentAccessToken()->getAttributeValue('abilities')[0] == 'role:admin') && $val['type_lapangan'] == 'field') {
                     $textEditor = $val['verifikasi_lapangan'];
                 }
-                
+ 
                 DB::beginTransaction();
 
                 if(!empty($textEditor)) {
@@ -87,15 +89,15 @@ class VerifikatorDeskController extends Controller
                     $detail = null;
                 }
                
-                if (auth()->user()->currentAccessToken()->getAttributeValue('abilities')[0] == 'role:operator') {
+                if ((auth()->user()->currentAccessToken()->getAttributeValue('abilities')[0] == 'role:operator' || auth()->user()->currentAccessToken()->getAttributeValue('abilities')[0] == 'role:admin') && $val['type_lapangan'] == 'pleno') {
                     
                     $countdataPleno[] = $detail;
-
+                   
                     $subKomponen = $user->with(['komponen' => function ($query) use ($val, $detail) {
                         $query->where('id', $val['id'])->update(['komentar_pleno' =>  $detail]);
                     }])->find($val['user_id']);
 
-                } elseif (auth()->user()->currentAccessToken()->getAttributeValue('abilities')[0] == 'role:verifikator_desk') {
+                } elseif ((auth()->user()->currentAccessToken()->getAttributeValue('abilities')[0] == 'role:verifikator_desk' || auth()->user()->currentAccessToken()->getAttributeValue('abilities')[0] == 'role:admin' ) && $val['type_lapangan'] == 'desk') {
 
                     $status = (boolean) $val['status'];
                     $setTypeData[] = $val['type'];
@@ -165,7 +167,7 @@ class VerifikatorDeskController extends Controller
                         }
                     }
 
-                } else {
+                } elseif ((auth()->user()->currentAccessToken()->getAttributeValue('abilities')[0] == 'role:verifikator_field' || auth()->user()->currentAccessToken()->getAttributeValue('abilities')[0] == 'role:admin' ) && $val['type_lapangan'] == 'field') {
                    
                     if($val['type'] == 'perpustakaan') {
                         $val['library_id'] = $request->library_id;
@@ -201,8 +203,8 @@ class VerifikatorDeskController extends Controller
                 $user->save();
                 DB::commit();
             });
-
-            if( auth()->user()->currentAccessToken()->getAttributeValue('abilities')[0] == 'role:verifikator_desk' ) {
+           
+            if( (auth()->user()->currentAccessToken()->getAttributeValue('abilities')[0] == 'role:verifikator_desk'  || auth()->user()->currentAccessToken()->getAttributeValue('abilities')[0] == 'role:admin') && $typeLapangan[0] == 'desk' ) {
                 if(count($setStatusSubKomponen) == 9 && $setTypeData[0] == 'subkomponen') {
                     $user->status_subkomponent = (boolean) true;
                     
@@ -264,7 +266,7 @@ class VerifikatorDeskController extends Controller
                 }
     
                 $user->save();
-            } else if (auth()->user()->currentAccessToken()->getAttributeValue('abilities')[0] == 'role:operator') {
+            } else if ((auth()->user()->currentAccessToken()->getAttributeValue('abilities')[0] == 'role:operator'  || auth()->user()->currentAccessToken()->getAttributeValue('abilities')[0] == 'role:admin') && $typeLapangan[0] == 'pleno' ) {
                 if (count($countdataPleno) == 9) {
                     $user->is_pleno = (boolean) true;
                 }

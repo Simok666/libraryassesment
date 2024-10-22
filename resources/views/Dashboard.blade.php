@@ -92,6 +92,138 @@
     </div>
 </div>
 
+<div class="page-content"> 
+    <section class="row">
+        <div class="col-12 col-lg-12">
+            <div class="row" id="contributor-dashboard">
+                {{-- <div class="col-12 col-lg-6">
+                    <div class="card">
+                        <div class="card-body py-4 px-4">
+                            <div class="d-flex align-items-center">
+                                <div class="ms-3 name">
+                                    <h5 class="font-bold">Eselon 2</h5>
+                                    <h6 class="text-muted mb-0">Name: </h6><p>${item.nama}</p>
+                                    <h6 class="text-muted mb-0">Nip: </h6><p>${item.nip}</p>
+                                </div>
+                                <div class="ms-3 icon">
+                                   <div class="icon-grid">
+                                   <div class="row">
+                                       <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start ">
+                                           <div class="stats-icon blue mb-2">
+                                               <i class="bi bi-cloud-upload" style="width: 25px; height: 30px;"></i>
+                                           </div>
+                                       </div>
+                                       <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
+                                           <h6 class="text-muted font-semibold">Jumlah konten publish</h6>
+                                           <h6 class="font-extrabold mb-0">${item.konten_publish_count}</h6>
+                                       </div>
+                                   </div>
+                                   <div class="row">
+                                       <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start ">
+                                           <div class="stats-icon red mb-2">
+                                               <i class="bi bi-clipboard-minus" style="width: 25px; height: 30px;"></i>
+                                           </div>
+                                       </div>
+                                       <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
+                                           <h6 class="text-muted font-semibold">Poin yang di hasilkan</h6>
+                                           <h6 class="font-extrabold mb-0">183.000</h6>
+                                       </div>
+                                   </div>
+                                   <div class="row">
+                                       <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start ">
+                                           <div class="stats-icon green mb-2">
+                                               <i class="bi bi-file-check" style="width: 25px; height: 30px;"></i>
+                                           </div>
+                                       </div>
+                                       <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
+                                           <h6 class="text-muted font-semibold">Jumlah Konten verifikasi</h6>
+                                           <h6 class="font-extrabold mb-0">${item.konten_verifikasi_count}</h6>
+                                       </div>
+                                   </div>
+                                   <div class="row">
+                                       <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start ">
+                                           <div class="stats-icon purple mb-2">
+                                               <i class="bi bi-star" style="width: 25px; height: 30px;"></i>
+                                           </div>
+                                       </div>
+                                       <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
+                                           <h6 class="text-muted font-semibold">Jumlah Konten aktifitas</h6>
+                                           <h6 class="font-extrabold mb-0">${item.konten_count_aktifitas}</h6>
+                                       </div>
+                                   </div>
+                               </div>
+                           </div>
+                        </div>
+                        </div>
+                    </div>
+                </div> 
+                <div class="col-12 col-lg-6">
+                    <div class="card">
+                        <div class="card-body py-4 px-4">
+                            <div class="d-flex align-items-center">
+                                <div class="ms-3 name">
+                                    <h5 class="font-bold">Eselon 3</h5>
+                                    <h6 class="text-muted mb-0">Name: </h6><p>${item.nama}</p>
+                                    <h6 class="text-muted mb-0">Nip: </h6><p>${item.nip}</p>
+                                </div>
+                                <div class="ms-3 icon">
+                                   <div class="icon-grid">
+                                   <div class="row">
+                                       <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start ">
+                                           <div class="stats-icon blue mb-2">
+                                               <i class="bi bi-cloud-upload" style="width: 25px; height: 30px;"></i>
+                                           </div>
+                                       </div>
+                                       <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
+                                           <h6 class="text-muted font-semibold">Jumlah konten publish</h6>
+                                           <h6 class="font-extrabold mb-0">${item.konten_publish_count}</h6>
+                                       </div>
+                                   </div>
+                                   <div class="row">
+                                       <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start ">
+                                           <div class="stats-icon red mb-2">
+                                               <i class="bi bi-clipboard-minus" style="width: 25px; height: 30px;"></i>
+                                           </div>
+                                       </div>
+                                       <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
+                                           <h6 class="text-muted font-semibold">Poin yang di hasilkan</h6>
+                                           <h6 class="font-extrabold mb-0">183.000</h6>
+                                       </div>
+                                   </div>
+                                   <div class="row">
+                                       <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start ">
+                                           <div class="stats-icon green mb-2">
+                                               <i class="bi bi-file-check" style="width: 25px; height: 30px;"></i>
+                                           </div>
+                                       </div>
+                                       <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
+                                           <h6 class="text-muted font-semibold">Jumlah Konten verifikasi</h6>
+                                           <h6 class="font-extrabold mb-0">${item.konten_verifikasi_count}</h6>
+                                       </div>
+                                   </div>
+                                   <div class="row">
+                                       <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start ">
+                                           <div class="stats-icon purple mb-2">
+                                               <i class="bi bi-star" style="width: 25px; height: 30px;"></i>
+                                           </div>
+                                       </div>
+                                       <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
+                                           <h6 class="text-muted font-semibold">Jumlah Konten aktifitas</h6>
+                                           <h6 class="font-extrabold mb-0">${item.konten_count_aktifitas}</h6>
+                                       </div>
+                                   </div>
+                                   
+                               </div>
+                           </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>           --}}
+            </div>
+        </div>
+    </section>
+</div>
+
 
 <div class="modal fade text-left" id="pleno-detail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel4" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
@@ -133,6 +265,7 @@
 
     $(document).ready(function() {
         let role = session("role");
+        let contributorDashboard = $('#contributor-dashboard').empty();
         if (dashboardWithTable.includes(role)) {
             $(".pleno").removeClass("d-none");
             $(".pleno").removeClass("d-none");
@@ -159,7 +292,135 @@
             if (session("is_upload_google_form") === "1") {
                 $("#form-google").find("[type=submit]").attr("disabled", true);
             }
+           
+            
+            ajaxData(`${baseUrl}/api/v1/dashboard`, 'GET', [], function(resp) {
+                if (!empty(resp)) {
+                    let isEselon1 = resp.isEselon1;
+                    let isEselon2 = resp.isEselon2;
+                    
+
+                    if(isEselon1 && isEselon2 == false){
+                    
+                    let eselon2 = resp.bawahan_eselon.eselon_2;
+                    let eselon3 = resp.bawahan_eselon.eselon_3;
+                    let eselon2Item = ``;
+                    let eselon3Item = ``;
+                    eselon2.forEach(item => {
+                        eselon2Item += `
+                         <div class="col-12 col-lg-6">
+                             <div class="card">
+                                 <div class="card-body py-4 px-4">
+                                     <div class="d-flex align-items-center">
+                                         <div class="ms-3 name">
+                                             <h5 class="font-bold">Eselon 2</h5>
+                                             <h6 class="text-muted mb-0">Name: </h6><p>${item.nama}</p>
+                                             <h6 class="text-muted mb-0">Email: </h6><p>${item.email}</p>
+                                         </div>
+                                         <div class="ms-3 icon">
+                                            <div class="icon-grid">
+                                            <div class="row">
+                                                <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start ">
+                                                    <div class="stats-icon green mb-2">
+                                                        <i class="bi bi-file-check" style="width: 25px; height: 30px;"></i>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
+                                                    <h6 class="text-muted font-semibold">Evaluasi Pleno</h6>
+                                                    <h6 class="font-extrabold mb-0">${item.evaluasi}</h6>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                     </div>
+                                 </div>
+                             </div>
+                         </div>
+ 
+                     `;
+                    });
+                    contributorDashboard.append(eselon2Item);
+                    
+                    eselon3.forEach(item => {
+                        eselon3Item += `
+                         <div class="col-12 col-lg-6">
+                             <div class="card">
+                                 <div class="card-body py-4 px-4">
+                                     <div class="d-flex align-items-center">
+                                         <div class="ms-3 name">
+                                             <h5 class="font-bold">Eselon 3</h5>
+                                             <h6 class="text-muted mb-0">Name: </h6><p>${item.nama}</p>
+                                             <h6 class="text-muted mb-0">Email: </h6><p>${item.email}</p>
+                                         </div>
+                                         <div class="ms-3 icon">
+                                            <div class="icon-grid">   
+                                            <div class="row">
+                                                <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start ">
+                                                    <div class="stats-icon green mb-2">
+                                                        <i class="bi bi-file-check" style="width: 25px; height: 30px;"></i>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
+                                                    <h6 class="text-muted font-semibold">Evaluasi Pleno</h6>
+                                                    <h6 class="font-extrabold mb-0">${item.evaluasi}</h6>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                     </div>
+                                 </div>
+                             </div>
+                         </div>
+ 
+                     `;
+                    });
+                    contributorDashboard.append(eselon3Item);
+                } else {
+                    let eselonBawahan = resp.bawahan_eselon;
+                    let eselonBawahanItem = '';
+                    eselonBawahan.forEach(item => {
+                        
+                        eselonBawahanItem += `
+                         <div class="col-12 col-lg-6">
+                             <div class="card">
+                                 <div class="card-body py-4 px-4">
+                                     <div class="d-flex align-items-center">
+                                         <div class="ms-3 name">
+                                             <h5 class="font-bold">Eselon 3</h5>
+                                             <h6 class="text-muted mb-0">Name: </h6><p>${item.nama}</p>
+                                             <h6 class="text-muted mb-0">Email: </h6><p>${item.email}</p>
+                                         </div>
+                                         <div class="ms-3 icon">
+                                            <div class="icon-grid">
+                                            <div class="row">
+                                                <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start ">
+                                                    <div class="stats-icon green mb-2">
+                                                        <i class="bi bi-file-check" style="width: 25px; height: 30px;"></i>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
+                                                    <h6 class="text-muted font-semibold">Evaluasi Pleno</h6>
+                                                    <h6 class="font-extrabold mb-0">${item.evaluasi}</h6>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                     </div>
+                                 </div>
+                             </div>
+                         </div>
+ 
+                     `;
+                    contributorDashboard.append(eselonBawahanItem);
+
+                    });
+                }
+                    
+                }
+            })
         }
+
+        
     });
 
 

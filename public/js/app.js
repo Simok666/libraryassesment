@@ -1,15 +1,15 @@
 var laravelCsrf = $('meta[name="csrf-token"]').attr('content');
-var baseUrl = window.location.origin + "/limes/public";
-// var baseUrl = window.location.origin;
+// var baseUrl = window.location.origin + "/limes/public";
+var baseUrl = window.location.origin;
 
 var req = {
     page:1
 };
 
 const menuByRole = {
-    "admin" : ["*"],
+    "admin" : ["dashboard", "users", "libraries", "proofOfWork", "komponent", "verifikator", "verifikator-desk", "verifikator-field", "pleno"],
     "user" : ["dashboard","profile-perpustakaan", "profile-komponent" , "profile-buktifisik"],
-    "operator" : ["dashboard", "users", "libraries", "proofOfWork", "komponent", "verifikator", "pleno", "googleform", "settingComponent", "eselon"],
+    "operator" : ["dashboard", "users", "libraries", "proofOfWork", "komponent", "verifikator", "pleno", "googleform", "settingComponent", "eselon", "eselondua", "eselontiga", "fungsi"],
     "verifikator_desk" : ["dashboard", "libraries", "proofOfWork", "komponent", "verifikator-desk"],
     "verifikator_field" : ["dashboard", "libraries", "proofOfWork", "komponent", "verifikator-field"],
     "pimpinan" : ["dashboard", "pleno-sesban"],
@@ -103,6 +103,21 @@ const sidebarItems = [
         url: "eselon",
         icon: "bi bi-people-fill",
         label: "Eselon Satu"
+    },
+    {
+        url: "eselondua",
+        icon: "bi bi-people-fill",
+        label: "Eselon Dua"
+    },
+    {
+        url: "eselontiga",
+        icon: "bi bi-people-fill",
+        label: "Eselon Tiga"
+    },
+    {
+        url: "fungsi",
+        icon: "bi bi-people-fill",
+        label: "Fungsi"
     }
 ];
 // jquery set default header
